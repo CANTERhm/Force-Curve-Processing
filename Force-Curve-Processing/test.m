@@ -1,0 +1,1 @@
+monitors = get(groot, 'MonitorPositions');
