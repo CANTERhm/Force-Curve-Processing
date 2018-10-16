@@ -10,12 +10,6 @@ function varargout = ExtractPlotData(RawData, handles, varargin)
 %   - xchannel_idx: index from xchannel popup form fcp-app (default: 1)
 %   - ychannel_idx: index from ychannel popup from fcp-app (default: 2)
 %
-% Name-Value-Pairs:
-%   - edit_button: this option allows to set active_edit_button to edit_button, which
-%   should be in some cases different from the active_edit_button on the gui.
-%   input must be a character-vector.
-%   Default: []
-%
 % output:
 %   - LineData: struct, containing all data ready for displaying or
 %   calculation
@@ -26,28 +20,21 @@ function varargout = ExtractPlotData(RawData, handles, varargin)
 %   - [LineData, handles] = ExtractPlotData(RawData, handles)
 %   - ___ = ExtractPlotData(___, xchannel_idx)
 %   - ___ = ExtractPlotData(___, xchannel_idx, ychannel_idx)
-%   - ___ = ExtractPlotData(___, edit_button, 'edit_button-tag')
-
 %% input parsing
 p = inputParser;
 
 DefaultValues.xchannel = '1';
 DefaultValues.ychannel = '2';
 DefaultValues.active_edit_button = 'procedure_root_btn';
-DefaultValues.edit_button = [];
 
 ValidChannelInput = @(x)assert(isa(x, 'double'),...
     'FCProcessing:ExtractPlotData:invalidInput',...
-    'input was not type "double", representing a valid channel.');
-ValidButtonTag = @(x)assert(isa(x, 'char'),...
-    'FCProcessing:ExtractPlotData:invalidInput',...
-    'input for edit_button was no character-vector.');
+    'input was not type "double", representing a valid channel');
 
 addRequired(p, 'RawData');
 addRequired(p, 'handles');
 addOptional(p, 'xchannel_idx', DefaultValues.xchannel, ValidChannelInput);
 addOptional(p, 'ychannel_idx', DefaultValues.ychannel, ValidChannelInput);
-addParameter(p, 'edit_button', DefaultValues.edit_button, ValidButtonTag);
 
 parse(p, RawData, handles, varargin{:});
 
@@ -55,7 +42,6 @@ RawData = p.Results.RawData;
 handles = p.Results.handles;
 xchannel_idx = p.Results.xchannel_idx;
 ychannel_idx = p.Results.ychannel_idx;
-edit_button = p.Results.edit_button;
 
 %% function procedure
 curvename = handles.guiprops.Features.edit_curve_table.UserData.CurrentCurveName;
@@ -72,22 +58,14 @@ segment_idx = handles.guiprops.Features.curve_segments_popup.Value;
 
 % determine wich edit_button is active
 editBtns = allchild(handles.guiprops.Panels.processing_panel);
-active_edit_button = [];
-if ~isempty(edit_button)
-    button = findobj(editBtns, 'Tag', edit_button);
-    if  ~isempty(button)
-        active_edit_button = edit_button;
+mask = false(length(editBtns),1);
+for i = 1:length(mask)
+    if editBtns(i).Value == 1
+        mask(i) = 1;
     end
 end
-if isempty(active_edit_button)
-    mask = false(length(editBtns),1);
-    for i = 1:length(mask)
-        if editBtns(i).Value == 1
-            mask(i) = 1;
-        end
-    end
-    active_edit_button = editBtns(mask).Tag;
-end
+
+active_edit_button = editBtns(mask).Tag;
 
 % is procedure_root_button is active, or another one?
 if strcmp(active_edit_button, DefaultValues.active_edit_button)
@@ -103,14 +81,6 @@ else
                 rethrow(ME)
         end
     end % try
-    names = fieldnames(Data);
-    if any(ismember(names, 'calculated_data'))
-        if isempty(Data.calculated_data)
-            Data = RawData.CurveData;
-        else
-            Data = Data.calculated_data;
-        end
-    end
 end % if 
 
 trace_idx = handles.curveprops.CurvePartIndex.trace;
