@@ -31,7 +31,7 @@ if isempty(results)
     results.Status = [];
     results.correction_type = 1;
     results.units = 'relative';
-    results.selection_borders = [0.9 1];
+    results.selection_borders = [0.99 1];
 end
 
     setappdata(handles.figure1, 'Baseline', results);
@@ -86,7 +86,10 @@ end
 
     % units-property
     lh.addListener(results, 'units', 'PostSet',...
-    {@EditFunctions.Baseline.Callbacks.test, handles});  
+    {@EditFunctions.Baseline.Callbacks.test, handles}); 
+
+    lh.addListener(results, 'units', 'PostSet',...
+    @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
     
     % selection_borders-property
     lh.addListener(results, 'selection_borders', 'PostSet',...
