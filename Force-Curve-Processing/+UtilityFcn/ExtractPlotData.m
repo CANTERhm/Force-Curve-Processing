@@ -86,7 +86,14 @@ if isempty(active_edit_button)
             mask(i) = 1;
         end
     end
-    active_edit_button = editBtns(mask).Tag;
+    editBtn = editBtns(mask);
+    if ~isempty(editBtn)
+        active_edit_button = editBtn.Tag;
+    else
+        active_edit_button = DefaultValues.active_edit_button;
+        handles.guiprops.Features.proc_root_btn.Value = 1;
+    end
+        
 end
 
 % is procedure_root_button is active, or another one?

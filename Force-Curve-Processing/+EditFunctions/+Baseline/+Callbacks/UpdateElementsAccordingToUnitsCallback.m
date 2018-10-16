@@ -2,41 +2,42 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
 %UPDATEELEMENTSACCORDINGTOUNITSCALLBACK Porpertylistener callback to update
 %left/right border edit according to results.units-property
 
-% get results-object
-main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-handles = guidata(main);
-results = getappdata(handles.figure1, 'Baseline');
+    % get results-object
+    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
+    handles = guidata(main);
+    results = getappdata(handles.figure1, 'Baseline');
 
-% preparation of frequently used variables
-table = handles.guiprops.Features.edit_curve_table;
-xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
-ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
-curvename = table.UserData.CurrentCurveName;
-RawData = handles.curveprops.(curvename).RawData;
-editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-baseline = findobj(editfunctions, 'Tag', 'Baseline');
-last_editfunction_index = find(editfunctions == baseline) + 1;
-last_editfunction = editfunctions(last_editfunction_index).Tag;
+    % preparation of frequently used variables
+    table = handles.guiprops.Features.edit_curve_table;
+    xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
+    ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
+    curvename = table.UserData.CurrentCurveName;
+    RawData = handles.curveprops.(curvename).RawData;
+    editfunctions = allchild(handles.guiprops.Panels.processing_panel);
+    baseline = findobj(editfunctions, 'Tag', 'Baseline');
+    last_editfunction_index = find(editfunctions == baseline) + 1;
+    last_editfunction = editfunctions(last_editfunction_index).Tag;
 
-switch results.units
-    case 'relative'
-        new_borders = ExpressAsRelative();
-    case 'absolute'
-        new_borders = ExpressAsAbsolute();
-end
+    switch results.units
+        case 'relative'
+            new_borders = ExpressAsRelative();
+        case 'absolute'
+            new_borders = ExpressAsAbsolute();
+    end
+    
+    results.selection_borders = new_borders;
+    
+    % refresh results object and handles
+    setappdata(handles.figure1, 'Baseline', results);
+    guidata(handles.figure1, handles);
 
-% refresh results object and handles
-setappdata(handles.figure1, 'Baseline', results);
-guidata(handles.figure1, handles);
+    % trigger update to handles.curveprops.curvename.Results.Baseline
+    results.FireEvent('UpdateObject');
 
 %% nested functions
 
     function new_borders = ExpressAsRelative()
         % transforms absolute selection_borders to relative ones
-        
-%         table = handles.guiprops.Features.edit_curve_table;
-        
-        % determine last Editfunction
         
         % abort transformation because no curvedata is available
         if isempty(table.Data)
@@ -45,14 +46,6 @@ guidata(handles.figure1, handles);
         else
             % test if there are already calculated data, if not take data
             % for last Editfunction
-%             xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
-%             ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
-%             curvename = table.UserData.CurrentCurveName;
-%             RawData = handles.curveprops.(curvename).RawData;
-%             editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-%             baseline = findobj(editfunctions, 'Tag', 'Baseline');
-%             last_editfunction_index = find(editfunctions == baseline) + 1;
-%             last_editfunction = editfunctions(last_editfunction_index).Tag;
             if isempty(results.calculated_data)
                 % get data from last editfunction
                 curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
@@ -109,13 +102,18 @@ guidata(handles.figure1, handles);
         old_borders = results.selection_borders;
         switch direction
             case 'absolute-relative'
-                xend = length(linedata(:,1));
+                xdata = linedata(:,1);
+                x = length(xdata);
+                a_left = old_borders(1);
+                a_right = old_borders(2);
+                aind_left = knnsearch(xdata, a_left);
+                aind_right = knnsearch(xdata, a_right);
                 
                 % left border
-                r_left = old_borders(1)/xend;
+                r_left = aind_left/x;
                 
                 % right border
-                r_right = old_borders(2)/xend;
+                r_right = aind_right/x;
                 
                 new_borders = [r_left r_right];
             case 'relative-absolute'
