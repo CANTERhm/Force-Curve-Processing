@@ -63,6 +63,17 @@ for i = 1:length(mask)
     if editBtns(i).Value == 1
         mask(i) = 1;
     end
+<<<<<<< HEAD
+    editBtn = editBtns(mask);
+    if ~isempty(editBtn)
+        active_edit_button = editBtn.Tag;
+    else
+        active_edit_button = DefaultValues.active_edit_button;
+        handles.guiprops.Features.proc_root_btn.Value = 1;
+    end
+        
+=======
+>>>>>>> master
 end
 
 active_edit_button = editBtns(mask).Tag;
