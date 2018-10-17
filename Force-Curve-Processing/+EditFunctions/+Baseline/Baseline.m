@@ -86,11 +86,7 @@ end
 
     % units-property
     lh.addListener(results, 'units', 'PostSet',...
-<<<<<<< HEAD
     @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
-=======
-    {@EditFunctions.Baseline.Callbacks.test, handles});  
->>>>>>> master
     
     % selection_borders-property
     lh.addListener(results, 'selection_borders', 'PostSet',...

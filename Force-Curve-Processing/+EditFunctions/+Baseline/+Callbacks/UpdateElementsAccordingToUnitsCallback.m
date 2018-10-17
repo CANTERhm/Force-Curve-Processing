@@ -7,7 +7,6 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
 
-<<<<<<< HEAD
     % preparation of frequently used variables
     table = handles.guiprops.Features.edit_curve_table;
     xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
@@ -202,14 +201,4 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
         
     end % ConvertToVector
 
-=======
-switch results.units
-    case 'relative'
-        new_borders = ExpressAsRelative(handles, results);
-    case 'absolute'
-        new_borders = ExpressAsAbsolute(handles, results);
-end
-
->>>>>>> master
 end % UpdateElementsAccordingToUnitsCallback
-
