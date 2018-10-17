@@ -86,17 +86,25 @@ end
 
     % units-property
     lh.addListener(results, 'units', 'PostSet',...
+<<<<<<< HEAD
+    @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
+=======
     {@EditFunctions.Baseline.Callbacks.test, handles});  
+>>>>>>> master
     
     % selection_borders-property
     lh.addListener(results, 'selection_borders', 'PostSet',...
-    {@EditFunctions.Baseline.Callbacks.test, left_border, right_border});    
+    {@EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback, left_border, right_border});    
 
     %% event listener to update handles.curveprops.curvename.Results.Baseline
     % This step is important, because it update the handles-struct; it is
     % kind of an output from Baseline
     lh.addListener(results, 'UpdateObject',...
         {@EditFunctions.Baseline.Callbacks.UpdateResultsToMain, handles, results});
+    
+
+    % trigger update to handles.curveprops.curvename.Results.Baseline
+    results.FireEvent('UpdateObject');
     
     %% nested functions
     
