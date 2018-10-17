@@ -13,7 +13,9 @@ function MarkupData()
     
     % transform relative units to absolute
     if strcmp(results.units, 'relative')
+        borders = TransformToAbsolute();
     else
+        borders = results.selection_borders;
     end
     
     
@@ -27,7 +29,7 @@ function MarkupData()
     
     %% nested functions
     
-    function absolute = TransformToAbsolute(results, handles)
+    function new_borders = TransformToAbsolute()
         
         % preparation of needed variables
         table = handles.guiprops.Features.edit_curve_table;
@@ -40,15 +42,34 @@ function MarkupData()
         last_editfunction_index = find(editfunctions == baseline) + 1;
         last_editfunction = editfunctions(last_editfunction_index).Tag;
         
+        % abort transformation because no curvedata is available
+        if isempty(table.Data)
+            new_borders = [];
+            return
+        else
+            % test if there are already calculated data, if not take data
+            % for last Editfunction
+            if isempty(results.calculated_data)
+                % get data from last editfunction
+                curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
+                    'edit_button', last_editfunction);
+                linedata = EditFunctions.Baseline.HelperFcn.ConvertToVector(curvedata);
+            else
+                % get data from active editfunction
+                curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
+                linedata = EditFunctions.Baseline.HelperFcn.ConvertToVector(curvedata);
+            end
+        end
+        
         % transformation of borders
             x = linedata(:,1);
 
             % left border
-            a_left_index = round(length(x)*old_borders(1));
+            a_left_index = round(length(x)*results.selection_borders(1));
             a_left = x(a_left_index);
 
             % right border
-            a_right_index = round(length(x)*old_borders(2));
+            a_right_index = round(length(x)*results.selection_borders(2));
             a_right = x(a_right_index);
 
             new_borders = [a_left a_right];

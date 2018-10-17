@@ -92,8 +92,7 @@ end
     lh.addListener(results, 'selection_borders', 'PostSet',...
     {@EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback, left_border, right_border});    
 
-    %% WindowButtonDownFcn and initial Markup
-%     EditFunctions.Baseline.HelperFcn.MarkupData();
+    %% set up WindowButtonDownFcn and Mar
 
     %% event listener to update handles.curveprops.curvename.Results.Baseline
     % This step is important, because it update the handles-struct; it is
