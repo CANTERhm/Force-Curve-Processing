@@ -9,6 +9,7 @@ function Baseline(src, handles)
             baseline = handles.curveprops.(curvename).Results.Baseline;
             if ~isempty(baseline)
                 results = baseline;
+                results.singleton = true;
             else
                 results = [];
             end
@@ -27,8 +28,12 @@ if isempty(results)
     results.addproperty('slope');
     results.addproperty('offset');
     results.addproperty('calculated_data');
+    results.addproperty('singleton');
+    results.addproperty('input_features');
+    results.addproperty('results_features');
 
     results.Status = [];
+    results.singleton = false;
     results.correction_type = 1;
     results.units = 'relative';
     results.selection_borders = [0.99 1];
@@ -61,7 +66,11 @@ end
     % make layout visible
     main_vbox.Visible = 'on';
     
-    %% import data from curve
+    % update results object
+    results.input_features = input_features;
+    results.results_features = results_features;
+    setappdata(handles.figure1, 'Baseline', results);
+    
 
     %% callbacks for input_layout elements
     tilt = input_features.tilt;
@@ -80,29 +89,30 @@ end
 
     %% property listener for results-object
     
-    % correction_type-property
-    lh.addListener(results, 'correction_type', 'PostSet',...
-    {@EditFunctions.Baseline.Callbacks.test, handles});
+    if results.singleton == false % only add property listener once
+        % correction_type-property
+        lh.addListener(results, 'correction_type', 'PostSet',...
+        {@EditFunctions.Baseline.Callbacks.test, handles});
 
-    % units-property
-    lh.addListener(results, 'units', 'PostSet',...
-    @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
-    
-    % selection_borders-property
-    lh.addListener(results, 'selection_borders', 'PostSet',...
-    {@EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback, left_border, right_border});    
+        % units-property
+        lh.addListener(results, 'units', 'PostSet',...
+        @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
+
+        % selection_borders-property
+        lh.addListener(results, 'selection_borders', 'PostSet',...
+        @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);   
+        
+        % event listener to update handles.curveprops.curvename.Results.Baseline
+        % This step is important, because it update the handles-struct; it is
+        % kind of an output from Baseline
+        lh.addListener(results, 'UpdateObject',...
+        {@EditFunctions.Baseline.Callbacks.UpdateResultsToMain, handles, results});
+    end
 
     %% WindowButtonDownFcn and initial Markup
 %     EditFunctions.Baseline.HelperFcn.MarkupData();
 
-    %% event listener to update handles.curveprops.curvename.Results.Baseline
-    % This step is important, because it update the handles-struct; it is
-    % kind of an output from Baseline
-    lh.addListener(results, 'UpdateObject',...
-        {@EditFunctions.Baseline.Callbacks.UpdateResultsToMain, handles, results});
-    
-
-    % trigger update to handles.curveprops.curvename.Results.Baseline
+    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     results.FireEvent('UpdateObject');
     
     %% nested functions
