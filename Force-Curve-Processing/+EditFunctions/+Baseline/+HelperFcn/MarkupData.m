@@ -19,6 +19,8 @@ function MarkupData()
     end
     
     
+    
+    
     %% update handles, results and fire event UpdateObject
     % update results object
     setappdata(handles.figure1, 'Baseline', results);
@@ -30,9 +32,13 @@ function MarkupData()
     %% nested functions
     
     function new_borders = TransformToAbsolute()
+        table = handles.guiprops.Features.edit_curve_table;
+        if isempty(table.Data)
+            new_borders = results.selection_borders;
+            return
+        end
         
         % preparation of needed variables
-        table = handles.guiprops.Features.edit_curve_table;
         xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
         ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
         curvename = table.UserData.CurrentCurveName;
