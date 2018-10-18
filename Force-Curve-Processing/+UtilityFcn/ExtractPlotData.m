@@ -93,7 +93,6 @@ if isempty(active_edit_button)
         active_edit_button = DefaultValues.active_edit_button;
         handles.guiprops.Features.proc_root_btn.Value = 1;
     end
-        
 end
 
 % is procedure_root_button is active, or another one?
@@ -127,6 +126,7 @@ else
     end
 end % if 
 
+% start Extracting data
 trace_idx = handles.curveprops.CurvePartIndex.trace;
 retrace_idx = handles.curveprops.CurvePartIndex.retrace;
 
@@ -176,8 +176,16 @@ switch segment_idx
         end % if 
         
     otherwise % only special segments
-        
-        segment_idx = segment_idx - 1;
+ 
+        switch handles.guiprops.Features.curve_parts_popup.Value
+            case 1 % just delete all-entry
+                segment_idx = segment_idx - 1;
+            case 2 % just delete all-entry
+                segment_idx = segment_idx - 1;
+            case 3 % segment_idx has to start from 3 not from one, if curvepart is retrace
+            segment_idx = segment_idx + 1;
+        end
+%         segment_idx = segment_idx - 1;
         segments = fieldnames(RawData.CurveData);
         segname = segments{segment_idx};
         

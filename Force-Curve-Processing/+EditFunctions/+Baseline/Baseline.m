@@ -1,4 +1,4 @@
-function Baseline(src, handles)
+function Baseline(handles, varargin)
 %BASELINE Calculates Baseline correction for an current active force-curve
 
     %% preparation of variables
@@ -46,9 +46,6 @@ end
     panel = handles.guiprops.Panels.results_panel;
     
     %% clear FCP Graph Window from previouse editing artefacts
-    ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
-    cla(ax);
-    handles = UtilityFcn.SetupMainFigure(handles);
     
     % plot afm-graph again
     table = handles.guiprops.Features.edit_curve_table;
@@ -122,10 +119,6 @@ end
         % selection_borders-property
         lh.addListener(results, 'selection_borders', 'PostSet',...
             @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);   
-    
-        lh.addListener(findobj(handles.guiprops.MainFigure, 'Type', 'Axes'),...
-            'Children', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.test);
         
         % event listener to update handles.curveprops.curvename.Results.Baseline
         % This step is important, because it update the handles-struct; it is

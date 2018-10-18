@@ -18,11 +18,15 @@ function MarkupData()
         borders = results.selection_borders;
     end
     
+    if isempty(borders)
+        return
+    end
+    
     ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
     xpoints = [borders(1) borders(2) borders(2) borders(1)];
     ypoints = [ax.YLim(1) ax.YLim(1) ax.YLim(2) ax.YLim(2)];
     hold(ax, 'on');
-    markup = patch(ax, xpoints, ypoints, 'black',...
+    patch(ax, xpoints, ypoints, 'black',...
         'FaceColor', 'black',...
         'FaceAlpha', 0.1,...
         'LineStyle', 'none',...
@@ -77,6 +81,11 @@ function MarkupData()
         end
         
         % transformation of borders
+            if isempty(linedata)
+                new_borders = [];
+                return
+            end
+            
             x = linedata(:,1);
 
             % left border

@@ -6,7 +6,7 @@ HelperFcn.SwitchToggleState(src);
 
 %% execute edit function
 name = src.Tag;
-EditFunctions.(name).(name)(src, handles);
+EditFunctions.(name).(name)(handles);
 
 %% plot data for explicit edit button
 
