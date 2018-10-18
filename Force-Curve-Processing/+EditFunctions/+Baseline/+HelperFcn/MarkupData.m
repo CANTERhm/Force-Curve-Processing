@@ -18,8 +18,17 @@ function MarkupData()
         borders = results.selection_borders;
     end
     
-    
-    
+    ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
+    xpoints = [borders(1) borders(2) borders(2) borders(1)];
+    ypoints = [ax.YLim(1) ax.YLim(1) ax.YLim(2) ax.YLim(2)];
+    hold(ax, 'on');
+    markup = patch(ax, xpoints, ypoints, 'black',...
+        'FaceColor', 'black',...
+        'FaceAlpha', 0.1,...
+        'LineStyle', 'none',...
+        'Tag', 'markup',...
+        'DisplayName', 'Markup');
+    hold(ax, 'off');
     
     %% update handles, results and fire event UpdateObject
     % update results object
@@ -72,10 +81,16 @@ function MarkupData()
 
             % left border
             a_left_index = round(length(x)*results.selection_borders(1));
+            if a_left_index == 0
+                a_left_index = 1;
+            end
             a_left = x(a_left_index);
 
             % right border
             a_right_index = round(length(x)*results.selection_borders(2));
+            if a_right_index == 0
+                a_right_index = 1;
+            end
             a_right = x(a_right_index);
 
             new_borders = [a_left a_right];

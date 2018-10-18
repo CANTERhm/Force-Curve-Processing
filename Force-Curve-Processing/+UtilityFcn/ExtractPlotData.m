@@ -110,7 +110,14 @@ else
                 rethrow(ME)
         end
     end % try
-    names = fieldnames(Data);
+    
+    if isa(Data, 'struct')
+        names = fieldnames(Data);
+    else
+        names = [];
+        Data = RawData.CurveData;
+    end
+    
     if any(ismember(names, 'calculated_data'))
         if isempty(Data.calculated_data)
             Data = RawData.CurveData;

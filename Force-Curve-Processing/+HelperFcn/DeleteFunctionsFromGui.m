@@ -17,5 +17,6 @@ end
 
 handles.procedure.DynamicProps = [];
 handles.guiprops.Features.edit_buttons = [];
+handles.guiprops.Features.proc_root_btn.Value = 1;
 guidata(handles.figure1, handles);
 

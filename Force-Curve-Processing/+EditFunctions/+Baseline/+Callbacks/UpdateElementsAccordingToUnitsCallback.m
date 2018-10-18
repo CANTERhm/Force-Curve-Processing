@@ -121,10 +121,16 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
                 
                 % left border
                 a_left_index = round(length(x)*old_borders(1));
+                if a_left_index == 0
+                    a_left_index = 1;
+                end
                 a_left = x(a_left_index);
                 
                 % right border
                 a_right_index = round(length(x)*old_borders(2));
+                if a_right_index == 0
+                    a_right_index = 1;
+                end
                 a_right = x(a_right_index);
                 
                 new_borders = [a_left a_right];

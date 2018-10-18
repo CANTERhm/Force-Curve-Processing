@@ -1,4 +1,4 @@
-function test(src, evt, left_border, right_border)
+function test(src, evt)
 
 main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
 handles = guidata(main);

@@ -18,15 +18,6 @@ if isempty(mainfig)
     handles.guiprops.MainAxes = ax;
     ax.FontSize = 20;
     plottools();
-elseif isempty(findobj(handles.guiprops.MainFigure, 'Type', 'Axes'))
-    ax = axes(handles.guiprops.MainFigure);
-    ax.XGrid = 'on';
-    ax.YGrid = 'on';
-    ax.XMinorGrid = 'on';
-    ax.YMinorGrid = 'on';
-    ax.Tag = 'MainAxes';
-    handles.guiprops.MainAxes = ax;
-    ax.FontSize = 20;
 end
 guidata(handles.figure1, handles);
 

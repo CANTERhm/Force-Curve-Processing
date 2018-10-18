@@ -57,8 +57,15 @@ end
     curvename = table.UserData.CurrentCurveName;
     RawData = handles.curveprops.(curvename).RawData;
     
-    curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
+    if ~isempty(results.calculated_data)
+        curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
+    else
+        curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
+            'edit_button', 'procedure_root_btn');
+    end
     handles = IOData.PlotData(curvedata, handles);
+    
+    %% set WindowButton and KeyPress Callbacks
     
 
     %% layout input parameters and results
@@ -106,15 +113,19 @@ end
     if results.singleton == false % only add property listener once
         % correction_type-property
         lh.addListener(results, 'correction_type', 'PostSet',...
-        {@EditFunctions.Baseline.Callbacks.test, handles});
+            @EditFunctions.Baseline.Callbacks.test);
 
         % units-property
         lh.addListener(results, 'units', 'PostSet',...
-        @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
+            @EditFunctions.Baseline.Callbacks.UpdateElementsAccordingToUnitsCallback);    
 
         % selection_borders-property
         lh.addListener(results, 'selection_borders', 'PostSet',...
-        @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);   
+            @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);   
+    
+        lh.addListener(findobj(handles.guiprops.MainFigure, 'Type', 'Axes'),...
+            'Children', 'PostSet',...
+            @EditFunctions.Baseline.Callbacks.test);
         
         % event listener to update handles.curveprops.curvename.Results.Baseline
         % This step is important, because it update the handles-struct; it is
@@ -129,15 +140,15 @@ end
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     results.FireEvent('UpdateObject');
     
-    %% nested functions
-    
-    function dataimport(handles)
-        t = handles.guiprops.Features.edit_curve_table;
-        if ~ismpty(t.Data)
-            cn = t.UserData.CurrentCurveName;
-        end
-        xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
-        ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value;
-    end % dataimport
+%     %% nested functions
+%     
+%     function dataimport(handles)
+%         t = handles.guiprops.Features.edit_curve_table;
+%         if ~ismpty(t.Data)
+%             cn = t.UserData.CurrentCurveName;
+%         end
+%         xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
+%         ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value;
+%     end % dataimport
 
 end % Baseline
