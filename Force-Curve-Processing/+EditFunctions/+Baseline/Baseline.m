@@ -48,21 +48,6 @@ end
     %% clear FCP Graph Window from previouse editing artefacts
     UtilityFcn.RefreshGraph();
     
-%     % plot afm-graph again
-%     table = handles.guiprops.Features.edit_curve_table;
-%     xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
-%     ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
-%     curvename = table.UserData.CurrentCurveName;
-%     RawData = handles.curveprops.(curvename).RawData;
-%     
-%     if ~isempty(results.calculated_data)
-%         curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
-%     else
-%         curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
-%             'edit_button', 'procedure_root_btn');
-%     end
-%     handles = IOData.PlotData(curvedata, handles);
-    
     %% set WindowButton and KeyPress Callbacks
     
 
@@ -133,16 +118,5 @@ end
 
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     results.FireEvent('UpdateObject');
-    
-%     %% nested functions
-%     
-%     function dataimport(handles)
-%         t = handles.guiprops.Features.edit_curve_table;
-%         if ~ismpty(t.Data)
-%             cn = t.UserData.CurrentCurveName;
-%         end
-%         xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
-%         ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value;
-%     end % dataimport
 
 end % Baseline
