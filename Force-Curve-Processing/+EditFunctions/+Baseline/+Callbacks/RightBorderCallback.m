@@ -30,7 +30,7 @@ function RightBorderCallback(src, evt)
     % apply input
     src.String = num2str(num);
     results.selection_borders(2) = num;
-    
+
     %% update all important variables
     
     % update results object

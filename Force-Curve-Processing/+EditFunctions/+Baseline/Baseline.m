@@ -104,7 +104,9 @@ end
 
         % selection_borders-property
         lh.addListener(results, 'selection_borders', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);   
+            @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);
+        lh.addListener(results, 'selection_borders', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.MarkupData);
         
         % event listener to update handles.curveprops.curvename.Results.Baseline
         % This step is important, because it update the handles-struct; it is
