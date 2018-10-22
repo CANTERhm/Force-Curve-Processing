@@ -49,7 +49,7 @@ end
     UtilityFcn.RefreshGraph();
     
     %% set WindowButton and KeyPress Callbacks
-    
+    handles.guiprops.MainFigure.WindowButtonDownFcn = @wbdcb;
 
     %% layout input parameters and results
     % clear results panel 
@@ -120,5 +120,29 @@ end
 
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     results.FireEvent('UpdateObject');
+    
+    %% WindowCallbacks
+    
+    function wbdcb(src, evt)
+    % WBDCB window button down callback
+        cp = handles.guiprops.MainAxes.CurrentPoint;
+        xinit = cp(1, 1);
+        results.selection_borders(1) = xinit;
+        src.WindowButtonMotionFcn = @wbmcb;
+        src.WindowButtonUpFcn = @wbucb;
+    end % wbdcb
+
+    function wbmcb(src, evt)
+    % WBMCB window button move callback
+        cp = handles.guiprops.MainAxes.CurrentPoint;
+        results.selection_borders(2) = cp(1, 1);
+        drawnow;
+    end % wbmcb
+
+    function wbucb(src, evt)
+    % WBUCB window button up callback
+      src.WindowButtonMotionFcn = '';
+      src.WindowButtonUpFcn = '';
+    end % wbucb
 
 end % Baseline

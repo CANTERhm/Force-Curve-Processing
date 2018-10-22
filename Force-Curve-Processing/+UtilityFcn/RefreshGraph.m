@@ -35,7 +35,11 @@ function RefreshGraph()
     % refresh results object and handles
     if update_appdata
         setappdata(handles.figure1, 'Baseline', results);
+        
+        % trigger update to handles.curveprops.curvename.Results.Baseline
+        results.FireEvent('UpdateObject');
     end
     guidata(handles.figure1, handles);
+    
 end % RefreshGraph
 

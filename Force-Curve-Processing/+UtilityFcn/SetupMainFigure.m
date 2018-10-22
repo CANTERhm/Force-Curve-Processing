@@ -18,6 +18,7 @@ if isempty(mainfig)
     handles.guiprops.MainAxes = ax;
     ax.FontSize = 20;
     plottools();
+    plotedit(handles.guiprops.MainFigure, 'off');
 end
 guidata(handles.figure1, handles);
 
