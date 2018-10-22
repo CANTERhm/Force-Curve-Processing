@@ -151,10 +151,10 @@ end
             % get results-object
             main_wbmcb = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
             h_wbmcb = guidata(main_wbmcb);
-            r_wbmcb = getappdata(h_wbmcb.figure1, 'Baseline');
+            r_wbmcb = getappdata(h.figure1, 'Baseline');
         
-            cp_wbmcb = h_wbmcb.guiprops.MainAxes.CurrentPoint;
-            user_defined_borders = [r_wbmcb.selection_borders(1) cp_wbmcb(1, 1)];
+            cp = h_wbmcb.guiprops.MainAxes.CurrentPoint;
+            user_defined_borders = [r_wbmcb.selection_borders(1) cp(1, 1)];
             r_wbmcb.selection_borders = user_defined_borders;
             
             % refresh results object and handles
@@ -169,18 +169,18 @@ end
         
             % get results-object
             main_wbucb = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-            h_wbucb = guidata(main_wbucb);
-            r_wbucb = getappdata(h_wbucb.figure1, 'Baseline');        
+            h_wbucb = guidata(main_wbmcb);
+            r_wbucb = getappdata(h.figure1, 'Baseline');        
 
-            if strcmp(r_wbucb.Status, 'units_changed')
-                r_wbucb.units = 'relative';
+            if strcmp(results.Status, 'units_changed')
+                results.units = 'relative';
             end
             src.WindowButtonMotionFcn = '';
             src.WindowButtonUpFcn = '';
             
             % refresh results object and handles
-            setappdata(h_wbucb.figure1, 'Baseline', r_wbucb);
-            guidata(h_wbucb.figure1, h_wbucb);
+            setappdata(h_wbmcb.figure1, 'Baseline', r_wbmcb);
+            guidata(h_wbmcb.figure1, h_wbmcb);
         end % wbucb
         
     end % wbdcb
