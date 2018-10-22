@@ -199,6 +199,9 @@ handles = HelperFcn.DeleteFunctionsFromGui(handles);
 panel = handles.guiprops.Panels.results_panel;
 delete(allchild(panel));
 
+% refresh shown graph
+UtilityFcn.RefreshGraph();
+
 guidata(handles.figure1, handles)
 
 % Edit Menu Entrys
