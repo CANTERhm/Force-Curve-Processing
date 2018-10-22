@@ -126,16 +126,49 @@ end
     function wbdcb(src, evt)
     % WBDCB window button down callback
         cp = handles.guiprops.MainAxes.CurrentPoint;
-        xinit = cp(1, 1);
-        results.selection_borders(1) = xinit;
+        results.selection_borders(1) = cp(1, 1);
         src.WindowButtonMotionFcn = @wbmcb;
         src.WindowButtonUpFcn = @wbucb;
     end % wbdcb
 
     function wbmcb(src, evt)
     % WBMCB window button move callback
+        table = handles.guiprops.Features.edit_curve_table;
+        xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
+        ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
+        curvename = table.UserData.CurrentCurveName;
+        RawData = handles.curveprops.(curvename).RawData;
+        editfunctions = allchild(handles.guiprops.Panels.processing_panel);
+        baseline = findobj(editfunctions, 'Tag', 'Baseline');
+        last_editfunction_index = find(editfunctions == baseline) + 1;
+        last_editfunction = editfunctions(last_editfunction_index).Tag;
+        
         cp = handles.guiprops.MainAxes.CurrentPoint;
-        results.selection_borders(2) = cp(1, 1);
+        user_defined_borders = [results.selection_borders(1) cp(1, 1)];
+        
+        % test if there are already calculated data, if not take data
+        % for last Editfunction
+        if isempty(results.calculated_data)
+            % get data from last editfunction
+            curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
+                'edit_button', last_editfunction);
+            linedata = EditFunctions.Baseline.HelperFcn.ConvertToVector(curvedata);
+        else
+            % get data from active editfunction
+            curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
+            linedata = EditFunctions.Baseline.HelperFcn.ConvertToVector(curvedata);
+        end
+        
+        switch results.units
+            case 'relative'
+                new_borders = EditFunctions.Baseline.HelperFcn.BorderTransformation(linedata,...
+                    'absolute-relative',...
+                    'user_defined_borders', user_defined_borders);
+            case 'absolute'
+                new_borders = user_defined_borders;
+        end
+        
+        results.selection_borders = new_borders;
         drawnow;
     end % wbmcb
 

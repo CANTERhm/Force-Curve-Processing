@@ -1,4 +1,4 @@
-function new_borders = BorderTransformation(linedata, direction)
+function new_borders = BorderTransformation(linedata, direction, varargin)
     % calculation of new borders according to transformation direction
     %
     % input: 
@@ -8,17 +8,45 @@ function new_borders = BorderTransformation(linedata, direction)
     %       relative vaules
     %       * relative-absolute: transformation from relative-values to
     %       absolute-values
+    % Name-Value-Pairs:
+    %   - user_defined_borders: 1x2 vector representing left and right
+    %   border for Markup of dataselection; if this parameter is set, it
+    %   will be used instead of results.selection_borders as
+    %   old_borders-varaible. (Window Callback defined in Baseline use this Parameter)
     %
     % output:
     %   - new_borders: transformed selection_borders-values
-
+    
+    %% input parsing
+    p = inputParser;
+    
+    ValidBorders = @(x)assert(isa(x, 'double') && isvector(x),...
+        'Baseline:HelperFcn:BorderTransformation:invalidInput',...
+        'Only an 1x2 double vector is an valid input for "unser_defined_borders".');
+    
+    addRequired(p, 'linedata');
+    addRequired(p, 'direction');
+    addParameter(p, 'user_defined_borders', [], ValidBorders);
+    
+    parse(p, linedata, direction, varargin{:});
+    
+    linedata = p.Results.linedata;
+    direction = p.Results.direction;
+    user_defined_borders = p.Results.user_defined_borders;
+    
+    %% function procedure
     
     % get results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
     
-    old_borders = results.selection_borders;
+    if isempty(user_defined_borders)
+        old_borders = results.selection_borders;
+    else
+        old_borders = user_defined_borders;
+    end
+    
     switch direction
         case 'absolute-relative'
             xdata = linedata(:,1);
