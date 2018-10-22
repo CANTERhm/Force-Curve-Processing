@@ -23,16 +23,34 @@ function MarkupData(varargin)
     end
     
     ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
+    markup = findobj(allchild(groot), 'Type', 'Patch', 'Tag', 'markup');
     xpoints = [borders(1) borders(2) borders(2) borders(1)];
     ypoints = [ax.YLim(1) ax.YLim(1) ax.YLim(2) ax.YLim(2)];
-    hold(ax, 'on');
-    patch(ax, xpoints, ypoints, 'black',...
-        'FaceColor', 'black',...
-        'FaceAlpha', 0.1,...
-        'LineStyle', 'none',...
-        'Tag', 'markup',...
-        'DisplayName', 'Markup');
-    hold(ax, 'off');
+    
+    if isempty(markup)
+        % setup an new markup
+        hold(ax, 'on');
+        patch(ax, xpoints, ypoints, 'black',...
+            'FaceColor', 'black',...
+            'FaceAlpha', 0.1,...
+            'LineStyle', 'none',...
+            'Tag', 'markup',...
+            'DisplayName', 'Data Range');
+        hold(ax, 'off');
+    else
+        % in case there are more markups on screen than there should be
+        % delete every markup but the last one
+        len = length(markup);
+        if len > 1
+            for i = 2:len
+                delete(markup(i))
+            end
+        end
+        
+        % update markup if theres only one
+        markup.XData = xpoints;
+        markup.YData = ypoints;
+    end
     
     %% update handles, results and fire event UpdateObject
     % update results object
