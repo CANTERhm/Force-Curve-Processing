@@ -195,6 +195,9 @@ handles = HelperFcn.DeleteFunctionsFromCurve(handles);
 % Delete edit_buttons from Gui
 handles = HelperFcn.DeleteFunctionsFromGui(handles);
 
+% Reset MainFigure Callbacks
+UtilityFcn.ResetMainFigureCallbacks();
+
 % clear Results-panel
 panel = handles.guiprops.Panels.results_panel;
 delete(allchild(panel));

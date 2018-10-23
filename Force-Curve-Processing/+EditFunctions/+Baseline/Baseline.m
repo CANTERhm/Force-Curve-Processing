@@ -2,6 +2,10 @@ function Baseline(handles, varargin)
 %BASELINE Calculates Baseline correction for an current active force-curve
 
     %% preparation of variables
+    
+    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
+    handles = guidata(main);
+    
     table = handles.guiprops.Features.edit_curve_table;
     if ~isempty(table.Data)
         curvename = table.UserData.CurrentCurveName;
@@ -129,8 +133,12 @@ end
             @EditFunctions.Baseline.HelperFcn.MarkupData);
 
         % xchannel
+        lh.addListener(handles.guiprops.Features.curve_xchannel_popup, 'Value', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.MarkupData);
 
         % ychannel
+        lh.addListener(handles.guiprops.Features.curve_ychannel_popup, 'Value', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.MarkupData);
         
     end
 

@@ -1,6 +1,19 @@
-function handles = PlotData(LineData, handles)
+function handles = PlotData(LineData, handles, varargin)
 % PLOTDATA plot prior extracted data via ExtractPlotData according to
 % setting in FCProcessing
+
+%% Input Parsing
+p = inputParser;
+
+addRequired(p, 'LineData');
+addRequired(p, 'handles');
+addParameter(p, 'RefreshAll', true);
+
+parse(p, LineData, handles, varargin{:});
+
+LineData = p.Results.LineData;
+handles = p.Results.handles;
+RefreshAll = p.Results.RefreshAll;
 
 %% preparation
 trace_x = [];
@@ -10,7 +23,12 @@ retrace_y = [];
 
 if ~isempty(handles.guiprops.MainAxes)
     ax = handles.guiprops.MainAxes;
-    delete(allchild(ax));
+    ForceCurves = findall(ax, 'Tag', 'ForceCurve');
+    if RefreshAll
+        delete(allchild(ax));
+    else
+        delete(ForceCurves);
+    end
 else
     note = 'No open Main Graph Window';
     HelperFcn.ShowNotification(note);
@@ -104,12 +122,14 @@ if ~isempty(trace_x) && ~isempty(trace_y)
     trace = line(ax, trace_x, trace_y);
     trace.Color = handles.curveprops.TraceColor;
     trace.DisplayName = 'Trace';
+    trace.Tag = 'ForceCurve';
 end
 
 if ~isempty(retrace_x) && ~isempty(retrace_y)
     retrace = line(ax, retrace_x, retrace_y);
     retrace.Color = handles.curveprops.RetraceColor;
     retrace.DisplayName = 'Retrace';
+    retrace.Tag = 'ForceCurve';
 end
 
 ax.XGrid = 'on';

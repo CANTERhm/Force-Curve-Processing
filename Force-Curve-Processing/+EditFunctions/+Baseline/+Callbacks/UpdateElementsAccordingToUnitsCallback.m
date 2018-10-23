@@ -9,6 +9,12 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
 
     % preparation of frequently used variables
     table = handles.guiprops.Features.edit_curve_table;
+    
+    % abort if no curve has been loaded
+    if isempty(table.UserData) || isempty(table.Data)
+        return
+    end
+    
     xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
     ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
     curvename = table.UserData.CurrentCurveName;
