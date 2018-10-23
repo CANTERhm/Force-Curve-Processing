@@ -21,13 +21,14 @@ if ~isempty(evt.Indices)
     src.UserData.CurrentRowIndex = row;
     src.UserData.CurrentRowSpan = [evt.Indices(1, 1); evt.Indices(end, 1)];
     src.UserData.CurrentCurveName = curvename;
+    handles.curveprops.CurrentCurveName = curvename;
     xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
     ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value; 
 
     [LineData, handles] = UtilityFcn.ExtractPlotData(handles.curveprops.(curvename).RawData, handles,...
         xch_idx,...
         ych_idx);
-    handles = IOData.PlotData(LineData, handles);
+    handles = IOData.PlotData(LineData, handles, 'RefreshAll', false);
 end
 guidata(handles.figure1, handles);
 

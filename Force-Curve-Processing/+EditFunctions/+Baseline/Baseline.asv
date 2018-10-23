@@ -140,11 +140,6 @@ end
         lh.addListener(handles.guiprops.Features.curve_ychannel_popup, 'Value', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
         
-        % edit_curve_table.UserData.CurrentCurveName
-        lh.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.MarkupData);
-        
-        
     end
 
     %% WindowButtonDownFcn and initial Markup

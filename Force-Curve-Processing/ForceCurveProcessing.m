@@ -70,6 +70,7 @@ guiprops.addproperty('MainAxes');
 
 % additional properties for curveprops
 curveprops.addproperty('CurvePartIndex', 'exclude', true);
+curveprops.addproperty('CurrentCurveName', 'exclude', true);
 curveprops.addproperty('TraceColor', 'exclude', true);
 curveprops.addproperty('RetraceColor', 'exclude', true);
 curveprops.addproperty('DeflectionAdjusted', 'exclude', true);

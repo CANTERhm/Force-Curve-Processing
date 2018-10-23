@@ -25,6 +25,8 @@ end
 
 % reset MainFigure
 close(handles.guiprops.MainFigure);
+handles.guiprops.MainFigure = [];
+handles.guiprops.MainAxes = [];
 handles = UtilityFcn.SetupMainFigure(handles);
 
 % empty popup-menu UserData.HasDefaultValue-property, to reset it if a new
