@@ -57,7 +57,7 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
                 linedata = EditFunctions.Baseline.HelperFcn.ConvertToVector(curvedata);
             end
         end
-        new_borders = EditFunctions.Baseline.HelperFcn.BorderTransformation(linedata, 'absolute-relative');
+        new_borders = sort(EditFunctions.Baseline.HelperFcn.BorderTransformation(linedata, 'absolute-relative'));
     end % ExpressAsRelative
 
     function new_borders = ExpressAsAbsolute()
@@ -81,7 +81,7 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
                 linedata = EditFunctions.Baseline.HelperFcn.ConvertToVector(curvedata);
             end
         end
-        new_borders = EditFunctions.Baseline.HelperFcn.BorderTransformation(linedata, 'relative-absolute');
+        new_borders = sort(EditFunctions.Baseline.HelperFcn.BorderTransformation(linedata, 'relative-absolute'));
     end % ExpressAsAbsolute
 
 end % UpdateElementsAccordingToUnitsCallback

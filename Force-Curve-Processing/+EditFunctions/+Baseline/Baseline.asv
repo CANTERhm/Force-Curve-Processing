@@ -49,7 +49,6 @@ end
     UtilityFcn.RefreshGraph();
     
     %% set WindowButton and KeyPress Callbacks
-    UtilityFcn.ResetMainFigureCallbacks();
     handles.guiprops.MainFigure.WindowButtonDownFcn = @wbdcb;
 
     %% layout input parameters and results
@@ -118,21 +117,9 @@ end
     
     %% propertylistener for fcp-gui-elements
     
-    if results.singleton == false % only add property listener once
-
-        % curveparts
-        lh.addListener(handles.guiprops.Features.curve_parts_popup, 'Value', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.MarkupData);
-
-        % curvesegments
-        lh.addListener(handles.guiprops.Features.curve_segments_popup, 'Value', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.MarkupData);
-
-        % xchannel
-
-        % ychannel
-        
-    end
+    % curveparts
+    
+    % curve
 
     %% WindowButtonDownFcn and initial Markup
     EditFunctions.Baseline.HelperFcn.MarkupData();

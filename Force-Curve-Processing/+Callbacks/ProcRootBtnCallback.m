@@ -8,6 +8,9 @@ HelperFcn.SwitchToggleState(src);
 figure1 = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
 handles = guidata(figure1);
 
+% reset all MainFigure Callbacks
+UtilityFcn.ResetMainFigureCallbacks();
+
 % clear results panel 
 delete(allchild(handles.guiprops.Panels.results_panel))
 

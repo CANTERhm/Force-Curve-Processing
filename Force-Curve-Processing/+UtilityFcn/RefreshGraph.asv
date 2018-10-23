@@ -9,10 +9,7 @@ function RefreshGraph()
 
     table = handles.guiprops.Features.edit_curve_table;
     
-    % return if table's UserData-property is empty
-    if isempty(table.UserData)
-        return
-    end
+    % return if table's UserData
     
     xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
     ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
