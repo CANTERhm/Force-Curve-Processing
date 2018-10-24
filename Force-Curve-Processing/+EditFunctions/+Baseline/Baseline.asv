@@ -37,16 +37,7 @@ if isempty(results)
     results.addproperty('results_features');
     
     loaded_input = handles.procedure.Baseline;
-    results.Status = loaded_input.Status;
-    results.singleton = loaded_input.singleton;
-    results.correction_type = loaded_input.correction_type;
-    results.units = loaded_input.units;
-    results.selection_borders = loaded_input.selection_borders;
-    results.slope = loaded_input.slope;
-    results.offset = loaded_input.offset;
-    results.calculated_data = loaded_input.calculated_data;
-    resutls.input_features = loaded_input.input_features;
-    results.results_features = loaded_input.results_features;
+    results.Status = loaded_in
 %     results.Status = [];
 %     results.singleton = false;
 %     results.correction_type = 1;
