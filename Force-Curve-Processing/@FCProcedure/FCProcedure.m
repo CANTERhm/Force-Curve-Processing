@@ -1,6 +1,7 @@
 classdef FCProcedure < Properties
     
     properties(SetObservable, AbortSet)
+        path = ''
     end % properties
     
     

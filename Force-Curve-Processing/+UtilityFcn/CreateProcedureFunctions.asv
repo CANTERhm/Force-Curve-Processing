@@ -23,7 +23,7 @@ file = [path '\' filename];
 %     file = handles.guiprops.ProcedureFilePathObject.path;
 % end
 object = handles.procedure;
-object.path = file;
+object.path = 
 object = object.ReadProcedureFile(file);
 
 % update handles-struct
