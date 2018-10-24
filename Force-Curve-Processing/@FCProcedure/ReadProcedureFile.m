@@ -23,7 +23,9 @@ while ~feof(fileID)
                 splitStr{2} = eval(splitStr{2});
             catch ME % if you can
                 switch ME.identifier
-                    case 'MATLAB:UndefinedFunction'
+                    case 'MATLAB:UndefinedFunction' % not a known function or a number
+                        % do nothing
+                    case 'MATLAB:m_missing_operator' % mixed numeric and alphabetic characters
                         % do nothing
                     otherwise
                         rethrow(ME);
