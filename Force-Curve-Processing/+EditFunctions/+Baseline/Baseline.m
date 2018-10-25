@@ -47,11 +47,6 @@ if isempty(results)
     results.calculated_data = loaded_input.calculated_data;
     results.input_features = loaded_input.input_features;
     results.results_features = loaded_input.results_features;
-%     results.Status = [];
-%     results.singleton = false;
-%     results.correction_type = 1;
-%     results.units = 'relative';
-%     results.selection_borders = [0.99 1];
 end
 
     setappdata(handles.figure1, 'Baseline', results);
