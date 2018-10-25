@@ -121,8 +121,6 @@ handles.guiprops.Features.curve_ychannel_popup = curve_ychannel_popup;
 handles.guiprops.Features.curve_parts_popup = curve_parts_popup;
 handles.guiprops.Features.curve_segments_popup = curve_segments_popup;
 
-% add listeners to curve_segment_popup
-
 % if curve_parts_popup.Value changes
 handles.listeners.addListener(handles.guiprops.Features.curve_parts_popup, 'Value', 'PostSet',...
     {@Callbacks.UpdatePopupMenuCallback, handles});
