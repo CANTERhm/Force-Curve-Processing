@@ -45,7 +45,7 @@ if isempty(results)
     results.slope = loaded_input.slope;
     results.offset = loaded_input.offset;
     results.calculated_data = loaded_input.calculated_data;
-    resutls.input_features = loaded_input.input_features;
+    results.input_features = loaded_input.input_features;
     results.results_features = loaded_input.results_features;
 %     results.Status = [];
 %     results.singleton = false;
@@ -129,6 +129,13 @@ end
         % kind of an output from Baseline
         lh.addListener(results, 'UpdateObject',...
         {@EditFunctions.Baseline.Callbacks.UpdateResultsToMain, handles, results});
+    
+        % listener for slope and baseline for results_features
+        lh.addListener(results, 'slope', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.MarkupData);
+        lh.addListener(results, 'offset', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.MarkupData);
+        
     end
     
     %% propertylistener for fcp-gui-elements
