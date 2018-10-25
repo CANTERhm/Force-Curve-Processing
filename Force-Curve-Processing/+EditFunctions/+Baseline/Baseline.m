@@ -132,9 +132,9 @@ end
     
         % listener for slope and baseline for results_features
         lh.addListener(results, 'slope', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.MarkupData);
+            @EditFunctions.Baseline.Callbacks.UpdateSlopeCallback);
         lh.addListener(results, 'offset', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.MarkupData);
+            @EditFunctions.Baseline.Callbacks.UpdateOffsetCallback);
         
     end
     
