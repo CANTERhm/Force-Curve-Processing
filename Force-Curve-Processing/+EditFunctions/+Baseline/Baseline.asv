@@ -48,7 +48,7 @@ if isempty(results)
     results.calculated_data = loaded_input.calculated_data;
     results.input_features = loaded_input.input_features;
     results.results_features = loaded_input.results_features;
-    results.userdata = loaded_input.userdata;
+    results.u
 end
 
     setappdata(handles.figure1, 'Baseline', results);
@@ -211,7 +211,8 @@ end
         
             cp_wbmcb = h_wbmcb.guiprops.MainAxes.CurrentPoint;
             user_defined_borders = [r_wbmcb.selection_borders(1) cp_wbmcb(1, 1)];
-            r_wbmcb.selection_borders = user_defined_borders;
+            r_wbmcb.new_borders = user_defined_borders;
+%             r_wbmcb.selection_borders = user_defined_borders;
             
             % refresh results object and handles
             setappdata(h_wbmcb.figure1, 'Baseline', r_wbmcb);
@@ -228,8 +229,8 @@ end
             h_wbucb = guidata(main_wbucb);
             r_wbucb = getappdata(h_wbucb.figure1, 'Baseline');  
             
-%             r_wbucb.selection_borders = r_wbucb.userdata.new_borders;
-%             r_wbucb.userdata = [];
+            r_wbucb.selection_borders = r_wbucb.new_borders;
+            r_wbucb = rmfield(r_wbucb, 'new_borders');
             
             if strcmp(r_wbucb.Status, 'units_changed')
                 r_wbucb.units = 'relative';

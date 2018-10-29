@@ -9,6 +9,7 @@
 # calculated_data: []
 # input_features: []
 # results_features: []
+# userdata: []
 
 # function: VerticalTipPosition
 # nargin: 0
