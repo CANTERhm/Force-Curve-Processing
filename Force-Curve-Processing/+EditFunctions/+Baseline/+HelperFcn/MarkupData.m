@@ -24,7 +24,7 @@ function MarkupData(varargin)
     %% refresh handles and results
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(main, EditFunction);
+    results = getappdata(handles.figure1, EditFunction);
     
     %% markup datarange
     

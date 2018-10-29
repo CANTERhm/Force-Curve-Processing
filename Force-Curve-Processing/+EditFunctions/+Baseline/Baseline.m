@@ -118,18 +118,21 @@ end
             @EditFunctions.Baseline.Callbacks.UpdateBorderEditsCallback);
         lh.addListener(results, 'selection_borders', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
+        lh.addListener(results, 'selection_borders', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.CalculateCorrection);
+        
+        
+        % listener for slope and baseline for results_features
+        lh.addListener(results, 'slope', 'PostSet',...
+            @EditFunctions.Baseline.Callbacks.UpdateSlopeCallback);
+        lh.addListener(results, 'offset', 'PostSet',...
+            @EditFunctions.Baseline.Callbacks.UpdateOffsetCallback);
         
         % event listener to update handles.curveprops.curvename.Results.Baseline
         % This step is important, because it update the handles-struct; it is
         % kind of an output from Baseline
         lh.addListener(results, 'UpdateObject',...
         {@EditFunctions.Baseline.Callbacks.UpdateResultsToMain, handles, results});
-    
-        % listener for slope and baseline for results_features
-        lh.addListener(results, 'slope', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.UpdateSlopeCallback);
-        lh.addListener(results, 'offset', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.UpdateOffsetCallback);
         
     end
     
@@ -154,14 +157,20 @@ end
             @EditFunctions.Baseline.HelperFcn.MarkupData);
         
         % edit_curve_table.UserData.CurrentCurveName
+        % execute following callbacks if the selected curve changes
         lh.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
+        lh.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
+            @EditFunctions.Baseline.HelperFcn.CalculateCorrection);
         
         
     end
 
     %% initial Markup
     EditFunctions.Baseline.HelperFcn.MarkupData();
+    
+    %% initial Data Correction
+    EditFunctions.Baseline.HelperFcn.CalculateCorrection();
 
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     results.FireEvent('UpdateObject');

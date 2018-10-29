@@ -27,7 +27,7 @@ function CalculateCorrection(varargin)
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
     
-    addParameter(p, 'EditFunction', [], ValidCharacter);
+    addParameter(p, 'EditFunction', 'Baseline', ValidCharacter);
     addParameter(p, 'RawData', [], ValidCharacter);
     
     % no futher input parameters so far
@@ -37,7 +37,7 @@ function CalculateCorrection(varargin)
     src = p.Results.src;
     evt = p.Results.evt;
     EditFunction = p.Results.EditFunction;
-    RawData = p.Results.EditFunction;
+    RawData = p.Results.RawData;
     
     %% function procedure
     
@@ -45,7 +45,7 @@ function CalculateCorrection(varargin)
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     if ~isempty(main)
         handles = guidata(main);
-        results = getappdata(handles.figure1, 'Baseline');
+        results = getappdata(handles.figure1, EditFunction);
     else
         % abort, no open fcp-app
         return
@@ -60,14 +60,14 @@ function CalculateCorrection(varargin)
     end
     curvename = table.UserData.CurrentCurveName;
     
-    % Check inputparameter EditFunction
-    if ~isempty(EditFunction)
-        last_editfunction = EditFunction;
-    else
-        editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-        edit_function = findobj(editfunctions, 'Tag', EditFunction);
-        last_editfunction_index = find(editfunctions == edit_function) + 1;
+    % obtain last editfunction
+    editfunctions = allchild(handles.guiprops.Panels.processing_panel);
+    edit_function = findobj(editfunctions, 'Tag', EditFunction);
+    last_editfunction_index = find(editfunctions == edit_function) + 1;
+    if ~isempty(last_editfunction_index)
         last_editfunction = editfunctions(last_editfunction_index).Tag;
+    else
+        last_editfunction = 'procedure_root_btn';
     end
     
     % Check inputparameter RawData
@@ -83,11 +83,11 @@ function CalculateCorrection(varargin)
             % get data from last editfunction
             curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
                 'edit_button', last_editfunction);
-            linedata = ConvertToVector(curvedata);
+            linedata = UtilityFcn.ConvertToVector(curvedata);
         else
             % get data from active editfunction
             curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
-            linedata = ConvertToVector(curvedata);
+            linedata = UtilityFcn.ConvertToVector(curvedata);
         end
     end
     
@@ -111,12 +111,15 @@ function CalculateCorrection(varargin)
     %% nested functions
     
     function calc_data = GetCalcData(results, linedata)
-        
+    
+    % frequently used variables
+    xdata = linedata(:,1);
+    ydata = linedata(:,2);
+    
     % Check units-property
         switch results.units
             case 'absolute'
                 old_borders = results.selection_borders;
-                xdata = linedata(:,1);
                 x = length(xdata);
                 a_left = old_borders(1);
                 a_right = old_borders(2);
@@ -129,13 +132,16 @@ function CalculateCorrection(varargin)
                 % right border
                 r_right = aind_right/x;
 
-                borders = round([r_left r_right]);
+                borders = [r_left r_right];
             case 'relative'
-                borders = round(results.selection_borders);
+                borders = results.selection_borders;
         end
         
         % data extraction
-        calc_data = linedata(borders(1):borders(2));
+        idx_left = round(length(linedata(:,1))*borders(1));
+        idx_right = round(length(linedata(:,2))*borders(2));
+        calc_data(:,1) = xdata(idx_left:idx_right);
+        calc_data(:,2) = ydata(idx_left:idx_right);
         
     end % GetCalcData
 

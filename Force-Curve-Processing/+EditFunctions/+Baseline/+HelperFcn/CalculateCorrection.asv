@@ -27,7 +27,7 @@ function CalculateCorrection(varargin)
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
     
-    addParameter(p, 'EditFunction', [], ValidCharacter);
+    addParameter(p, 'EditFunction', 'Baseline', ValidCharacter);
     addParameter(p, 'RawData', [], ValidCharacter);
     
     % no futher input parameters so far
@@ -60,15 +60,11 @@ function CalculateCorrection(varargin)
     end
     curvename = table.UserData.CurrentCurveName;
     
-    % Check inputparameter EditFunction
-    if ~isempty(EditFunction)
-        last_editfunction = EditFunction;
-    else
-        editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-        edit_function = findobj(editfunctions, 'Tag', EditFunction);
-        last_editfunction_index = find(editfunctions == edit_function) + 1;
-        last_editfunction = editfunctions(last_editfunction_index).Tag;
-    end
+    % obtain last editfunction
+    editfunctions = allchild(handles.guiprops.Panels.processing_panel);
+    edit_function = findobj(editfunctions, 'Tag', EditFunction);
+    last_editfunction_index = find(editfunctions == edit_function) + 1;
+    last_editfunction = editfunctions(last_editfunction_index).Tag;
     
     % Check inputparameter RawData
     if isempty(RawData)
@@ -83,26 +79,26 @@ function CalculateCorrection(varargin)
             % get data from last editfunction
             curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
                 'edit_button', last_editfunction);
-            linedata = ConvertToVector(curvedata);
+            linedata = UtilityFcn.ConvertToVector(curvedata);
         else
             % get data from active editfunction
             curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
-            linedata = ConvertToVector(curvedata);
+            linedata = UtilityFcn.ConvertToVector(curvedata);
         end
     end
     
     % obtain data for calculate corrections
-    calc_data = GetCalcData(borders);
+    calc_data = GetCalcData(results, linedata);
     
     % Calculate Corrections
-    [slope, offset] = CalculateFit();
+    [slope, offset] = CalculateFit(calc_data);
     
     % update handles, results and fire event UpdateObject
     results.slope = slope;
     results.offset = offset;
     
     % update results object
-    setappdata(handles.figure1, EditFunction, results);
+    setappdata(handles.figure1, 'Baseline', results);
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.EditFunction
@@ -111,11 +107,15 @@ function CalculateCorrection(varargin)
     %% nested functions
     
     function calc_data = GetCalcData(results, linedata)
+    
+    % frequently used variables
+    xdata = linedata(:,1);
+    ydata = linedata(:,2);
+    
     % Check units-property
         switch results.units
             case 'absolute'
                 old_borders = results.selection_borders;
-                xdata = linedata(:,1);
                 x = length(xdata);
                 a_left = old_borders(1);
                 a_right = old_borders(2);
@@ -128,13 +128,23 @@ function CalculateCorrection(varargin)
                 % right border
                 r_right = aind_right/x;
 
-                borders = round([r_left r_right]);
+                borders = [r_left r_right];
             case 'relative'
-                borders = round(results.selection_borders);
+                borders = results.selection_borders;
         end
+        
+        % data extraction
+        idx_left = round(length(linedata(:,1))*borders(1));
+        idx_right = round(length(linedata(:,2))*borders(2));
+        calc_data(:,1) = xdata(idx_left:idx_right);
+        calc_data(:,2) = ydata(idx_left:idx_right);
+        
     end % GetCalcData
 
-    function [slope, offset] = CalculateFit()
+    function [slope, offset] = CalculateFit(calc_data)
+        f = Poly1Fit(calc_data(:,1), calc_data(:,2));
+        slope = f.p1;
+        offset = f.p2;
     end % CalculateFit
 
 end % CalculateCorrection
