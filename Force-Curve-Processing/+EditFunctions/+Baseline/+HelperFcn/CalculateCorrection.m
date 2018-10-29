@@ -51,6 +51,11 @@ function CalculateCorrection(varargin)
         return
     end
     
+    if isempty(results)
+        % no editfunctions are loaded
+        return
+    end
+    
     % create frequently used variables
     xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
     ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
