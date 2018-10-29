@@ -160,7 +160,7 @@ end
         
     end
 
-    %% WindowButtonDownFcn and initial Markup
+    %% initial Markup
     EditFunctions.Baseline.HelperFcn.MarkupData();
 
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
