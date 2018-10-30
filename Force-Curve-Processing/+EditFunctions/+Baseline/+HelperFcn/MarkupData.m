@@ -22,9 +22,7 @@ function MarkupData(varargin)
     EditFunction = p.Results.EditFunction;
 
     %% refresh handles and results
-%     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-%     handles = guidata(main);
-%     results = getappdata(handles.figure1, EditFunction);
+
     % get latest references to handles and result
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     if ~isempty(main)

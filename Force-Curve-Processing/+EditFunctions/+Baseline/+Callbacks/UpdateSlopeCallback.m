@@ -17,7 +17,12 @@ function UpdateSlopeCallback(src, evt)
     % update unit labels
     table = handles.guiprops.Features.edit_curve_table;
     curvename = table.UserData.CurrentCurveName;
-    units = handles.curveprops.(curvename).RawData.SpecialInformation.Segment1.units;
+    SpecialInformation = handles.curveprops.(curvename).RawData.SpecialInformation;
+    if ~isempty(SpecialInformation)
+        units = SpecialInformation.Segment1.units;
+    else
+        units = [];
+    end
     if ~isempty(units)
         xch = handles.guiprops.Features.curve_xchannel_popup.Value;
         ych = handles.guiprops.Features.curve_ychannel_popup.Value;
