@@ -19,8 +19,8 @@ function UpdateOffsetCallback(src, evt)
     curvename = table.UserData.CurrentCurveName;
     units = handles.curveprops.(curvename).RawData.SpecialInformation.Segment1.units;
     if ~isempty(units)
-        xch = handles.guiprops.Features.curve_xchannel_popup.Value;
-        off_unit.String = units{xch};
+        ych = handles.guiprops.Features.curve_ychannel_popup.Value;
+        off_unit.String = units{ych};
     end
 
     % refresh results object and handles

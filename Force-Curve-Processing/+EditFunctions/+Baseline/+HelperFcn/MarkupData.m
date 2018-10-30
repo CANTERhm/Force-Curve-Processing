@@ -22,9 +22,23 @@ function MarkupData(varargin)
     EditFunction = p.Results.EditFunction;
 
     %% refresh handles and results
+%     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
+%     handles = guidata(main);
+%     results = getappdata(handles.figure1, EditFunction);
+    % get latest references to handles and result
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(main, EditFunction);
+    if ~isempty(main)
+        handles = guidata(main);
+        results = getappdata(handles.figure1, EditFunction);
+    else
+        % abort, no open fcp-app
+        return
+    end
+    
+    if isempty(results)
+        % no editfunctions are loaded
+        return
+    end
     
     %% markup datarange
     
@@ -39,8 +53,8 @@ function MarkupData(varargin)
         return
     end
     
-    ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
-    markup = findobj(allchild(groot), 'Type', 'Patch', 'Tag', 'markup');
+    ax = handles.guiprops.MainAxes;
+    markup = findobj(ax, 'Type', 'Patch', 'Tag', 'markup');
     xpoints = [borders(1) borders(2) borders(2) borders(1)];
     ypoints = [ax.YLim(1) ax.YLim(1) ax.YLim(2) ax.YLim(2)];
     
@@ -67,6 +81,7 @@ function MarkupData(varargin)
         % update markup if theres only one
         markup.XData = xpoints;
         markup.YData = ypoints;
+        markup.FaceColor = 'black';
     end
     
     %% update handles, results and fire event UpdateObject
