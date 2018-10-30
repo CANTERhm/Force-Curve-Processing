@@ -53,8 +53,8 @@ function MarkupData(varargin)
         return
     end
     
-    ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
-    markup = findobj(allchild(groot), 'Type', 'Patch', 'Tag', 'markup');
+    ax = handles.guiprops.MainAxes;
+    markup = findobj(ax, 'Type', 'Patch', 'Tag', 'markup');
     xpoints = [borders(1) borders(2) borders(2) borders(1)];
     ypoints = [ax.YLim(1) ax.YLim(1) ax.YLim(2) ax.YLim(2)];
     
@@ -81,6 +81,7 @@ function MarkupData(varargin)
         % update markup if theres only one
         markup.XData = xpoints;
         markup.YData = ypoints;
+        markup.FaceColor = 'black';
     end
     
     %% update handles, results and fire event UpdateObject

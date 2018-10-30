@@ -117,41 +117,49 @@ function CalculateCorrection(varargin)
     
     function calc_data = GetCalcData(results, linedata)
     
-    % frequently used variables
-    xdata = linedata(:,1);
-    ydata = linedata(:,2);
+        % frequently used variables
+        xdata = linedata(:,1);
+        ydata = linedata(:,2);
     
-    % Check units-property
-        switch results.units
-            case 'absolute'
-                old_borders = results.selection_borders;
-                x = length(xdata);
-                a_left = old_borders(1);
-                a_right = old_borders(2);
-                aind_left = knnsearch(xdata, a_left);
-                aind_right = knnsearch(xdata, a_right);
+        % Check units-property
+            switch results.units
+                case 'absolute'
+                    old_borders = results.selection_borders;
+                    x = length(xdata);
+                    a_left = old_borders(1);
+                    a_right = old_borders(2);
+                    aind_left = knnsearch(xdata, a_left);
+                    aind_right = knnsearch(xdata, a_right);
 
-                % left border
-                r_left = aind_left/x;
+                    % left border
+                    r_left = aind_left/x;
 
-                % right border
-                r_right = aind_right/x;
+                    % right border
+                    r_right = aind_right/x;
 
-                borders = [r_left r_right];
-            case 'relative'
-                borders = results.selection_borders;
-        end
-        
-        % data extraction
-        idx_left = round(length(linedata(:,1))*borders(1));
-        idx_right = round(length(linedata(:,2))*borders(2));
-        calc_data(:,1) = xdata(idx_left:idx_right);
-        calc_data(:,2) = ydata(idx_left:idx_right);
-        
+                    borders = [r_left r_right];
+                case 'relative'
+                    borders = results.selection_borders;
+            end
+
+            % data extraction
+            idx_left = round(length(linedata(:,1))*borders(1));
+            idx_right = round(length(linedata(:,2))*borders(2));
+            calc_data(:,1) = xdata(idx_left:idx_right);
+            calc_data(:,2) = ydata(idx_left:idx_right);
+
     end % GetCalcData
 
     function [slope, offset] = CalculateFit(calc_data)
-        f = Poly1Fit(calc_data(:,1), calc_data(:,2));
+        
+        if length(calc_data) <= 3
+            % not enough data for fitting 
+            slope = '...';
+            offset = '...';
+            return
+        end
+        
+        f = fit(calc_data(:,1), calc_data(:,2), 'poly1');
         slope = f.p1;
         offset = f.p2;
     end % CalculateFit
