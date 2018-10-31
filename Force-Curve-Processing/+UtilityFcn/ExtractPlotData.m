@@ -103,8 +103,10 @@ else
         Data = handles.curveprops.(curvename).Results.(active_edit_button).calculated_data;
     catch ME % if you can
         switch ME.identifier
-            case 'MATLAB:noSuchMethodOrField'
-                Data = [];
+            case 'MATLAB:noSuchMethodOrField' % referenced field is not existing
+                Data = RawData.CurveData;
+            case 'MATLAB:structRefFromNonStruct' % reference a field form a non struct element
+                Data = RawData.CurveData;
             otherwise
                 rethrow(ME)
         end
