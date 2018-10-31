@@ -22,8 +22,8 @@ function ApplyCorrection(varargin)
         'CalculateCorrection:invalidInput',...
         'Input is not a character-vector or a string-scalar.');
     
-    addOptional(p, 'src');
-    addOptional(p, 'evt');
+    addOptional(p, 'src', []);
+    addOptional(p, 'evt', []);
     addParameter(p, 'EditFunction', 'Baseline', ValidCharacter);
     addParameter(p, 'RawData', [], ValidCharacter);
     
@@ -116,11 +116,14 @@ function ApplyCorrection(varargin)
     
     %% nested functions
     
-    function apply(data, varargin)
-        % applys corrections in varargin to data
-        
-        disp(length(varargin))
-        
+    function corrected_data = apply(data, varargin)
+    %APPLY applys corrections in varargin to data
+    %
+    % varargin{1} have to be 'data' input
+    % vararing{2:end} are varaible inputs of corrections to apply on data
+    
+        corrected_data = data;
+
     end % apply
 
 end % ApplyCorrection

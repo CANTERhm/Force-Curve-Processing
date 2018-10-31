@@ -203,6 +203,9 @@ end
     
     %% initial Data Correction
     EditFunctions.Baseline.HelperFcn.CalculateCorrection();
+    
+    %% Apply initial Data Correction
+    EditFunctions.Baseline.HelperFcn.ApplyCorrection();
 
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     results.FireEvent('UpdateObject');
