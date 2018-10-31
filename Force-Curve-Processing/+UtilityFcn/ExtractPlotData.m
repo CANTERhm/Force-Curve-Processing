@@ -100,7 +100,7 @@ if strcmp(active_edit_button, DefaultValues.active_edit_button)
     Data = RawData.CurveData;
 else
     try
-        Data = handles.curveprops.(curvename).Results.(active_edit_button).calculated_data;
+        Data = handles.curveprops.(curvename).Results.(active_edit_button);
     catch ME % if you can
         switch ME.identifier
             case 'MATLAB:noSuchMethodOrField' % referenced field is not existing
@@ -119,6 +119,7 @@ else
         Data = RawData.CurveData;
     end
     
+    % take calculated_data from curveprops.curvename.Results if available
     if any(ismember(names, 'calculated_data'))
         if isempty(Data.calculated_data)
             Data = RawData.CurveData;
