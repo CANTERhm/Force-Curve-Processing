@@ -55,7 +55,7 @@ function ApplyCorrection(varargin)
     if ~isempty(last_editfunction_index)
         last_editfunction = editfunctions(last_editfunction_index).Tag;
     else
-        last_editfunction = [];
+        last_editfunction = 'procedure_root_btn';
     end
     
     % obtain current curve name
@@ -64,7 +64,7 @@ function ApplyCorrection(varargin)
         return
     end
     curvename = table.UserData.CurrentCurveName;
-    
+
     % setup data
     data = [];
     
@@ -74,12 +74,12 @@ function ApplyCorrection(varargin)
     end
     
     % try to fetch data for correction from last editfunction
-    if isempty(data) && ~isempty(last_editfunction)
-        result = handles.curveprops.(curvename).Results.(last_editfunction);
-        if isa(result, 'sturct')
+    if isempty(data) && ~strcmp(last_editfunction, 'procedure_root_btn')
+        res = handles.curveprops.(curvename).Results.(last_editfunction);
+        if isa(res, 'sturct')
             props = fieldnames(results);
             if ismember(props, 'calculated_data')
-                calculated_data = results.calculated_data;
+                calculated_data = res.calculated_data;
                 if ~isempty(calculated_data)
                     data = calculated_data;
                 end
@@ -96,10 +96,12 @@ function ApplyCorrection(varargin)
     % apply the correction
     switch results.correction_type
         case 1
-            corrected_data = apply(data, results.slope);
+            corrected_data = apply(data, handles,...
+                results.slope);
         case 2
-            corrected_data = apply(data, results.slope,...
-                                         results.offset);
+            corrected_data = apply(data, handles,...
+                results.slope,...
+                results.offset);
     end
     
     %% update all Results
@@ -112,15 +114,46 @@ function ApplyCorrection(varargin)
     % trigger update to handles.curveprops.curvename.Results.EditFunction
     results.FireEvent('UpdateObject');
     
+%     ------------------for debugging purposes-----------------------------
+%     xch = handles.guiprops.Features.curve_xchannel_popup.Value;
+%     ych = handles.guiprops.Features.curve_ychannel_popup.Value;
+%     RawData = handles.curveprops.(curvename).RawData;
+%     linedata = UtilityFcn.ExtractPlotData(RawData, handles, xch, ych);
+%     curve = UtilityFcn.ConvertToVector(linedata);
+%     ---------------------------------------------------------------------
+    
     %% nested functions
     
-    function corrected_data = apply(data, varargin)
+    function corrected_data = apply(data, handles, varargin)
     %APPLY applys corrections in varargin to data
     %
     % data: input with data to be corrected
     % vararing: list with corrections to be applied on data
-    
+        
+        xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
+        ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
+        
         slope = varargin{1};
+        segments = fieldnames(data);
+        for i = 1:length(segments)
+            segment = segments{i};
+            channels = fieldnames(data.(segment));
+            xdata = data.(segment).(channels{xchannel});
+            ydata = data.(segment).(channels{ychannel});
+            ydata = ydata - xdata.*slope;
+            data.(segment).(channels{ychannel}) = ydata;
+        end
+        if length(varargin) > 1
+            for i = 1:length(segments)
+                segment = segments{i};
+                channels = fieldnames(segment);
+                ydata = data.(segment).(channels{ychannel});
+                ydata = ydata - offset;
+                data.(segment).(channels{ychannel}) = ydata;
+            end
+        end
+        
+        corrected_data = data;
 
     end % apply
 

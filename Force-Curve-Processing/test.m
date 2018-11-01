@@ -1,10 +1,12 @@
+table = handles.guiprops.Features.edit_curve_table;
+curvename = table.UserData.CurrentCurveName;
+xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
+ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
+RawData = handles.curveprops.(curvename).RawData;
 
-nested(1,2,3,4);
+LineData = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
+line = UtilityFcn.ConvertToVector(LineData);
 
-function nested(x, y, varargin)
-    disp("Total number of input arguments: " + nargin)
-    
-    formatSpec = "Size of varargin cell array: %dx%d";
-    str = compose(formatSpec,size(varargin));
-    disp(str)
-end
+figure();
+hold on
+plot(line(:,1), line(:,2));

@@ -112,21 +112,32 @@ else
         end
     end % try
     
-    if isa(Data, 'struct')
-        names = fieldnames(Data);
-    else
-        names = [];
+    if ~isobject(Data)
         Data = RawData.CurveData;
     end
     
+%     if isa(Data, 'struct')
+%         names = fieldnames(Data);
+%     else
+%         names = [];
+%         Data = RawData.CurveData;
+%     end
+    
     % take calculated_data from curveprops.curvename.Results if available
-    if any(ismember(names, 'calculated_data'))
+    if isprop(Data, 'calculated_data')
         if isempty(Data.calculated_data)
             Data = RawData.CurveData;
         else
             Data = Data.calculated_data;
         end
     end
+%     if any(ismember(names, 'calculated_data'))
+%         if isempty(Data.calculated_data)
+%             Data = RawData.CurveData;
+%         else
+%             Data = Data.calculated_data;
+%         end
+%     end
 end % if 
 
 % start Extracting data
