@@ -7,13 +7,15 @@ function ApplyCorrection(varargin)
 %
 % Name-Value-Pairs
 %   - EditFunction: char-vector or string-scalar, determining from which
-%   editfunction the calculated_data property should be taken from;
-%   default: the last editfunction (left from the active one on gui)
+%                   editfunction the calculated_data property should be 
+%                   taken from;
+%                   default: the last editfunction 
+%                            (left from the active one on gui)
 %
-%   - RawData: char-vector or string-scalar, determinting the afm-object
-%   containing the RawData if calculated_data form active editfunction or
-%   last editfunction is empty
-%   default: RawData from currently shown curve
+%   - RawData: afm-object containing the RawData if calculated_data 
+%              form active editfunction or last 
+%              editfunction is empty
+%              default: RawData from currently shown curve
 
     %% input parser
     p = inputParser;
@@ -25,12 +27,14 @@ function ApplyCorrection(varargin)
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
     addParameter(p, 'EditFunction', 'Baseline', ValidCharacter);
+    addParameter(p, 'RawData', []);
     
     parse(p, varargin{:});
     
     src = p.Results.src;
     evt = p.Results.evt;
     EditFunction = p.Results.EditFunction;
+    RawData = p.Results.RawData;
     
     %% get latest references to handles and result
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
@@ -51,7 +55,7 @@ function ApplyCorrection(varargin)
     if ~isempty(last_editfunction_index)
         last_editfunction = editfunctions(last_editfunction_index).Tag;
     else
-        last_editfunction = 'procedure_root_btn';
+        last_editfunction = [];
     end
     
     % obtain current curve name
@@ -61,15 +65,19 @@ function ApplyCorrection(varargin)
     end
     curvename = table.UserData.CurrentCurveName;
     
-    % obtain data
-    RawData = handles.curveprops.(curvename).RawData;
-    xchannel_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
-    ychannel_idx = handles.guiprops.Features.curve_ychannel_popup.Value;
-    LineData = UtilityFcn.ExtractPlotData(RawData, handles,...
-        xchannel_idx,...
-        ychannel_idx,...
-        'edit_button', last_editfunction);
-    data = UtilityFcn.ConvertToVector(LineData);
+    % take RawData, if input is not empty
+    if ~isempty(RawData)
+        data = RawData.CurveData;
+    end
+    
+    % try to fetch data for correction from last editfunction
+    if ~isempty(last_editfunction)
+        calculated_data = handles.curveprops.(curvename).Results.(last_editfunction);
+    end
+    
+    % if data from last editfunction is not avaliable, take
+    % RawData.CurveData from acitve editfunction
+    
     
     % apply the correction
     switch results.correction_type
