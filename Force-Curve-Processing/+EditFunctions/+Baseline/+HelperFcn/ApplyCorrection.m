@@ -65,19 +65,33 @@ function ApplyCorrection(varargin)
     end
     curvename = table.UserData.CurrentCurveName;
     
+    % setup data
+    data = [];
+    
     % take RawData, if input is not empty
     if ~isempty(RawData)
         data = RawData.CurveData;
     end
     
     % try to fetch data for correction from last editfunction
-    if ~isempty(last_editfunction)
-        calculated_data = handles.curveprops.(curvename).Results.(last_editfunction);
+    if isempty(data) && ~isempty(last_editfunction)
+        result = handles.curveprops.(curvename).Results.(last_editfunction);
+        if isa(result, 'sturct')
+            props = fieldnames(results);
+            if ismember(props, 'calculated_data')
+                calculated_data = results.calculated_data;
+                if ~isempty(calculated_data)
+                    data = calculated_data;
+                end
+            end
+        end
     end
     
     % if data from last editfunction is not avaliable, take
     % RawData.CurveData from acitve editfunction
-    
+    if isempty(data)
+        data = handles.curveprops.(curvename).RawData.CurveData;
+    end
     
     % apply the correction
     switch results.correction_type
@@ -106,8 +120,8 @@ function ApplyCorrection(varargin)
     % data: input with data to be corrected
     % vararing: list with corrections to be applied on data
     
-        
-    
+        slope = varargin{1};
+
     end % apply
 
 end % ApplyCorrection
