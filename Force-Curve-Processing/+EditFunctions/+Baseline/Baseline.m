@@ -146,26 +146,17 @@ end
         % curveparts
         results.results_listener.addListener(handles.guiprops.Features.curve_parts_popup, 'Value', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
-%         lh.addListener(handles.guiprops.Features.curve_parts_popup, 'Value', 'PostSet',...
-%             @EditFunctions.Baseline.HelperFcn.MarkupData);
 
         % curvesegments
         results.results_listener.addListener(handles.guiprops.Features.curve_segments_popup, 'Value', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
-%         lh.addListener(handles.guiprops.Features.curve_segments_popup, 'Value', 'PostSet',...
-%             @EditFunctions.Baseline.HelperFcn.MarkupData);
 
         % xchannel
         results.results_listener.addListener(handles.guiprops.Features.curve_xchannel_popup, 'Value', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
-%         lh.addListener(handles.guiprops.Features.curve_xchannel_popup, 'Value', 'PostSet',...
-%             @EditFunctions.Baseline.HelperFcn.MarkupData);
-
         % ychannel
         results.results_listener.addListener(handles.guiprops.Features.curve_ychannel_popup, 'Value', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.MarkupData);
-%         lh.addListener(handles.guiprops.Features.curve_ychannel_popup, 'Value', 'PostSet',...
-%             @EditFunctions.Baseline.HelperFcn.MarkupData);
         
         % edit_curve_table.UserData.CurrentCurveName
         % execute following callbacks if the selected curve changes
@@ -173,12 +164,7 @@ end
             @EditFunctions.Baseline.HelperFcn.MarkupData);
         results.results_listener.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
             @EditFunctions.Baseline.HelperFcn.CalculateCorrection);
-%         lh.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
-%             @EditFunctions.Baseline.HelperFcn.MarkupData);
-%         lh.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
-%             @EditFunctions.Baseline.HelperFcn.CalculateCorrection);
-        
-        
+
     end
 
     %% initial Markup
@@ -208,7 +194,6 @@ end
             r_wbdcb.Status = 'units_changed';
             r_wbdcb.units = 'absolute';
         end
-%         r_wbdcb.selection_borders = [cp_wbdcb(1, 1) cp_wbdcb(1, 1)];
         r_wbdcb.userdata.new_borders = [cp_wbdcb(1, 1) cp_wbdcb(1, 1)];
         
         % refresh results object and handles
@@ -229,9 +214,6 @@ end
             cp_wbmcb = h_wbmcb.guiprops.MainAxes.CurrentPoint;
             new_borders = [r_wbmcb.userdata.new_borders(1) cp_wbmcb(1, 1)];
             r_wbmcb.userdata.new_borders = new_borders;
-            
-%             user_defined_borders = [r_wbmcb.selection_borders(1) cp_wbmcb(1, 1)];
-%             r_wbmcb.selection_borders = user_defined_borders;
 
             % renew an initial markup while moving the mouse
             ax = findobj(h_wbmcb.guiprops.MainFigure, 'Type', 'Axes');
@@ -286,8 +268,7 @@ end
                 r_wbucb.units = 'relative';
                 r_wbucb.Status = [];
             end
-            
-%             r_wbucb.selection_borders = sort(r_wbucb.userdata.new_borders);
+
             r_wbucb.selection_borders = sort(r_wbucb.selection_borders);
             
             src.WindowButtonMotionFcn = '';
