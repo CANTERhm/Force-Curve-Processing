@@ -54,8 +54,6 @@ if isempty(results)
 end
 
     setappdata(handles.figure1, 'Baseline', results);
-    
-%     lh = PropListener();
 
     panel = handles.guiprops.Panels.results_panel;
     
