@@ -91,7 +91,6 @@ end
     % update results object
     results.input_features = input_features;
     results.results_features = results_features;
-    handles.curveprops.(curvename).Results.Baseline = results;
 %     setappdata(handles.figure1, 'Baseline', results);
     
 
@@ -113,6 +112,13 @@ end
     %% property listener for results-object
     
     if results.singleton == false % only add property listener once
+        
+        % delete all listeners, if Baseline is not acitve
+        editfunctions = handles.guiprops.Features.edit_buttons;
+        BaselineFcn = editfunctions.Baseline;
+        results.results_listener.addListener(BaselineFcn, 'Value', 'PostSet',...
+            {@Callbacks.DeleteListenerCallback, BaselineFcn.Tag});
+        
         % correction_type-property
         results.results_listener.addListener(results, 'correction_type', 'PostSet',...
             @EditFunctions.Baseline.Callbacks.test);
@@ -164,24 +170,36 @@ end
         
         % edit_curve_table.UserData.CurrentCurveName
         % execute following callbacks if the selected curve changes
-        results.results_listener.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.MarkupData);
-        results.results_listener.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
-            @EditFunctions.Baseline.HelperFcn.CalculateCorrection);
+%         results.results_listener.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
+%             @EditFunctions.Baseline.HelperFcn.MarkupData);
+%         results.results_listener.addListener(handles.curveprops, 'CurrentCurveName', 'PostSet',...
+%             @EditFunctions.Baseline.HelperFcn.CalculateCorrection);
 
     end
 
-    %% initial Markup
-    EditFunctions.Baseline.HelperFcn.MarkupData();
-    
-    %% initial Data Correction
-    EditFunctions.Baseline.HelperFcn.CalculateCorrection();
-    
-    %% Apply initial Data Correction
-    EditFunctions.Baseline.HelperFcn.ApplyCorrection();
-
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
+    handles.curveprops.(curvename).Results.Baseline = results;
     results.FireEvent('UpdateObject');
+    
+    editfunctions = allchild(handles.guiprops.Panels.processing_panel);
+    edit_function = findobj(editfunctions, 'Tag', 'Baseline');
+    
+    if isempty(edit_function)
+        % initial Data Correction
+        EditFunctions.Baseline.HelperFcn.CalculateCorrection();
+
+        % Apply initial Data Correction
+        EditFunctions.Baseline.HelperFcn.ApplyCorrection();
+    else
+        % initial Markup
+        EditFunctions.Baseline.HelperFcn.MarkupData();
+
+        % initial Data Correction
+        EditFunctions.Baseline.HelperFcn.CalculateCorrection();
+
+        % Apply initial Data Correction
+        EditFunctions.Baseline.HelperFcn.ApplyCorrection();
+    end
     
     %% Window Callbacks
     
