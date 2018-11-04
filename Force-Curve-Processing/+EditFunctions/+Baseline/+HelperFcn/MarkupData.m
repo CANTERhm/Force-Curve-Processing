@@ -27,7 +27,14 @@ function MarkupData(varargin)
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     if ~isempty(main)
         handles = guidata(main);
-        results = getappdata(handles.figure1, EditFunction);
+        t = handles.guiprops.Features.edit_curve_table;
+        cn = t.UserData.CurrentCurveName;
+        if isprop(handles.curveprops.(cn).Results, 'Baseline')
+            results = handles.curveprops.(cn).Results.Baseline;
+        else
+            results = [];
+        end
+%         results = getappdata(handles.figure1, EditFunction);
     else
         % abort, no open fcp-app
         return
@@ -84,7 +91,8 @@ function MarkupData(varargin)
     
     %% update handles, results and fire event UpdateObject
     % update results object
-    setappdata(handles.figure1, EditFunction, results);
+%     setappdata(handles.figure1, EditFunction, results);
+    handles.curveprops.(cn).Results.(EditFunction) = results;
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.EditFunction
@@ -95,9 +103,9 @@ function MarkupData(varargin)
     function new_borders = TransformToAbsolute(handles, results, EditFunction)
         
         % refresh handles and results
-        m = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-        handles = guidata(m);
-        results = getappdata(handles.figure1, EditFunction);
+%         m = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
+%         handles = guidata(m);
+%         results = getappdata(handles.figure1, EditFunction);
         
         table = handles.guiprops.Features.edit_curve_table;
         if isempty(table.Data)

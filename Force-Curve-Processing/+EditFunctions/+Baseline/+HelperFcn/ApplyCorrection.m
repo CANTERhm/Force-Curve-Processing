@@ -40,7 +40,7 @@ function ApplyCorrection(varargin)
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     if ~isempty(main)
         handles = guidata(main);
-        results = getappdata(handles.figure1, EditFunction);
+%         results = getappdata(handles.figure1, EditFunction);
     else
         % abort, no open fcp-app
         return
@@ -64,6 +64,9 @@ function ApplyCorrection(varargin)
         return
     end
     curvename = table.UserData.CurrentCurveName;
+    
+    % obtain results-object
+    results = handles.curveprops.(curvename).Results.(EditFunction);
 
     % setup data
     data = [];
@@ -108,19 +111,12 @@ function ApplyCorrection(varargin)
     results.calculated_data = corrected_data;
     
     % update results object and handles-struct
-    setappdata(handles.figure1, EditFunction, results);
+%     setappdata(handles.figure1, EditFunction, results);
+    handles.curveprops.(curvename).Results.Baseline = results;
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.EditFunction
     results.FireEvent('UpdateObject');
-    
-%     ------------------for debugging purposes-----------------------------
-%     xch = handles.guiprops.Features.curve_xchannel_popup.Value;
-%     ych = handles.guiprops.Features.curve_ychannel_popup.Value;
-%     RawData = handles.curveprops.(curvename).RawData;
-%     linedata = UtilityFcn.ExtractPlotData(RawData, handles, xch, ych);
-%     curve = UtilityFcn.ConvertToVector(linedata);
-%     ---------------------------------------------------------------------
     
     %% nested functions
     

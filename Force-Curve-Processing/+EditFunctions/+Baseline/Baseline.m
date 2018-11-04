@@ -53,7 +53,12 @@ if isempty(results)
     results.results_listener = PropListener();
 end
 
-    setappdata(handles.figure1, 'Baseline', results);
+%     setappdata(handles.figure1, 'Baseline', results);
+    curvename = table.UserData.CurrentCurveName;
+    handles.curveprops.(curvename).Results.Baseline = results;
+%     if isprop(handles.curveprops.(curvename).Results, 'Baseline')
+%         handles.curveprops.(curvename).Results.Baseline = results;
+%     end
 
     panel = handles.guiprops.Panels.results_panel;
     
@@ -86,7 +91,8 @@ end
     % update results object
     results.input_features = input_features;
     results.results_features = results_features;
-    setappdata(handles.figure1, 'Baseline', results);
+    handles.curveprops.(curvename).Results.Baseline = results;
+%     setappdata(handles.figure1, 'Baseline', results);
     
 
     %% callbacks for input_layout elements
