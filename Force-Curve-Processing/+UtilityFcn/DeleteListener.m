@@ -36,48 +36,20 @@ function DeleteListener(varargin)
     for i = 1:length(curves)
         curvename = curves{i};
         try
-            
-            %----------------------------------------------------------
-            disp(EditFunction);
-            %----------------------------------------------------------
-
-            delete(handles.curveprops.(curvename).Results.(EditFunction).results_listener);
+            listener = handles.curveprops.(curvename).Results.(EditFunction).results_listener;
+            listener_handles = listener.ListenerObjects;
+            for n = 1:length(listener_handles)
+                listener.deleteListener(listener_handles(n));
+            end
             struct = handles.curveprops.(curvename).Results.(EditFunction);
             struct = struct.delproperty('results_listener');
             handles.curveprops.(curvename).Results.(EditFunction) = struct;
-            handles.curveprops.(curvename).Results.(EditFunction).singleton = false;
         catch
+            % if an error occurs, skip this loop
             continue
         end
+        handles.curveprops.(curvename).Results.(EditFunction).singleton = false;
     end
-    
-%     editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-%     editfunctions(end) = [];
-%     edit_function = findobj(editfunctions, 'Tag', EditFunction);
-%     not_active = editfunctions ~= edit_function;
-%     editfunctions = editfunctions(not_active);
-%     
-%     curves = fieldnames(handles.curveprops.DynamicProps);
-%     for i = 1:length(curves)
-%         curvename = curves{i};
-%         for n = 1:length(editfunctions)
-%             try
-%                 func = editfunctions(n).Tag;
-%                 
-%                 %----------------------------------------------------------
-%                 disp(func);
-%                 %----------------------------------------------------------
-%                 
-%                 delete(handles.curveprops.(curvename).Results.(func).results_listener);
-%                 struct = handles.curveprops.(curvename).Results.(func);
-%                 struct = struct.delproperty('results_listener');
-%                 handles.curveprops.(curvename).Results.(func) = struct;
-%                 handles.curveprops.(curvename).Results.(func).singleton = false;
-%             catch
-%                 continue
-%             end
-%         end
-%     end
     
     guidata(handles.figure1, handles);
 

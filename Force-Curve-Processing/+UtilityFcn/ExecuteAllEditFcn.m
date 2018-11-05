@@ -27,11 +27,11 @@ function ExecuteAllEditFcn(varargin)
         % abort, no open fcp-app
         return
     end
-
-    editfunctions = fieldnames(handles.guiprops.Features.edit_buttons);
     
-    if isempty(editfunctions)
-        % no loaded editfunction which have to be invoked
+    if ~isempty(handles.guiprops.Features.edit_buttons)
+        editfunctions = fieldnames(handles.guiprops.Features.edit_buttons);
+    else
+        % no loaded editfunction which has to be invoked
         return
     end
     
@@ -39,6 +39,8 @@ function ExecuteAllEditFcn(varargin)
     for i = 1:length(editfunctions)
         EditFunctions.(editfunctions{i}).(editfunctions{i})();
     end
+    
+    guidata(handles.figure1, handles);
     
 end % ExecuteAllEditFcn
 
