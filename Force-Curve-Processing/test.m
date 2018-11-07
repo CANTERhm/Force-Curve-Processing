@@ -1,12 +1,18 @@
-table = handles.guiprops.Features.edit_curve_table;
-curvename = table.UserData.CurrentCurveName;
-xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
-ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
-RawData = handles.curveprops.(curvename).RawData;
-
-LineData = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
-line = UtilityFcn.ConvertToVector(LineData);
-
-figure();
-hold on
-plot(line(:,1), line(:,2));
+fig = figure();
+panel = uix.Panel('Parent', fig);
+box = uix.Grid('Parent', panel);
+btn1 = uicontrol('Parent', box,...
+    'Style', 'pushbutton',...
+    'String', 'test1');
+btn2 = uicontrol('Parent', box,...
+    'Style', 'pushbutton',...
+    'String', 'test2');
+btn3 = uicontrol('Parent', box,...
+    'Style', 'pushbutton',...
+    'String', 'test3');
+label = TextLabel('Parent', box,...
+    'String', 'TestLabel',...
+    'HorizontalAlignment', 'center',...
+    'VerticalAlignment', 'center');
+box.Widths = [-1 -1];
+box.Heights = [-1 -1];
