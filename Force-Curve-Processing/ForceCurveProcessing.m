@@ -1,6 +1,6 @@
 function varargout = ForceCurveProcessing(varargin)
 %==========================================================================
-% This is Version: 0.0.0
+% ForceCurveProcessing 0.0.0
 %==========================================================================
 % FORCECURVEPROCESSING MATLAB code for ForceCurveProcessing.fig
 %      FORCECURVEPROCESSING, by itself, creates a new FORCECURVEPROCESSING or raises the existing
