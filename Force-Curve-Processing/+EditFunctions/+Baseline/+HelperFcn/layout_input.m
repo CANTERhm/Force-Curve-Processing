@@ -3,7 +3,12 @@ function input_features = layout_input(main_vbox)
     
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, 'Baseline');
+    table = handles.guiprops.Features.edit_curve_table;
+    curvename = table.UserData.CurrentCurveName;
+    if isprop(handles.curveprops.(curvename).Results, 'Baseline')
+        results = handles.curveprops.(curvename).Results.Baseline;
+    end
+%     results = getappdata(handles.figure1, 'Baseline');
 
     settings_panel = uix.Panel('Parent', main_vbox,...
         'Padding', 10,...
@@ -141,7 +146,8 @@ function input_features = layout_input(main_vbox)
     input_features.settings_grid1 = grid1;
     input_features.settings_grid2 = grid2;
     
-    setappdata(handles.figure1, 'Baseline', results);
+%     setappdata(handles.figure1, 'Baseline', results);
+    handles.curveprops.(curvename).Results.Baseline = results;
     guidata(handles.figure1, handles);
     
 end % layout_input

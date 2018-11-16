@@ -5,7 +5,12 @@ function UpdateSlopeCallback(src, evt)
     % get results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, 'Baseline');
+    table = handles.guiprops.Features.edit_curve_table;
+    curvename = table.UserData.CurrentCurveName;
+    if isprop(handles.curveprops.(curvename).Results, 'Baseline')
+        results = handles.curveprops.(curvename).Results.Baseline;
+    end
+%     results = getappdata(handles.figure1, 'Baseline');
     
     % get label references
     sl_value = results.results_features.slope_value_label;
@@ -30,7 +35,8 @@ function UpdateSlopeCallback(src, evt)
     end
 
     % refresh results object and handles
-    setappdata(handles.figure1, 'Baseline', results);
+%     setappdata(handles.figure1, 'Baseline', results);
+    handles.curveprops.(curvename).Results.Baseline = results;
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.Baseline

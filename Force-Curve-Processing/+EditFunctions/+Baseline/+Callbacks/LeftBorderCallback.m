@@ -6,7 +6,12 @@ function LeftBorderCallback(src, evt)
     % refresh results object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, 'Baseline');
+    table = handles.guiprops.Features.edit_curve_table;
+    curvename = table.UserData.CurrentCurveName;
+    if isprop(handles.curveprops.(curvename).Results, 'Baseline')
+        results = handles.curveprops.(curvename).Results.Baseline;
+    end
+%     results = getappdata(handles.figure1, 'Baseline');
     
     %% validate user input
     input = src.String;
@@ -34,7 +39,8 @@ function LeftBorderCallback(src, evt)
     %% update all important varaibles
     
     % update results object
-    setappdata(handles.figure1, 'Baseline', results);
+%     setappdata(handles.figure1, 'Baseline', results);
+    handles.curveprops.(curvename).Results.Baseline = results;
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.Baseline

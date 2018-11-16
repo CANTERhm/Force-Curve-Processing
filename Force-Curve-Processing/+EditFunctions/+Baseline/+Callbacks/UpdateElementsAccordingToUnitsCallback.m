@@ -5,7 +5,12 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
     % get results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, 'Baseline');
+    table = handles.guiprops.Features.edit_curve_table;
+    curvename = table.UserData.CurrentCurveName;
+    if isprop(handles.curveprops.(curvename).Results, 'Baseline')
+        results = handles.curveprops.(curvename).Results.Baseline;
+    end
+%     results = getappdata(handles.figure1, 'Baseline');
 
     % preparation of frequently used variables
     table = handles.guiprops.Features.edit_curve_table;
@@ -26,15 +31,16 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
 
     switch results.units
         case 'relative'
-            new_borders = ExpressAsRelative();
+            new_borders = ExpressAsRelative(handles, results, table, RawData, xchannel, ychannel, last_editfunction);
         case 'absolute'
-            new_borders = ExpressAsAbsolute();
+            new_borders = ExpressAsAbsolute(handles, results, table, RawData, xchannel, ychannel, last_editfunction);
     end
     
     results.selection_borders = new_borders;
     
     % refresh results object and handles
-    setappdata(handles.figure1, 'Baseline', results);
+%     setappdata(handles.figure1, 'Baseline', results);
+    handles.curveprops.(curvename).Results.Baseline = results;
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.Baseline
@@ -42,7 +48,7 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
 
 %% nested functions
 
-    function new_borders = ExpressAsRelative()
+    function new_borders = ExpressAsRelative(handles, results, table, RawData, xchannel, ychannel, last_editfunction)
         % transforms absolute selection_borders to relative ones
         
         % abort transformation because no curvedata is available
@@ -66,7 +72,7 @@ function UpdateElementsAccordingToUnitsCallback(src, evt)
         new_borders = sort(EditFunctions.Baseline.HelperFcn.BorderTransformation(linedata, 'absolute-relative'));
     end % ExpressAsRelative
 
-    function new_borders = ExpressAsAbsolute()
+    function new_borders = ExpressAsAbsolute(handles, results, table, RawData, xchannel, ychannel, last_editfunction)
         % transforms relative selection_borders to aboslute ones
         
         % abort transformation because no curvedata is available

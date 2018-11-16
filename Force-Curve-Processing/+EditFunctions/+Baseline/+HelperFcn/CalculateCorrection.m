@@ -45,7 +45,14 @@ function CalculateCorrection(varargin)
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     if ~isempty(main)
         handles = guidata(main);
-        results = getappdata(handles.figure1, EditFunction);
+        table = handles.guiprops.Features.edit_curve_table;
+        curvename = table.UserData.CurrentCurveName;
+        if isprop(handles.curveprops.(curvename).Results, 'Baseline')
+            results = handles.curveprops.(curvename).Results.Baseline;
+        else
+            results = [];
+        end
+%         results = getappdata(handles.figure1, EditFunction);
     else
         % abort, no open fcp-app
         return
@@ -107,7 +114,8 @@ function CalculateCorrection(varargin)
     results.offset = offset;
     
     % update results object
-    setappdata(handles.figure1, EditFunction, results);
+%     setappdata(handles.figure1, EditFunction, results);
+    handles.curveprops.(curvename).Results.Baseline = results;
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.EditFunction

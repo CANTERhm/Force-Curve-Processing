@@ -24,6 +24,9 @@ if ~isempty(evt.Indices)
     handles.curveprops.CurrentCurveName = curvename;
     xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
     ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value; 
+    
+    % recalculate all editfunctions
+    UtilityFcn.ExecuteAllEditFcn();
 
     [LineData, handles] = UtilityFcn.ExtractPlotData(handles.curveprops.(curvename).RawData, handles,...
         xch_idx,...
