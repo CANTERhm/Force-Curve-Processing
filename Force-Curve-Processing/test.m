@@ -19,40 +19,30 @@ btn3 = uicontrol('Parent', box,...
 
 function cb(src, evt)
     HelperFcn.SwitchToggleState(src);
-    ExplicitlyNoCallback();
-    par = src.Parent;
-    list = allchild(par);
-    fmt = 'Object: %s;  Is on Gui: %d\n';
-    clc
-    for i = 1:length(list)
-        try
-            part1 = list(i).String;
-        catch
-            part1 = 999;
-        end
-        try
-            part2 = list(i).UserData.on_gui.Status;
-        catch
-            part2 = 999;
-        end
-        fprintf(fmt, part1, part2);
-    end
+    outsidefunction();
 end
 
-function ExplicitlyNoCallback()
-    % gets called inside an callback
-    button = findall(allchild(groot), 'Type', 'UIControl');
-    btn1 = button(1);
-    lh = PropListener();
-    try
-        lh.addListener(btn1.UserData.on_gui, 'Status', 'PostSet', @lcb);
-    catch
-        % move on
+function outsidefunction()
+    list = findall(allchild(groot), 'Type', 'UIControl');
+    
+    for i = 1:length(list)
+        if isa(list(i).UserData, 'struct')
+            names = fieldnames(list(i).UserData);
+            if ~any(ismember(names, 'lh2'))
+                list(i).UserData.lh2 = PropListener();
+                list(i).UserData.lh2.addListener(list(i).UserData.on_gui,...
+                    'Status',...
+                    'PostSet',...
+                    @StateChanged);
+            end
+        end
     end
     
-    function lcb(src, evt)
+    function StateChanged(src, evt)
         obj = evt.AffectedObject;
+        disp('StateChanged');
+        fmt = 'On Gui: %d\n';
+        fprintf(fmt, obj.Status);
     end
 end
-
 

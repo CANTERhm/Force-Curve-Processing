@@ -33,30 +33,33 @@ function SwitchToggleState(src, varargin)
         list = obj_list;
     end
     
-    % catch src.Value before it gets changed
-    if isa(src.UserData, 'struct')
-        names = fieldnames(src.UserData);
-        if ~any(ismember(names, 'lh'))
-            src.UserData.lh = [];
+    for i = 1:length(list)
+        % catch src.Value before it gets changed
+        if isa(list(i).UserData, 'struct')
+            names = fieldnames(list(i).UserData);
+            if ~any(ismember(names, 'lh'))
+                list(i).UserData.lh = [];
+            end
+            if ~any(ismember(names, 'last_value'))
+                list(i).UserData.last_value = [];
+            end
+            if ~any(ismember(names, 'on_gui'))
+                list(i).UserData.on_gui = Results();
+                list(i).UserData.on_gui.Status = false;
+            end
+        else
+            list(i).UserData.lh = [];
+            list(i).UserData.last_value = [];
+            list(i).UserData.on_gui = Results();
+            list(i).UserData.on_gui.Status = false;
         end
-        if ~any(ismember(names, 'last_value'))
-            src.UserData.last_value = [];
+        if isempty(list(i).UserData.lh)
+            list(i).UserData.lh = PropListener();
+            list(i).UserData.lh.addListener(list(i),...
+                'Value',...
+                'PostSet',...
+                @SetOnGui);
         end
-        if ~any(ismember(names, 'on_gui'))
-            src.UserData.on_gui = Results();
-            src.UserData.on_gui.Status = false;
-        end
-    else
-        src.UserData.lh = [];
-        src.UserData.last_value = [];
-        src.UserData.on_gui = Results();
-        src.UserData.on_gui.Status = false;
-    end
-    
-    if isempty(src.UserData.lh)
-        src.UserData.lh = PropListener();
-        src.UserData.lh.addListener(src, 'Value', 'PreSet', @SetLastValue);
-        src.UserData.lh.addListener(src, 'Value', 'PreSet', @SetOnGui);
     end
     
     % work off style input parameter
@@ -86,27 +89,45 @@ function SwitchToggleState(src, varargin)
     end 
     
     %% Callbacks
-    
-    function SetLastValue(src, evt)
-        obj = evt.AffectedObject;
-        obj.UserData.last_value = obj.Value;
-    end
-
     function SetOnGui(src, evt)
+        persistent CUR_OBJ
+        persistent CYCLE 
         obj = evt.AffectedObject;
         try
-            last_value = obj.UserData.last_value;
-        catch
-            last_value = [];
-        end
-        if ~isempty(last_value)
-            if obj.Value == 0 && obj.UserData.last_value == 1
-                obj.UserData.on_gui.Status = true;
-            else
-                obj.UserData.on_gui.Status = false;
+            if strcmp(CYCLE, 'second')
+                current_object_string = CUR_OBJ.String;
+                last_object_string = obj.String;
+                
+                % is true if:
+                %   - last pressed togglebutton is not currently pressed
+                %     toggle button
+                if ~strcmp(current_object_string, last_object_string)
+                    obj.UserData.on_gui.Status = false;
+                    CUR_OBJ.UserData.on_gui.Status = true;
+                end
+                
+                % is true if:
+                %   - a toggle button is pressed the first time on a gui at
+                %   all
+                if strcmp(current_object_string, last_object_string) && ...
+                        CUR_OBJ.UserData.on_gui.Status == false
+                    obj.UserData.on_gui.Status = false;
+                    CUR_OBJ.UserData.on_gui.Status = true;
+                end
             end
+        catch ME
+            switch ME.identifier
+                case 'MATLAB:UndefinedFunction'
+                    % move on
+                otherwise
+                    rethrow(ME);
+            end
+        end
+        CUR_OBJ = obj;
+        if isempty(CYCLE)
+            CYCLE = 'second';
         else
-            obj.UserData.on_gui.Status = false;
+            CYCLE = [];
         end
     end
 
