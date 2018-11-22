@@ -37,10 +37,10 @@ if isempty(results)
     results.addproperty('offset');
     results.addproperty('calculated_data');
     results.addproperty('singleton');
-    results.addproperty('input_features');
-    results.addproperty('results_features');
+%     results.addproperty('input_features');
+%     results.addproperty('results_features');
     results.addproperty('userdata');
-    results.addproperty('results_listener');
+%     results.addproperty('results_listener');
     
     loaded_input = handles.procedure.Baseline;
     results.Status = loaded_input.Status;

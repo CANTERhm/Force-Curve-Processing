@@ -37,7 +37,18 @@ function ExecuteAllEditFcn(varargin)
     
     % execute editfunctions
     for i = 1:length(editfunctions)
-        EditFunctions.(editfunctions{i}).(editfunctions{i})();
+        try
+            EditFunctions.(editfunctions{i}).main();
+        catch ME
+            switch ME.identifier
+                case 'MATLAB:undefinedVarOrClass'
+                    % 'Undefined variable "EditFunctions" or class "EditFunctions.Baseline.Baseline".'
+                    % reason: main does not exists
+                    % move on
+                otherwise
+                    rethrow(ME);
+            end
+        end
     end
     
     guidata(handles.figure1, handles);

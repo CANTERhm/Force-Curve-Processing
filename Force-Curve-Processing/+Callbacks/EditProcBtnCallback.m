@@ -6,4 +6,4 @@ HelperFcn.SwitchToggleState(src);
 
 %% execute edit function
 name = src.Tag;
-EditFunctions.(name).(name)();
+EditFunctions.(name).main();

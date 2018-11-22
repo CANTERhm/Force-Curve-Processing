@@ -118,6 +118,15 @@ function SwitchToggleState(src, varargin)
         catch ME
             switch ME.identifier
                 case 'MATLAB:UndefinedFunction'
+                    % CUR_OBJ is empty
+                    % reason: editbutton pressed for the first time after
+                    %         loading.
+                    % move on
+                case 'MATLAB:class:InvalidHandle'
+                    % invalid or deleted Object
+                    % reason: e.g. procedure has been deleted an loaded
+                    %         again. CUR_OBJ contains in this case an 
+                    %         deleted object.
                     % move on
                 otherwise
                     rethrow(ME);
