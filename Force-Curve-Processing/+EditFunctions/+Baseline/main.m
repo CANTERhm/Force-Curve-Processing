@@ -71,71 +71,82 @@ end
     UtilityFcn.ResetMainFigureCallbacks();
     handles.guiprops.MainFigure.WindowButtonDownFcn = @EditFunctions.Baseline.Callbacks.WindowButtonDownCallback;
     
-    %% layout I/O-Parameters
-    
-    try
-        input_elements = results.input_elements;
-    catch ME
-        switch ME.identifier
-            case 'MATLAB:noSuchMethodOrField'
+    %% Baseline procedure
+    switch button_handle.UserData.on_gui.Status
+        case true
+            try
+                input_elements = results.input_elements;
+            catch ME
+                switch ME.identifier
+                    case 'MATLAB:noSuchMethodOrField'
+                        input_elements = [];
+                    otherwise
+                        rethrow(ME);
+                end
+            end
+            try
+                output_elements = results.output_elements;
+            catch ME
+                switch ME.identifier
+                    case'MATLAB:noSuchMethodOrField'
+                        output_elements = [];
+                    otherwise
+                        rethrow(ME);
+                end
+            end
+
+            if isempty(allchild(panel))
                 input_elements = [];
-            otherwise
-                rethrow(ME);
-        end
-    end
-    try
-        output_elements = results.output_elements;
-    catch ME
-        switch ME.identifier
-            case'MATLAB:noSuchMethodOrField'
                 output_elements = [];
-            otherwise
-                rethrow(ME);
-        end
-    end
-    
-    if isempty(allchild(panel))
-        input_elements = [];
-        output_elements = [];
-    end
-    
-    if (isempty(input_elements) || isempty(output_elements))
-        % clear results panel 
-        delete(allchild(panel));
+            end
 
-        % setup main_vbox for resutls an input parameters for Baseline
-        scrolling_panel = uix.ScrollingPanel('Parent', panel);
-        main_vbox = uix.VBox('Parent', scrolling_panel,...
-            'Padding', 5,...
-            'Visible', 'off');
+            if (isempty(input_elements) || isempty(output_elements))
+                % clear results panel 
+                delete(allchild(panel));
 
-        % layout input parameters
-        EditFunctions.Baseline.AuxillaryFcn.SetInputElements(main_vbox);
-        EditFunctions.Baseline.AuxillaryFcn.SetOutputElements(main_vbox);
+                % setup main_vbox for resutls an input parameters for Baseline
+                scrolling_panel = uix.ScrollingPanel('Parent', panel);
+                main_vbox = uix.VBox('Parent', scrolling_panel,...
+                    'Padding', 5,...
+                    'Visible', 'off');
 
-        % adjust height of main_vbox
-        main_vbox.Heights = [100 80];
+                % layout input parameters
+                EditFunctions.Baseline.AuxillaryFcn.SetInputElements(main_vbox);
+                EditFunctions.Baseline.AuxillaryFcn.SetOutputElements(main_vbox);
 
-        % make layout visible
-        main_vbox.Visible = 'on';
-        
-        scrolling_panel.Widths = 345;
-        scrolling_panel.Heights = 200;
-   
-        tilt = results.input_elements.tilt;
-        tilt_offset = results.input_elements.tilt_offset;
-        left_border = results.input_elements.left_border;
-        right_border = results.input_elements.right_border;
+                % adjust height of main_vbox
+                main_vbox.Heights = [100 80];
 
-        tilt.Callback = {@EditFunctions.Baseline.Callbacks.ElementCallbacks.TiltCallback, [tilt; tilt_offset]};
-        tilt_offset.Callback = {@EditFunctions.Baseline.Callbacks.ElementCallbacks.TiltOffsetCallback, [tilt; tilt_offset]};
-        left_border.Callback = @EditFunctions.Baseline.Callbacks.ElementCallbacks.LeftBorderCallback;
-        right_border.Callback = @EditFunctions.Baseline.Callbacks.ElementCallbacks.RightBorderCallback;
-    end
-    
-    %% Set Event Listeners
-    EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
-    EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
+                % make layout visible
+                main_vbox.Visible = 'on';
+
+                scrolling_panel.Widths = 345;
+                scrolling_panel.Heights = 200;
+
+                tilt = results.input_elements.tilt;
+                tilt_offset = results.input_elements.tilt_offset;
+                left_border = results.input_elements.left_border;
+                right_border = results.input_elements.right_border;
+
+                tilt.Callback = {@EditFunctions.Baseline.Callbacks.ElementCallbacks.TiltCallback, [tilt; tilt_offset]};
+                tilt_offset.Callback = {@EditFunctions.Baseline.Callbacks.ElementCallbacks.TiltOffsetCallback, [tilt; tilt_offset]};
+                left_border.Callback = @EditFunctions.Baseline.Callbacks.ElementCallbacks.LeftBorderCallback;
+                right_border.Callback = @EditFunctions.Baseline.Callbacks.ElementCallbacks.RightBorderCallback;
+            end
+
+            % Set Event Listeners
+            EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
+            EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
+            
+        % Data Markup
+        EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData();
+
+        % Data Correction
+        EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection();
+
+        % Apply Data Correction
+        EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection();
+    end % switch
     
 %     %% Calculation Procedure
 % 
