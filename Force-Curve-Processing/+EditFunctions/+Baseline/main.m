@@ -46,13 +46,16 @@ if isempty(results)
         results.userdata = loaded_input.userdata;
     else
         % use values from data as default
+        % the singleton property has to be resettet to false in every
+        % execution of main in order to load property listeners for results
+        % properly
         results.Status = data.Status;
         results.correction_type = data.correction_type;
         results.units = data.units;
         results.selection_borders = data.selection_borders;
         results.slope = data.slope;
         results.offset = data.offset;
-        results.singleton = data.singleton;
+        results.singleton = false; 
         results.calculated_data = data.calculated_data;
         results.userdata = data.userdata;
     end
@@ -69,11 +72,11 @@ end
     %% operations on Figure and Axes 
     UtilityFcn.RefreshGraph();
     UtilityFcn.ResetMainFigureCallbacks();
-    handles.guiprops.MainFigure.WindowButtonDownFcn = @EditFunctions.Baseline.Callbacks.WindowButtonDownCallback;
     
     %% Baseline procedure
     switch button_handle.UserData.on_gui.Status
         case true
+            handles.guiprops.MainFigure.WindowButtonDownFcn = @EditFunctions.Baseline.Callbacks.WindowButtonDownCallback;
             try
                 input_elements = results.input_elements;
             catch ME
@@ -146,6 +149,9 @@ end
 
         % Apply Data Correction
         EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection();
+        
+        % update Graph
+        UtilityFcn.RefreshGraph('RefreshAll', false);
     end % switch
     
 %     %% Calculation Procedure

@@ -141,9 +141,10 @@ function ApplyCorrection(varargin)
             data.(segment).(channels{ychannel}) = ydata;
         end
         if length(varargin) > 1
+            offset = varargin{2};
             for i = 1:length(segments)
                 segment = segments{i};
-                channels = fieldnames(segment);
+                channels = fieldnames(data.(segment));
                 ydata = data.(segment).(channels{ychannel});
                 ydata = ydata - offset;
                 data.(segment).(channels{ychannel}) = ydata;
