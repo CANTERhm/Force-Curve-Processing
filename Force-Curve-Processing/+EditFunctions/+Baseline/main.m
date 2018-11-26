@@ -141,39 +141,18 @@ end
             EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
             EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
             
-        % Data Markup
-        EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData();
+            UtilityFcn.RefreshGraph('EditFunction', 'Baseline', 'RefreshAll', true);
+            
+            % Data Markup
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData();
 
-        % Data Correction
-        EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection();
+            % Data Correction
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection();
 
-        % Apply Data Correction
-        EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection();
-        
-        % update Graph
-        UtilityFcn.RefreshGraph('RefreshAll', false);
+            % Apply Data Correction
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection();
+
     end % switch
-    
-%     %% Calculation Procedure
-% 
-%     % decide what to do if Baseline is on screen or not
-%     switch button_handle.UserData.on_gui.Status
-%         case true
-%             % Data Markup
-%             EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData();
-% 
-%             % Data Correction
-%             EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection();
-% 
-%             % Apply Data Correction
-%             EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection();
-%         case false
-%             % Data Correction
-%             EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection();
-% 
-%             % Apply Data Correction
-%             EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection();
-%     end
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     guidata(handles.figure1, handles);

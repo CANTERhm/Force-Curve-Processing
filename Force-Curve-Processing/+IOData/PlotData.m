@@ -69,9 +69,6 @@ if ~isempty(curvename)
     end
 end
 
-% ax = handles.guiprops.MainAxes;
-% delete(allchild(ax));
-
 % prepare plot data
 if ~isempty(LineData.Trace)
     segment = fieldnames(LineData.Trace);

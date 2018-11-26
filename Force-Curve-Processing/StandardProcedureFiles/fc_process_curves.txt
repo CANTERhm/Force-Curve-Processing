@@ -1,7 +1,7 @@
 # function: Baseline
 # Status: []
 # singleton: false
-# correction_type: 1
+# correction_type: 2
 # units: 'relative'
 # selection_borders: [0.99 1]
 # slope: []

@@ -48,19 +48,26 @@ function CalculateCorrection(varargin)
         return
     end
     
+    table = handles.guiprops.Features.edit_curve_table;
+    
     if isempty(results)
         % no editfunctions are loaded
         return
     end
     
+    if isempty(table.Data)
+        % no loaded curves
+        return
+    else
+        curvename = table.UserData.CurrentCurveName;
+    end
+    
     % create frequently used variables
     xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
     ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
-    table = handles.guiprops.Features.edit_curve_table;
     if isempty(table.Data)
         return
     end
-    curvename = table.UserData.CurrentCurveName;
     
     % obtain last editfunction
     editfunctions = allchild(handles.guiprops.Panels.processing_panel);
@@ -77,27 +84,26 @@ function CalculateCorrection(varargin)
         RawData = handles.curveprops.(curvename).RawData;
     end
     
-    % Check caluclated_data of last_editfunction
-    if ~isempty(table.Data)
-        % test if there are already calculated data, if not take data
-        % for last Editfunction
-        if isempty(results.calculated_data)
-            % get data from last editfunction
-            curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
-                'edit_button', last_editfunction);
-            linedata = UtilityFcn.ConvertToVector(curvedata);
-        else
-            % get data from active editfunction
-            curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
-            linedata = UtilityFcn.ConvertToVector(curvedata);
-        end
+    % obtain curve-data either from last editfunction if availalbe or from
+    % procedure_root_btn if not
+    if ~strcmp(last_editfunction, 'procedure_root_btn')
+        % get data from last editfunction
+        curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
+            'edit_button', last_editfunction);
+        linedata = UtilityFcn.ConvertToVector(curvedata);
+    else
+        % get data from active editfunction
+        curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
+            'edit_button', 'procedure_root_btn');
+        linedata = UtilityFcn.ConvertToVector(curvedata);
     end
     
-    % obtain data for calculate corrections
+    % cut out selected data from linedata
     calc_data = GetCalcData(results, linedata);
     
+    % Calculate Corrections
     if ~isempty(calc_data)
-        % Calculate Corrections
+        
         [slope, offset] = CalculateFit(calc_data);
     else
         slope = [];
@@ -173,7 +179,7 @@ function CalculateCorrection(varargin)
             offset = '...';
             return
         end
-        
+        calc_data = smoothdata(calc_data, 1, 'gaussian', 100);
         f = fit(calc_data(:,1), calc_data(:,2), 'poly1');
         slope = f.p1;
         offset = f.p2;

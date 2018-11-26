@@ -57,7 +57,7 @@ function SetOutputElements(PanelObject)
         ych = handles.guiprops.Features.curve_ychannel_popup.Value;
         offset_unit = units{ych};
     else
-        offset_unit = '';
+        offset_unit = '...';
     end
     
     slope_label = uicontrol('Parent', grid,...

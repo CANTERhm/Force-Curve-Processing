@@ -128,26 +128,52 @@ function ApplyCorrection(varargin)
         
         slope = varargin{1};
         % abort, if no slope for data adjustment is available
-        if isempty(slope)
+        if isempty(slope) || ~isnumeric(slope)
+            corrected_data = [];
             return
         end
-        segments = fieldnames(data);
-        for i = 1:length(segments)
-            segment = segments{i};
-            channels = fieldnames(data.(segment));
-            xdata = data.(segment).(channels{xchannel});
-            ydata = data.(segment).(channels{ychannel});
-            ydata = ydata - xdata.*slope;
-            data.(segment).(channels{ychannel}) = ydata;
+        
+        % test if data is segmented. In special cases, like true
+        % easyimport, data is only a nxm-numeric matrix
+        if isa(data, 'struct')
+            segmented = true;
+        else
+            segmented = false;
         end
-        if length(varargin) > 1
-            offset = varargin{2};
+        
+        if segmented
+        segments = fieldnames(data);
             for i = 1:length(segments)
                 segment = segments{i};
                 channels = fieldnames(data.(segment));
+                xdata = data.(segment).(channels{xchannel});
                 ydata = data.(segment).(channels{ychannel});
-                ydata = ydata - offset;
+                ydata = ydata - xdata.*slope;
                 data.(segment).(channels{ychannel}) = ydata;
+            end
+        else     
+            xdata = data(:, xchannel);
+            ydata = data(:, ychannel);
+            ydata = ydata - xdata.*slope;
+            data(:, ychannel) = ydata;
+        end
+        if length(varargin) > 1
+            offset = varargin{2};
+            if isempty(offset) || ~isnumeric(slope)
+                return
+            end
+            if segmented
+                for i = 1:length(segments)
+                    segment = segments{i};
+                    channels = fieldnames(data.(segment));
+                    ydata = data.(segment).(channels{ychannel});
+                    ydata = ydata - offset;
+                    data.(segment).(channels{ychannel}) = ydata;
+                end
+            else
+                ydata = data(:, ychannel);
+                ydata = ydata - offset;
+                data(:, ychannel) = ydata;
             end
         end
         

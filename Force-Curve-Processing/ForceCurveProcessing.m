@@ -224,7 +224,7 @@ delete(allchild(panel));
 % refresh shown graph
 UtilityFcn.RefreshGraph();
 
-clear SetOnGui
+% clear SetOnGui
 % % reset proc_root_btn and delete its listener
 % src = handles.guiprops.Features.proc_root_btn;
 % listener = src.UserData.lh;

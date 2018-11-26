@@ -27,19 +27,25 @@ function SetPropertyEventListener(varargin)
         
         % correction_type-property
         results.property_event_listener.addListener(results, 'correction_type', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.PropertyEventListener.test); 
+            @EditFunctions.Baseline.Callbacks.PropertyEventListener.UpdateCorrectionTypeCallback); 
+        results.property_event_listener.addListener(results, 'correction_type', 'PostSet',...
+            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection);
+        results.property_event_listener.addListener(results, 'correction_type', 'PostSet',...
+            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection);
+        results.property_event_listener.addListener(results, 'correction_type', 'PostSet',...
+            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData);
 
         % selection_borders-property
         results.property_event_listener.addListener(results, 'selection_borders', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.PropertyEventListener.UpdateBorderEditsCallback);
+            @EditFunctions.Baseline.Callbacks.PropertyEventListener.UpdateSelectionBordersCallback);
         results.property_event_listener.addListener(results, 'selection_borders', 'PostSet',...
-            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData);
+            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection);
         results.property_event_listener.addListener(results, 'selection_borders', 'PostSet',...
             @EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection);
         results.property_event_listener.addListener(results, 'selection_borders', 'PostSet',...
-            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection);
-                results.property_event_listener.addListener(results, 'selection_borders', 'PostSet',...
-            {@UtilityFcn.RefreshGraph, 'RefreshAll', false});
+            @EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData);
+        results.property_event_listener.addListener(results, 'selection_borders', 'PostSet',...
+            @EditFunctions.Baseline.Callbacks.PropertyEventListener.UpdateBorderEditsCallback);
         
         % listener for slope and baseline for results_features
         results.property_event_listener.addListener(results, 'slope', 'PostSet',...
@@ -61,4 +67,3 @@ function SetPropertyEventListener(varargin)
     guidata(handles.figure1, handles);
 
 end % SetPropertyEventListener
-

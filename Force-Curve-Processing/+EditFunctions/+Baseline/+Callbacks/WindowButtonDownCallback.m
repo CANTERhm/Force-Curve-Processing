@@ -1,6 +1,23 @@
 function WindowButtonDownCallback(src, evt)
 % WBDCB window button down callback
 
+    % check wich mousebutton was pressed
+    selection_type = src.SelectionType;
+    
+    if strcmp(selection_type, 'normal')
+        go_on = true;
+    elseif strcmp(selection_type, 'alt')
+        go_on = false;
+    elseif strcmp(selection_type, 'open')
+        go_on = false;
+    else
+        return
+    end
+    
+    if ~go_on
+        return
+    end 
+
     % get results-object
     main_wbdcb = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     h_wbdcb = guidata(main_wbdcb);

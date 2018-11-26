@@ -111,19 +111,30 @@ else
                 rethrow(ME)
         end
     end % try
-    
-    if ~isobject(Data)
-        Data = RawData.CurveData;
-    end
-    
+
     % take calculated_data from curveprops.curvename.Results if available
-    if isprop(Data, 'calculated_data')
+    if isfield(Data, 'calculated_data')
         if isempty(Data.calculated_data)
             Data = RawData.CurveData;
         else
             Data = Data.calculated_data;
         end
-    end
+    else
+        Data = RawData.CurveData;
+    end    
+
+%     if ~isobject(Data)
+%         Data = RawData.CurveData;
+%     end
+%     
+%     % take calculated_data from curveprops.curvename.Results if available
+%     if isprop(Data, 'calculated_data')
+%         if isempty(Data.calculated_data)
+%             Data = RawData.CurveData;
+%         else
+%             Data = Data.calculated_data;
+%         end
+%     end
 end % if 
 
 % start Extracting data
