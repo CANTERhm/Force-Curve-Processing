@@ -16,7 +16,6 @@ btn3 = uicontrol('Parent', box,...
     'String', 'test3',...
     'Callback', @cb);
 
-
 function cb(src, evt)
     HelperFcn.SwitchToggleState(src);
     outsidefunction();

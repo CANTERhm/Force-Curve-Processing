@@ -1,32 +1,58 @@
-function RefreshGraph()
+function RefreshGraph(varargin)
 %REFRESHGRAPH brings a refreshed version of the afm-curve to the screen
-
+%   Refreshes the objects on MainAxes. It also can be used as Callback.
+%   optional Name-Value-Pairs:
+%       - RefreshAll: true/ false (default: true); 
+%           *if true, all elements on graph gets resettet. If there are 
+%            elements which should not be replottet they get discarded.
+%           *if false, only the trace and retrace objects are going to be
+%            resettet. Ohter Elements remaining untouched.
+    
+    %% input parsing
+    p = inputParser;
+    
+    ValidChar = @(x)assert(isa(x, 'char') || isa(x, 'struct'),...
+        'RefreshGraph:invalidInput',...
+        'input for EditFunction was not a character-vector or a string-scalar.');
+    
+    addOptional(p, 'src', []);
+    addOptional(p, 'evt', []);
+    addParameter(p, 'EditFunction', [], ValidChar)
+    addParameter(p, 'RefreshAll', true);
+    
+    parse(p, varargin{:});
+    
+    src = p.Results.src;
+    evt = p.Results.evt;
+    EditFunction = p.Results.EditFunction;
+    refresh_all = p.Results.RefreshAll;
+    
+    %% function procedure
+    
     % get results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-%     results = getappdata(handles.figure1, 'Baseline');
-    update_appdata = true;
-
     table = handles.guiprops.Features.edit_curve_table;
-    curvename = table.UserData.CurrentCurveName;
-    editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-    editfunctions(end) = [];
-    active_fun_mask = false(length(editfunctions), 1);
-    for i = 1:length(editfunctions)
-        if editfunctions(i).Value == 1
-            active_fun_mask(i) = 1;
+
+    if ~isempty(EditFunction)
+        curvename = table.UserData.CurrentCurveName;
+        res = handles.curveprops.(curvename).Results;
+        if isprop(res, EditFunction)
+            if isfield(res.(EditFunction), 'calculated_data')
+                results = res.(EditFunction).calculated_data;
+            else
+                results = [];
+            end
+        else
+            results = [];
         end
-    end
-    active_fun = editfunctions(active_fun_mask);
-    
-    if ~isempty(active_fun)
-        results = handles.curveprops.(curvename).Results.(active_fun.Tag);
     else
         results = [];
     end
     
-    % return if table's UserData-property is empty
-    if isempty(table.UserData)
+    
+    if isempty(table.Data)
+        % no loaded curves, abort function
         return
     end
     
@@ -34,34 +60,14 @@ function RefreshGraph()
     ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
     curvename = table.UserData.CurrentCurveName;
     RawData = handles.curveprops.(curvename).RawData;
-    
-    % if no data has been loaded, there is no graph to update
-    if isempty(curvename)
-        return
-    end
-    
-    % function call outside of an editfunction
-    if isempty(results)
-%         results.calculated_data = [];
-        update_appdata = false;
-    end
-    
-    if isobject(results) && ~isempty(results.calculated_data)
+  
+    if ~isempty(results)
         curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
     else
         curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
             'edit_button', 'procedure_root_btn');
-    end
-    handles = IOData.PlotData(curvedata, handles);
-
-    % refresh results object and handles
-    if update_appdata
-%         setappdata(handles.figure1, 'Baseline', results);
-        handles.curveprops.(curvename).Results.(active_fun.Tag) = results;
-        
-        % trigger update to handles.curveprops.curvename.Results.Baseline
-        results.FireEvent('UpdateObject');
-    end
+    end    
+    handles = IOData.PlotData(curvedata, handles, 'RefreshAll', refresh_all);
     guidata(handles.figure1, handles);
     
 end % RefreshGraph

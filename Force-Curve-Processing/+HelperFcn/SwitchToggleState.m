@@ -114,10 +114,20 @@ function SwitchToggleState(src, varargin)
                     obj.UserData.on_gui.Status = false;
                     CUR_OBJ.UserData.on_gui.Status = true;
                 end
+                CYCLE = [];
             end
         catch ME
             switch ME.identifier
                 case 'MATLAB:UndefinedFunction'
+                    % CUR_OBJ is empty
+                    % reason: editbutton pressed for the first time after
+                    %         loading.
+                    % move on
+                case 'MATLAB:class:InvalidHandle'
+                    % invalid or deleted Object
+                    % reason: e.g. procedure has been deleted an loaded
+                    %         again. CUR_OBJ contains in this case an 
+                    %         deleted object.
                     % move on
                 otherwise
                     rethrow(ME);
@@ -126,8 +136,6 @@ function SwitchToggleState(src, varargin)
         CUR_OBJ = obj;
         if isempty(CYCLE)
             CYCLE = 'second';
-        else
-            CYCLE = [];
         end
     end
 
