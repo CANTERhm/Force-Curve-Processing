@@ -36,23 +36,6 @@ function UpdateResultsToMain(src, evt)
     end
     handles.curveprops.(table.UserData.CurrentCurveName).Results.Baseline = data;
     
-    
-%     % remove fields, which should not be stored in
-%     % curveprops.curvename.Results.Baseline
-%     if isprop(results, 'input_elements')
-%         results.delproperty('input_elements');
-%     end
-%     if isprop(results, 'output_elements')
-%         results.delproperty('output_elements');
-%     end
-%     if isprop(results, 'property_event_listener')
-%         results.delproperty('property_event_listener');
-%     end
-%     if isprop(results, 'external_event_listener')
-%         results.delproperty('external_event_listener');
-%     end
-    
-    
     % update handles-struct
     % Do not update results-object! is modified an not possible to use it
     % futher in activeEditfunction

@@ -20,10 +20,6 @@ function ApplyCorrection(varargin)
     %% input parser
     p = inputParser;
     
-    ValidCharacter = @(x)assert(isa(x, 'char') || isa(x, 'string'),...
-        'CalculateCorrection:invalidInput',...
-        'Input is not a character-vector or a string-scalar.');
-    
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
     addParameter(p, 'RawData', []);
