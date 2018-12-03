@@ -42,7 +42,7 @@ jpk_nw_I_standard_txt();
         mainHandles.settings.delimiter_edit = {' '};
         mainHandles.settings.comment_style_edit = {'#'};
         mainHandles.settings.column_specifier_edit = {'columns:'};
-        mainHandles.settings.search_query_edit = 'jpk-nanowizard-I-standard';
+        mainHandles.settings.search_query_edit = 'jpk-nw-I-standard-text';
         mainHandles.settings.InformationStyle = 'jpk-nanowizard-I';
         mainHandles.settings.CurvePartIdx.trace = [1; 2];
         mainHandles.settings.CurvePartIdx.retrace = [3; 6];
