@@ -9,6 +9,12 @@ function varargout = ExtractPlotData(RawData, handles, varargin)
 % optional input:
 %   - xchannel_idx: index from xchannel popup form fcp-app (default: 1)
 %   - ychannel_idx: index from ychannel popup from fcp-app (default: 2)
+%   - curve_part_idx: index indicating from which curve part the data
+%                      has to be extracted.
+%                      (default: fcp-app-curve_parts_popup)
+%   - curve_segment_idx: index indicating from which segment the data has
+%                         to be extracted.
+%                         (default: fcp-app-curve_segments_popup)
 %
 % Name-Value-Pairs:
 %   - edit_button: this option allows to set active_edit_button to edit_button, which
@@ -26,13 +32,17 @@ function varargout = ExtractPlotData(RawData, handles, varargin)
 %   - [LineData, handles] = ExtractPlotData(RawData, handles)
 %   - ___ = ExtractPlotData(___, xchannel_idx)
 %   - ___ = ExtractPlotData(___, xchannel_idx, ychannel_idx)
+%   - ___ = ExtractPlotData(___, curve_part_idx)
+%   - ___ = ExtractPlotData(___, curve_part_idx, curve_segment_idx)
 %   - ___ = ExtractPlotData(___, edit_button, 'edit_button-tag')
 
 %% input parsing
 p = inputParser;
 
-DefaultValues.xchannel = '1';
-DefaultValues.ychannel = '2';
+DefaultValues.xchannel = 1;
+DefaultValues.ychannel = 2;
+DefaultValues.curve_part_idx = [];
+DefaultValues.curve_segment_idx = [];
 DefaultValues.active_edit_button = 'procedure_root_btn';
 DefaultValues.edit_button = [];
 
@@ -47,6 +57,8 @@ addRequired(p, 'RawData');
 addRequired(p, 'handles');
 addOptional(p, 'xchannel_idx', DefaultValues.xchannel, ValidChannelInput);
 addOptional(p, 'ychannel_idx', DefaultValues.ychannel, ValidChannelInput);
+addOptional(p, 'curve_part_idx', DefaultValues.curve_part_idx, ValidChannelInput);
+addOptional(p, 'curve_segment_idx', DefaultValues.curve_segment_idx, ValidChannelInput);
 addParameter(p, 'edit_button', DefaultValues.edit_button, ValidButtonTag);
 
 parse(p, RawData, handles, varargin{:});
@@ -55,6 +67,8 @@ RawData = p.Results.RawData;
 handles = p.Results.handles;
 xchannel_idx = p.Results.xchannel_idx;
 ychannel_idx = p.Results.ychannel_idx;
+curve_part_idx = p.Results.curve_part_idx;
+curve_segment_idx = p.Results.curve_segment_idx;
 edit_button = p.Results.edit_button;
 
 %% function procedure
@@ -68,7 +82,11 @@ else % only one choice for popup, if there are no named channels
 end
 
 % determin segment_idx 
-segment_idx = handles.guiprops.Features.curve_segments_popup.Value;
+if isempty(curve_segment_idx)
+    segment_idx = handles.guiprops.Features.curve_segments_popup.Value;
+else
+    segment_idx = curve_segment_idx;
+end
 
 % determine wich edit_button is active
 editBtns = allchild(handles.guiprops.Panels.processing_panel);
@@ -122,19 +140,6 @@ else
     else
         Data = RawData.CurveData;
     end    
-
-%     if ~isobject(Data)
-%         Data = RawData.CurveData;
-%     end
-%     
-%     % take calculated_data from curveprops.curvename.Results if available
-%     if isprop(Data, 'calculated_data')
-%         if isempty(Data.calculated_data)
-%             Data = RawData.CurveData;
-%         else
-%             Data = Data.calculated_data;
-%         end
-%     end
 end % if 
 
 % start Extracting data
@@ -231,7 +236,13 @@ switch segment_idx
 end % switch
 
 % Decide which part to show
-switch handles.guiprops.Features.curve_parts_popup.Value
+if isempty(curve_part_idx)
+    part = handles.guiprops.Features.curve_parts_popup.Value;
+else
+    part = curve_part_idx;
+end
+
+switch part
     case 1
         LineData.Trace = Trace;
         LineData.Retrace = Retrace;

@@ -110,7 +110,7 @@ function ApplyCorrection(varargin)
     % apply the correction
     main_slope = results.slope;
     main_offset = results.offset;
-    main_offset_fitted = results.offset_fitted;
+    main_offset_mean = results.offset_mean;
     
     switch results.correction_type
         case 1
@@ -120,7 +120,7 @@ function ApplyCorrection(varargin)
                 xchannel_idx,...
                 ychannel_idx,...
                 InCallback,...
-                'Offset', main_offset);
+                'OffsetMean', main_offset_mean);
         case 2
             corrected_data = apply(data,...
                 handles,...
@@ -129,7 +129,7 @@ function ApplyCorrection(varargin)
                 ychannel_idx,...
                 InCallback,...
                 'Slope', main_slope,...
-                'Offset', main_offset_fitted);
+                'Offset', main_offset);
     end
     
     %% update all Results
@@ -166,6 +166,7 @@ function ApplyCorrection(varargin)
         addOptional(p_apply, 'InCallback', false);
         addParameter(p_apply, 'Slope', [], ValidNumber_apply);
         addParameter(p_apply, 'Offset', [], ValidNumber_apply);
+        addParameter(p_apply, 'OffsetMean', [], ValidNumber_apply);
 
         parse(p_apply, data, handles, results, varargin{:});
 
@@ -177,6 +178,7 @@ function ApplyCorrection(varargin)
         InCallback_apply = p_apply.Results.InCallback;
         slope = p_apply.Results.Slope;
         offset = p_apply.Results.Offset;
+        offset_mean = p_apply.Results.OffsetMean;
         
         % function procedure
         
@@ -194,132 +196,138 @@ function ApplyCorrection(varargin)
             ychannel = ychannel_idx_apply;
         end
         
-        % calculate corrections depending from given offset and slope
-        channels = [xchannel ychannel];
-        if isempty(slope)
-            data = CalculateOffset(data, channels, offset);
-        else
-            data = CalculateSlope(data, channels, slope);
-            data = CalculateOffset(data, channels, offset);
+
+        % work off slope parameter
+        if ~isempty(slope)
+            % test if data is segmented. In special cases, like true
+            % easyimport, data is only a nxm-numeric matrix
+            if isa(data, 'struct')
+                segmented = true;
+            else
+                segmented = false;
+            end
+
+            if segmented
+                segments = fieldnames(data);
+                for i = 1:length(segments)
+                    segment = segments{i};
+                    channels = fieldnames(data.(segment));
+                    try
+                        xdata = data.(segment).(channels{xchannel});
+                        ydata = data.(segment).(channels{ychannel});
+                    catch ME
+                        switch ME.identifier
+                            case 'MATLAB:badsubscript'
+                                % 'Index exceeds array bounds.'
+                                % reason: A channel does not have as much choises as in in the
+                                % channels-popup-menus are available
+                                xdata = [];
+                                ydata = [];
+                            otherwise
+                                rethrow(ME);
+                        end
+                    end
+                    if ~isempty(xdata) && ~isempty(ydata)
+                        ydata = ydata - xdata.*slope;
+                        data.(segment).(channels{ychannel}) = ydata;
+                    end
+                end
+            else     
+                xdata = data(:, xchannel);
+                ydata = data(:, ychannel);
+                ydata = ydata - xdata.*slope;
+                data(:, ychannel) = ydata;
+            end
+        end
+        
+        % work off offset parameter
+        if ~isempty(offset) && isempty(offset_mean)
+            % test if data is segmented. In special cases, like true
+            % easyimport, data is only a nxm-numeric matrix
+            if isa(data, 'struct')
+                segmented = true;
+            else
+                segmented = false;
+            end
+            
+            if segmented
+                segments = fieldnames(data);
+                for i = 1:length(segments)
+                    segment = segments{i};
+                    channels = fieldnames(data.(segment));
+                    try
+                        ydata = data.(segment).(channels{ychannel});
+                    catch ME
+                        switch ME.identifier
+                            case 'MATLAB:badsubscript'
+                                % 'Index exceeds array bounds.'
+                                % reason: A channel does not have as much choises as in in the
+                                % channels-popup-menus are available
+                                ydata = [];
+                            otherwise
+                                rethrow(ME);
+                        end
+                    end
+                    if ~isempty(ydata)
+                        ydata = ydata - offset;
+                        data.(segment).(channels{ychannel}) = ydata;
+                    end
+                end
+            else
+                ydata = data(:, ychannel);
+                ydata = ydata - offset;
+                data(:, ychannel) = ydata;
+            end
+        end
+        
+        % work off offset_mean parameter
+        if ~isempty(offset_mean) && isempty(offset)
+            % test if data is segmented. In special cases, like true
+            % easyimport, data is only a nxm-numeric matrix
+            if isa(data, 'struct')
+                segmented = true;
+            else
+                segmented = false;
+            end
+            
+            if segmented
+                segments = fieldnames(data);
+                for i = 1:length(segments)
+                    segment = segments{i};
+                    channels = fieldnames(data.(segment));
+                    try
+                        ydata = data.(segment).(channels{ychannel});
+                    catch ME
+                        switch ME.identifier
+                            case 'MATLAB:badsubscript'
+                                % 'Index exceeds array bounds.'
+                                % reason: A channel does not have as much choises as in in the
+                                % channels-popup-menus are available
+                                ydata = [];
+                            otherwise
+                                rethrow(ME);
+                        end
+                    end
+                    if ~isempty(ydata)
+                        ydata = ydata - offset_mean;
+                        data.(segment).(channels{ychannel}) = ydata;
+                    end
+                end
+            else
+                ydata = data(:, ychannel);
+                ydata = ydata - offset_mean;
+                data(:, ychannel) = ydata;
+            end
         end
         
         % assign data output
-        if isempty(slope) && isempty(offset) 
+        if isempty(slope) && isempty(offset) && isempty(offset_mean)
             corrected_data = [];
         else
             corrected_data = data;
         end
 
     end % apply
-
-    function out_data = CalculateSlope(data, channels, slope)
-        
-        % work off channels
-        xchannel = channels(1);
-        ychannel = channels(2);
-        
-        % work off slope
-        if isempty(slope)
-            out_data = [];
-            return
-        end
-        
-        % work off data
-        % test if data is segmented. In special cases, like true
-        % easyimport, data is only a nxm-numeric matrix
-        if isa(data, 'struct')
-            segmented = true;
-        else
-            segmented = false;
-        end
-
-        if segmented
-            segments = fieldnames(data);
-            for i = 1:length(segments)
-                segment = segments{i};
-                channels = fieldnames(data.(segment));
-                try
-                    xdata = data.(segment).(channels{xchannel});
-                    ydata = data.(segment).(channels{ychannel});
-                catch ME
-                    switch ME.identifier
-                        case 'MATLAB:badsubscript'
-                            % 'Index exceeds array bounds.'
-                            % reason: A channel does not have as much choises as in in the
-                            % channels-popup-menus are available
-                            xdata = [];
-                            ydata = [];
-                        otherwise
-                            rethrow(ME);
-                    end
-                end
-                if ~isempty(xdata) && ~isempty(ydata)
-                    ydata = ydata - xdata.*slope;
-                    data.(segment).(channels{ychannel}) = ydata;
-                end
-            end
-        else     
-            xdata = data(:, xchannel);
-            ydata = data(:, ychannel);
-            ydata = ydata - xdata.*slope;
-            data(:, ychannel) = ydata;
-        end
-        
-        out_data = data;
-
-    end % CalculateSlope
-
-    function out_data = CalculateOffset(data, channels, offset)
-        
-        % work off channels
-        ychannel = channels(2);
-        
-        % work off offset
-        if isempty(offset)
-            out_data = [];
-            return
-        end
-        
-        % test if data is segmented. In special cases, like true
-        % easyimport, data is only a nxm-numeric matrix
-        if isa(data, 'struct')
-            segmented = true;
-        else
-            segmented = false;
-        end
-
-        if segmented
-            segments = fieldnames(data);
-            for i = 1:length(segments)
-                segment = segments{i};
-                channels = fieldnames(data.(segment));
-                try
-                    ydata = data.(segment).(channels{ychannel});
-                catch ME
-                    switch ME.identifier
-                        case 'MATLAB:badsubscript'
-                            % 'Index exceeds array bounds.'
-                            % reason: A channel does not have as much choises as in in the
-                            % channels-popup-menus are available
-                            ydata = [];
-                        otherwise
-                            rethrow(ME);
-                    end
-                end
-                if ~isempty(ydata)
-                    ydata = ydata - offset;
-                    data.(segment).(channels{ychannel}) = ydata;
-                end
-            end
-        else
-            ydata = data(:, ychannel);
-            ydata = ydata - offset;
-            data(:, ychannel) = ydata;
-        end
-        
-        out_data = data;
-        
-    end % CalculateOffset
 
 end % ApplyCorrection
 

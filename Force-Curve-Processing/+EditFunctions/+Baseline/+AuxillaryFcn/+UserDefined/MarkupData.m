@@ -1,8 +1,29 @@
 function MarkupData(varargin)
-%MARKUPDATA Marksup data between selection_borders property
-%  	Tracks the selection_borders property via
+%MARKUPDATA Markup data between selection_borders property
+%
+%   Tracks the selection_borders property via
 %   propertylistener and marks up the range according to this property
-%   on FCP GraphWindow.
+%   on FCP GraphWindow. It also can be used as an Function to markup data
+%   on purpos.
+%
+% Syntax:
+%   - MarkupData()
+%   - MarkupData(xchannel_idx, ychannel_idx)
+%   - MarkupData(xchannel_idx, ychannel_idx, curve_part_idx)
+%   - MarkupData(xchannel_idx, ychannel_idx, curve_part_idx, curve_segment_idx)
+%   - MarkupData(___, 'EditFunction', 'EditFunction-Tag')
+%
+% input:
+%   - if used as an Callback, the first two inputarguments are source-data
+%     end event-data
+%   - xchannel_idx: Value of an xchannel_popup (default: fcp-app curve_xchannel_popup.Value)
+%   - ychannel_idx: Value of an ychannel_popup (default: fcp-app curve_ychannel_popup.Value)
+%   - curve_part_idx: Value of an curve_part_popup (default: fcp-app-curve_part_popup.Value)
+%   - curve_segment_idx: Value of an curve_segments_popup (default: fcp-app curve_segments_popup.Value)
+%   
+% Optional Name-Value-Pairs:
+%   - 'EditFunction': char-vector detemining the editfunction from which to
+%                     take calculated_data, if it exist
 
     %% input parser
     p = inputParser;
@@ -10,15 +31,27 @@ function MarkupData(varargin)
     ValidCharacter = @(x)assert(isa(x, 'char') || isa(x, 'string'),...
         'MarkupData:invalidInput',...
         'Input is not a character-vector or a string-scalar.');
+    ValidNumber = @(x)assert(isnumeric(x),...
+        'MarkupData.invalidInput',...
+        'Input was not a numeric input for one of the following inputarguments:\n%s\n%s\n%s\n%s',...
+        'curve_part_idx', 'curve_segment_idx', 'xchannel_idx', 'ychannel_idx');
     
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
+    addOptional(p, 'xchannel_idx', [], ValidNumber);
+    addOptional(p, 'ychannel_idx', [], ValidNumber);
+    addOptional(p, 'curve_part_idx', [], ValidNumber);
+    addOptional(p, 'curve_segment_idx', [], ValidNumber);
     addParameter(p, 'EditFunction', 'Baseline', ValidCharacter);
     
     parse(p, varargin{:});
     
     src = p.Results.src;
     evt = p.Results.evt;
+    xchannel_idx = p.Results.xchannel_idx;
+    ychannel_idx = p.Results.ychannel_idx;
+    curve_part_idx = p.Results.curve_part_idx;
+    curve_segment_idx = p.Results.curve_segment_idx;
     EditFunction = p.Results.EditFunction;
 
     %% refresh handles and results
@@ -38,13 +71,26 @@ function MarkupData(varargin)
         return
     end
     
+    % is MarkupData used in an Callback?
+    if isempty(src) && isempty(evt)
+        InCallback = false;
+    else
+        InCallback = true;
+    end
+    
     %% markup datarange
     
     % transform relative units to absolute
     % since the units property is likely to vanish (only working with
     % relative units makes life easier) this comparison may be obsolete 
     if strcmp(results.units, 'relative')
-        borders = TransformToAbsolute(handles, results, EditFunction);
+        borders = TransformToAbsolute(handles, results,...
+            xchannel_idx,...
+            ychannel_idx,...
+            curve_part_idx,...
+            curve_segment_idx,...
+            InCallback,...
+            EditFunction);
     else
         borders = results.selection_borders;
     end
@@ -94,7 +140,9 @@ function MarkupData(varargin)
     
     %% nested functions
     
-    function new_borders = TransformToAbsolute(handles, results, EditFunction)
+    function new_borders = TransformToAbsolute(handles, results,...
+            xchannel_idx, ychannel_idx, curve_part_idx, curve_segment_idx, InCallback,...
+            EditFunction)
         
         table = handles.guiprops.Features.edit_curve_table;
         if isempty(table.Data)
@@ -103,8 +151,36 @@ function MarkupData(varargin)
         end
         
         % preparation of needed variables
-        xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
-        ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
+        if isempty(xchannel_idx) && isempty(ychannel_idx)
+            if ~InCallback
+                xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
+                ychannel = handles.guiprops.Features.curve_ychannel_popup.Value;
+            else
+                xchannel = results.input_elements.input_xchannel_popup.Value;
+                ychannel = results.input_elements.input_ychannel_popup.Value;
+            end
+        else
+            xchannel = xchannel_idx;
+            ychannel = ychannel_idx;
+        end
+        if isempty(curve_part_idx)
+            if ~InCallback
+                part = handles.guiprops.Features.curve_parts_popup.Value;
+            else
+                part = results.input_elements.input_parts_popup.Value;
+            end
+        else
+            part = curve_part_idx;
+        end
+        if isempty(curve_segment_idx)
+            if ~InCallback
+                segment = handles.guiprops.Features.curve_segments_popup.Value;
+            else
+                segment = results.input_elements.input_segments_popup.Value;
+            end
+        else
+            segment = curve_segment_idx;
+        end
         curvename = table.UserData.CurrentCurveName;
         RawData = handles.curveprops.(curvename).RawData;
         editfunctions = allchild(handles.guiprops.Panels.processing_panel);
@@ -121,12 +197,22 @@ function MarkupData(varargin)
             % for last Editfunction
             if isempty(results.calculated_data)
                 % get data from last editfunction
-                curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel,...
+                curvedata = UtilityFcn.ExtractPlotData(RawData,...
+                    handles,...
+                    xchannel,...
+                    ychannel,...
+                    part,...
+                    segment,...
                     'edit_button', last_editfunction);
                 linedata = ConvertToVector(curvedata);
             else
                 % get data from active editfunction
-                curvedata = UtilityFcn.ExtractPlotData(RawData, handles, xchannel, ychannel);
+                curvedata = UtilityFcn.ExtractPlotData(RawData,...
+                    handles,...
+                    xchannel,...
+                    ychannel,...
+                    part,...
+                    segment);
                 linedata = ConvertToVector(curvedata);
             end
         end

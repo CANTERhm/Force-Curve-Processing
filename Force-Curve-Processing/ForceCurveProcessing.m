@@ -224,16 +224,9 @@ delete(allchild(panel));
 % refresh shown graph
 UtilityFcn.RefreshGraph();
 
-% clear SetOnGui
-% % reset proc_root_btn and delete its listener
-% src = handles.guiprops.Features.proc_root_btn;
-% listener = src.UserData.lh;
-% listener_handles = listener.ListenerObjects;
-% for i = 1:length(listener_handles)
-%     listener.deleteListener(listener_handles(i));
-% end
-% src.UserData = [];
-
+% Reset SwitchToggleState to make sure its propert behavior if a new
+% procedure gets loaded
+clear SwitchToggleState
 
 guidata(handles.figure1, handles)
 

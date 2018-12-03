@@ -1,4 +1,4 @@
-function TiltCallback(src, evt, obj_list)
+function OffsetCallback(src, evt, obj_list)
 %TILTCALLBACK callback for tilt-checkbox in Baseline-Editfunction
 
 % refresh results object

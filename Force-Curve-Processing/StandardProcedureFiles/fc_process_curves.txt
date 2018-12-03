@@ -1,11 +1,12 @@
 # function: Baseline
 # Status: []
 # singleton: false
-# correction_type: 2
+# correction_type: 1
 # units: 'relative'
 # selection_borders: [0.99 1]
 # slope: []
 # offset: []
+# offset_fitted: []
 # calculated_data: []
 # input_features: []
 # results_features: []

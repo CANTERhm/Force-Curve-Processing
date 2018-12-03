@@ -22,30 +22,32 @@ function SetInputElements(PanelObject)
     grid2 = uix.Grid('Parent', settings_vbox,...
         'Tag', 'settings_grid2',...
         'Spacing', 5);
+    grid3 = uix.Grid('Parent', settings_vbox,...
+        'Spacing', 5);
     
     %% grid1
     
     % tilt or tilt_offset checkbox
     switch results.correction_type
         case 1
-            tilt_value = 1;
+            offset_value = 1;
             tilt_offset_value = 0;
         case 2
-            tilt_value = 0;
+            offset_value = 0;
             tilt_offset_value = 1;
     end
     
     % label for tilt
-    tilt_label = uicontrol('Parent', grid1,...
+    offset_label = uicontrol('Parent', grid1,...
         'Style', 'text',...
         'HorizontalAlignment', 'left',...
-        'String', 'Tilt:');
-    tilt_label.Tag = 'tilt_label';
+        'String', 'Offset:');
+    offset_label.Tag = 'tilt_label';
 
     % checkbox for tilt
-    tilt = uicontrol('Parent', grid1,...
+    offset = uicontrol('Parent', grid1,...
         'Style', 'checkbox',...
-        'Value', tilt_value,...
+        'Value', offset_value,...
         'Tag', 'tilt'); 
 
     % label for tilt and offset
@@ -97,23 +99,122 @@ function SetInputElements(PanelObject)
     grid2.Heights = -1;
     grid2.Widths = [-1 -1 -1 -1];
     
+    %% grid 3
+    
+    curve_xchannel_popup_string = handles.guiprops.Features.curve_xchannel_popup.String;
+    curve_ychannel_popup_string = handles.guiprops.Features.curve_ychannel_popup.String;
+    curve_parts_popup_string = handles.guiprops.Features.curve_parts_popup.String;
+    curve_segments_popup_string = handles.guiprops.Features.curve_segments_popup.String;
+    
+    if isempty(results.xchannel_popup_start_value)
+        curve_xchannel_popup_value = handles.guiprops.Features.curve_xchannel_popup.Value;
+    else
+        curve_xchannel_popup_value = results.xchannel_popup_start_value;
+    end
+    if isempty(results.ychannel_popup_start_value)
+        curve_ychannel_popup_value = handles.guiprops.Features.curve_ychannel_popup.Value;
+    else
+        curve_ychannel_popup_value = results.ychannel_popup_start_value;
+    end
+    if isempty(results.parts_popup_start_value)
+        curve_parts_popup_value = handles.guiprops.Features.curve_parts_popup.Value;
+    else
+        curve_parts_popup_value = results.parts_popup_start_value;
+    end
+    if isempty(results.segments_popup_start_value)
+        curve_segments_popup_value = handles.guiprops.Features.curve_segments_popup.Value;
+    else
+        curve_segments_popup_value = results.segments_popup_start_value;
+    end
+    
+    % label for curve parts for baseline correction
+    input_parts_label = uicontrol('Parent', grid3,...
+        'Style', 'text',...
+        'String', 'Parts:',...
+        'Tag', 'input_parts_label',...
+        'HorizontalAlignment', 'left');
+    
+    % label for curve segments for baseline correction
+    input_segments_label = uicontrol('Parent', grid3,...
+        'Style', 'text',...
+        'String', 'Segments:',...
+        'Tag', 'input_segments_label',...
+        'HorizontalAlignment', 'left');
+    
+    % label for curve xchannel for baseline correction
+    input_xchannel_label = uicontrol('Parent', grid3,...
+        'Style', 'text',...
+        'String', 'xchannel:',...
+        'Tag', 'input_xchannel_label',...
+        'HorizontalAlignment', 'left');
+    
+    % label for curve ychannel for baseline correction
+    input_ychannel_label = uicontrol('Parent', grid3,...
+        'Style', 'text',...
+        'String', 'ychannel:',...
+        'Tag', 'input_ychannel_label',...
+        'HorizontalAlignment', 'left');
+    
+    % popup for curve parts selection for baseline correction
+    input_parts_popup = uicontrol('Parent', grid3,...
+        'Style', 'popupmenu',...
+        'String', curve_parts_popup_string,...
+        'Tag', 'input_parts_popup',...
+        'Value', curve_parts_popup_value,...
+        'Callback', @EditFunctions.Baseline.Callbacks.ElementCallbacks.InputPartsPopupCallback);
+    
+    % popup for curve segments seleciton for baseline correction
+    input_segments_popup = uicontrol('Parent', grid3,...
+        'Style', 'popupmenu',...
+        'String', curve_segments_popup_string,...
+        'Tag', 'input_segments_popup',...
+        'Value', curve_segments_popup_value,...
+        'Callback', @EditFunctions.Baseline.Callbacks.ElementCallbacks.InputSegmentsPopupCallback);
+    
+    % popup for curve xchannel for baseline correction
+    input_xchannel_popup = uicontrol('Parent', grid3,...
+        'Style', 'popupmenu',...
+        'String', curve_xchannel_popup_string,...
+        'Tag', 'input_xchannel_popup',...
+        'Value', curve_xchannel_popup_value);
+    
+    % popup for curve ychannel for baseline correction
+    input_ychannel_popup = uicontrol('Parent', grid3,...
+        'Style', 'popupmenu',...
+        'String', curve_ychannel_popup_string,...
+        'Tag', 'input_ychannel_popup',...
+        'Value', curve_ychannel_popup_value);
+    
+    grid3.Heights = [-1 -1];
+    grid3.Widths = [-1 -1];
+    
     %% settings_panel heights
-    settings_vbox.Heights = [15 20];
+    settings_vbox.Heights = [15 20 120];
     settings_vbox.Spacing = 20;
     
     %% update handles and results-object
     
     results = results.addproperty('input_elements');
     
-    input_elements.tilt = tilt;
+    input_elements.offset = offset;
     input_elements.tilt_offset = tilt_offset;
-    input_elements.tilt_label = tilt_label;
+    input_elements.offset_label = offset_label;
     input_elements.tilt_offset_label = tilt_offset_label;
 
     input_elements.left_border = left_border;
     input_elements.right_border = right_border;
     input_elements.left_border_label = left_border_label;
     input_elements.right_border_label = right_border_label;
+    
+    input_elements.input_parts_label = input_parts_label;
+    input_elements.input_segments_label = input_segments_label;
+    input_elements.input_parts_popup = input_parts_popup;
+    input_elements.input_segments_popup = input_segments_popup;
+    
+    input_elements.input_xchannel_label = input_xchannel_label;
+    input_elements.input_ychannel_label = input_ychannel_label;
+    input_elements.input_xchannel_popup = input_xchannel_popup;
+    input_elements.input_ychannel_popup = input_ychannel_popup;
     
     input_elements.settings_panel = settings_panel;
     input_elements.settings_vbox = settings_vbox;

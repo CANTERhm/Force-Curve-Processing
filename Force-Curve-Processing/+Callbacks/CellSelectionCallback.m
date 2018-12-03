@@ -33,6 +33,7 @@ if ~isempty(evt.Indices)
         xch_idx,...
         ych_idx);
     handles = IOData.PlotData(LineData, handles, 'RefreshAll', false);
+    
 end
 guidata(handles.figure1, handles);
 

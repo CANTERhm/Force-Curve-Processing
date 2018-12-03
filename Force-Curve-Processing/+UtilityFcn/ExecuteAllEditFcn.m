@@ -45,6 +45,11 @@ function ExecuteAllEditFcn(varargin)
                     % 'Undefined variable "EditFunctions" or class "EditFunctions.Baseline.Baseline".'
                     % reason: main does not exists
                     % move on
+                case 'MATLAB:badsubscript'
+                    % 'Index exceeds array bounds.'
+                    % reason: A channel does not have as much choises as in in the
+                    % channels-popup-menus are available
+                    % move on
                 otherwise
                     rethrow(ME);
             end

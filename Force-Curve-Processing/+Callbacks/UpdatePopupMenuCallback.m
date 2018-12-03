@@ -63,7 +63,7 @@ if ~isempty(table_userdata)
             
             if ~isempty(curve_segments)
                 curve_parts_popup.String = {'All', 'Trace', 'Retrace'};
-                curve_segments_popup.Value = 1;
+%                 curve_segments_popup.Value = 1;
                 curve_segments_popup.String = curve_segments;
             else
                 curve_parts_popup.String = 'All';

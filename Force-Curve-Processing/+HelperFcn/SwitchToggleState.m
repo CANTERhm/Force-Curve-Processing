@@ -92,16 +92,23 @@ function SwitchToggleState(src, varargin)
     function SetOnGui(src, evt)
         persistent CUR_OBJ
         persistent CYCLE 
+        
+        if isempty(CYCLE)
+            CYCLE = 'first';
+        elseif strcmp(CYCLE, 'first')
+            CYCLE = 'second';
+        end
+
         obj = evt.AffectedObject;
         try
             if strcmp(CYCLE, 'second')
-                current_object_string = CUR_OBJ.String;
-                last_object_string = obj.String;
+                current_object_tag = CUR_OBJ.Tag;
+                last_object_tag = obj.Tag;
                 
                 % is true if:
                 %   - last pressed togglebutton is not currently pressed
                 %     toggle button
-                if ~strcmp(current_object_string, last_object_string)
+                if ~strcmp(current_object_tag, last_object_tag)
                     obj.UserData.on_gui.Status = false;
                     CUR_OBJ.UserData.on_gui.Status = true;
                 end
@@ -109,12 +116,11 @@ function SwitchToggleState(src, varargin)
                 % is true if:
                 %   - a toggle button is pressed the first time on a gui at
                 %   all
-                if strcmp(current_object_string, last_object_string) && ...
+                if strcmp(current_object_tag, last_object_tag) && ...
                         CUR_OBJ.UserData.on_gui.Status == false
                     obj.UserData.on_gui.Status = false;
                     CUR_OBJ.UserData.on_gui.Status = true;
                 end
-                CYCLE = [];
             end
         catch ME
             switch ME.identifier
@@ -129,14 +135,23 @@ function SwitchToggleState(src, varargin)
                     %         again. CUR_OBJ contains in this case an 
                     %         deleted object.
                     % move on
+                case 'MATLAB:refClearedVar'
+                    % Reference to a cleared variabel CYCLE
+                    % reason: the second rund clears CYCLE to switch the
+                    % on_gui.Status correct. But leads to this error
+                    % move on
                 otherwise
                     rethrow(ME);
             end
         end
         CUR_OBJ = obj;
-        if isempty(CYCLE)
-            CYCLE = 'second';
+        
+        % if SetOnGui runs the second time flush the persistent variable
+        % from workspace
+        if strcmp(CYCLE, 'second')
+            clear CYCLE
         end
+        
     end
 
 end % SwitchToggleState

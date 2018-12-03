@@ -32,13 +32,17 @@ function SetOutputElements(PanelObject)
     else
         offset = '...';
     end
-    
+
     % units
     table = handles.guiprops.Features.edit_curve_table;
-    curvename = table.UserData.CurrentCurveName;
-    SpecialInformation = handles.curveprops.(curvename).RawData.SpecialInformation;
-    if ~isempty(SpecialInformation)
-        units = SpecialInformation.Segment1.units;
+    if ~isempty(table.Data)
+        curvename = table.UserData.CurrentCurveName;
+        SpecialInformation = handles.curveprops.(curvename).RawData.SpecialInformation;
+        if ~isempty(SpecialInformation)
+            units = SpecialInformation.Segment1.units;
+        else
+            units = [];
+        end
     else
         units = [];
     end

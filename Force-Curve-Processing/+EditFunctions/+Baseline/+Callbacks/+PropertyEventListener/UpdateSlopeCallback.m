@@ -1,7 +1,32 @@
-function UpdateSlopeCallback(src, evt)
-%UPDATESLOPECALLBACK Update slope_value_label and slope_unit_label
-%according to results-object
+function UpdateSlopeCallback(varargin)
+%UPDATESLOPECALLBACK update slope labels on Baseline-Resultspanel-Inputparameters
+%   
+%   Update slope_value_label and slope_unit_label
+%   according to results-object. It can also be used as a normal function
 
+
+    %% inputparser
+    p = inputParser;
+    
+    ValidNumber = @(x)assert(isnumeric(x),...
+        'UpdateSlopeCallback:invalidInput',...
+        'Input was not numeric for one of the following inputparameters:\n%s\n%s\n%s\n%s\n',...
+        'xchannel_idx', 'ychannel_idx', 'curve_part_idx', 'curve_segment_idx');
+    
+    addOptional(p, 'src', []);
+    addOptional(p, 'evt', []);
+    addOptional(p, 'xchannel_idx', [], ValidNumber);
+    addOptional(p, 'ychannel_idx', [], ValidNumber);
+    
+    parse(p, varargin{:});
+    
+    src = p.Results.src;
+    evt = p.Results.evt;
+    xchannel_idx = p.Results.xchannel_idx;
+    ychannel_idx = p.Results.ychannel_idx;
+    
+    %% function procedure
+    
     % get results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
@@ -23,9 +48,15 @@ function UpdateSlopeCallback(src, evt)
     else
         units = [];
     end
+    
     if ~isempty(units)
-        xch = handles.guiprops.Features.curve_xchannel_popup.Value;
-        ych = handles.guiprops.Features.curve_ychannel_popup.Value;
+        if isempty(xchannel_idx) && isempty(ychannel_idx)
+            xch = results.input_elements.input_xchannel_popup.Value;
+            ych = results.input_elements.input_ychannel_popup.Value;
+        else
+            xch = xchannel_idx;
+            ych = ychannel_idx;
+        end
         sl_unit.String = [units{ych} '/' units{xch}];
     end
 

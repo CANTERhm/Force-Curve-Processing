@@ -21,6 +21,8 @@ function handles = SetupMainFigure(handles)
         ax.FontSize = 20;
         plottools();
         plotedit(handles.guiprops.MainFigure, 'off');
+        propertyeditor(handles.guiprops.MainFigure, 'off');
+        figurepalette(handles.guiprops.MainFigure, 'hide');
     end
     guidata(handles.figure1, handles);
 

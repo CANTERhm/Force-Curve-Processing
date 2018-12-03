@@ -1,6 +1,25 @@
-function UpdateOffsetCallback(src, evt)
-%UPDATEOFFSETCALLBACK Update offset_value_label and offset_unit_label
-%according to results-object
+function UpdateOffsetCallback(varargin)
+%UPDATEOFFSETCALLBACK Update offset_value_label and offset_unit_label according to results-object
+
+    %% inputparsing
+    p = inputParser;
+    
+    ValidNumber = @(x)assert(isnumeric(x),...
+        'UpdateOffsetCallback:invalidInput',...
+        'Input was not numeric for one of the following inputparameters:\n%s\n',...
+        'ychannel_idx');
+    
+    addOptional(p, 'src', []);
+    addOptional(p, 'evt', []);
+    addOptional(p, 'ychannel_idx', [], ValidNumber);
+    
+    parse(p, varargin{:});
+    
+    src = p.Results.src;
+    evt = p.Results.evt;
+    ychannel_idx = p.Results.ychannel_idx;
+    
+    %% function procedure
 
     % get results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
@@ -24,7 +43,11 @@ function UpdateOffsetCallback(src, evt)
         units = [];
     end
     if ~isempty(units)
-        ych = handles.guiprops.Features.curve_ychannel_popup.Value;
+        if isempty(ychannel_idx)
+            ych = results.input_elements.input_ychannel_popup.Value;
+        else
+            ych = ychannel_idx;
+        end
         off_unit.String = units{ych};
     end
 
