@@ -6,6 +6,7 @@
 # selection_borders: [0.99 1]
 # slope: []
 # offset: []
+# offset_fitted: []
 # calculated_data: []
 # input_features: []
 # results_features: []

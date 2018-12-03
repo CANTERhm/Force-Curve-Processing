@@ -178,8 +178,23 @@ function load_procedure_submenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+handles.guiprops.Features.proc_root_btn.Enable = 'off';
 handles = UtilityFcn.UIGetFilepath(handles, 'ProcedureFilePathObject', 'mSelect', 'off');
 handles = HelperFcn.LoadEditFunctions(handles);
+
+% to load all listeners to editbuttons propertly and to set on_gui.Status 
+% of every edit button properly: set the on_gui.Status property of
+% proc_root_btn == true
+src = handles.guiprops.Features.proc_root_btn;
+HelperFcn.SwitchToggleState(src);
+src.UserData.on_gui.Status = true;
+
+% Enable all editbuttons
+buttons = allchild(handles.guiprops.Panels.processing_panel);
+for i = 1:length(buttons)
+    buttons(i).Enable = 'on';
+end
+
 guidata(handles.figure1, handles);
 
 
@@ -208,6 +223,10 @@ delete(allchild(panel));
 
 % refresh shown graph
 UtilityFcn.RefreshGraph();
+
+% Reset SwitchToggleState to make sure its propert behavior if a new
+% procedure gets loaded
+clear SwitchToggleState
 
 guidata(handles.figure1, handles)
 

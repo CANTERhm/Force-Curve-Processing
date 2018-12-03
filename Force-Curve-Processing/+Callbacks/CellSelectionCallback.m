@@ -17,7 +17,7 @@ if ~isempty(evt.Indices)
         handles = HelperFcn.AddFunctionsToCurve(handles);
     end
     
-    % update specific guiprops and curveprops properties
+    %% update specific guiprops and curveprops properties
     src.UserData.CurrentRowIndex = row;
     src.UserData.CurrentRowSpan = [evt.Indices(1, 1); evt.Indices(end, 1)];
     src.UserData.CurrentCurveName = curvename;
@@ -25,13 +25,15 @@ if ~isempty(evt.Indices)
     xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
     ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value; 
     
-    % recalculate all editfunctions
+    %% recalculate all editfunctions
     UtilityFcn.ExecuteAllEditFcn();
-
+    
+    %% Replot graph according to active editfunction
     [LineData, handles] = UtilityFcn.ExtractPlotData(handles.curveprops.(curvename).RawData, handles,...
         xch_idx,...
         ych_idx);
     handles = IOData.PlotData(LineData, handles, 'RefreshAll', false);
+    
 end
 guidata(handles.figure1, handles);
 

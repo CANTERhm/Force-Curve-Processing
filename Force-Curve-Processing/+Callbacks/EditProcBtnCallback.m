@@ -6,4 +6,5 @@ HelperFcn.SwitchToggleState(src);
 
 %% execute edit function
 name = src.Tag;
-EditFunctions.(name).(name)();
+UtilityFcn.ResetMainFigureCallbacks();
+EditFunctions.(name).main();

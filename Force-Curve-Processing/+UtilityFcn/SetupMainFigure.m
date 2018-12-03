@@ -8,6 +8,8 @@ function handles = SetupMainFigure(handles)
         handles.guiprops.MainFigure = figure('NumberTitle', 'off',...
             'Name', name,...
             'Tag', 'MainFigure',...
+            'ToolBar', 'none',...
+            'Interruptible', 'off',...
             'CloseRequestFcn', {@CloseMainFigureCallback, handles});
         ax = axes(handles.guiprops.MainFigure);
         ax.XGrid = 'on';
@@ -19,6 +21,8 @@ function handles = SetupMainFigure(handles)
         ax.FontSize = 20;
         plottools();
         plotedit(handles.guiprops.MainFigure, 'off');
+        propertyeditor(handles.guiprops.MainFigure, 'off');
+        figurepalette(handles.guiprops.MainFigure, 'hide');
     end
     guidata(handles.figure1, handles);
 

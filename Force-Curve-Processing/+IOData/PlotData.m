@@ -69,9 +69,6 @@ if ~isempty(curvename)
     end
 end
 
-% ax = handles.guiprops.MainAxes;
-% delete(allchild(ax));
-
 % prepare plot data
 if ~isempty(LineData.Trace)
     segment = fieldnames(LineData.Trace);
@@ -121,6 +118,12 @@ end
 if ~isempty(trace_x) && ~isempty(trace_y)
     trace = line(ax, trace_x, trace_y);
     trace.Color = handles.curveprops.TraceColor;
+    trace.LineStyle = 'none';
+    trace.Marker = 'o';
+    trace.MarkerSize = 2;
+    trace.MarkerEdgeColor = 'none';
+    trace.MarkerFaceColor = handles.curveprops.TraceColor;
+    trace.DisplayName = 'Retrace';
     trace.DisplayName = 'Trace';
     trace.Tag = 'ForceCurve';
 end
@@ -128,6 +131,11 @@ end
 if ~isempty(retrace_x) && ~isempty(retrace_y)
     retrace = line(ax, retrace_x, retrace_y);
     retrace.Color = handles.curveprops.RetraceColor;
+    retrace.LineStyle = 'none';
+    retrace.Marker = 'o';
+    retrace.MarkerSize = 2;
+    retrace.MarkerEdgeColor = 'none';
+    retrace.MarkerFaceColor = handles.curveprops.RetraceColor;
     retrace.DisplayName = 'Retrace';
     retrace.Tag = 'ForceCurve';
 end
