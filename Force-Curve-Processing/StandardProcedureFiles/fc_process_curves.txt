@@ -13,7 +13,11 @@
 # userdata: []
 
 # function: VerticalTipPosition
-# nargin: 0
+# Status: []
+# Sensitivity: []
+# SpringConstant: []
+# calculated_data: []
+# userdata: []
 
 # function: ChainFit
 # nargin: 0

@@ -56,4 +56,6 @@ handles.guiprops.Features.curve_ychannel_popup.Value = 1;
 handles.guiprops.Features.edit_curve_table.UserData = [];
 handles.guiprops.FilePathObject.files = [];
 handles.curveprops.DynamicProps = [];
+handles.curveprops.CalibrationValues.SpringConstant = [];
+handles.curveprops.CalibrationValues.Sensitivity = [];
 guidata(handles.figure1, handles);
