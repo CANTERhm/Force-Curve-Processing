@@ -85,13 +85,14 @@ function main(varargin)
     end
     
     %% operations on Figure and Axes 
-    UtilityFcn.RefreshGraph();
+%     UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
 
     %% on/off gui behavior
     GuiStatus = button_handle.UserData.on_gui.Status;
     switch GuiStatus
         case true
+            UtilityFcn.RefreshGraph();
             if ~isprop(results, 'input_elements') && ~isprop(results, 'output_elements')
                 SetupGraphicalElements(container);
             end

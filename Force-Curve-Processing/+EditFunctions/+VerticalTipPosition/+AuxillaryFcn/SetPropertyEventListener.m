@@ -7,7 +7,7 @@ function SetPropertyEventListener(varargin)
     % handles and results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, EditFunction);
+    results = getappdata(handles.figure1, 'VerticalTipPosition');
     
     % if results_listener property has been removed 
     if ~isprop(results, 'property_event_listener')
@@ -22,8 +22,7 @@ function SetPropertyEventListener(varargin)
         {@Callbacks.DeleteListenerCallback, VerticalTipPositionFcn}); 
     
     % update handles and results-object
-    setappdata(handles.figure1, EditFunction, results);
-    handles.curveprops.(curvename).Results.EditFunction = results;
+    setappdata(handles.figure1, 'VerticalTipPosition', results);
     guidata(handles.figure1, handles);
 
 end % SetPropertyEventListener

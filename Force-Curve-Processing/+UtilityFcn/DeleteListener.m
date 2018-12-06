@@ -34,15 +34,15 @@ function DeleteListener(varargin)
     end
     
     if ~isempty(results)
-        if isprop(results, 'property_event_listeners')
-            listeners = results.property_event_listeners;
+        if isprop(results, 'property_event_listener')
+            listeners = results.property_event_listener;
             listener_handles = listeners.ListenerObjects;
             for i = 1:length(listener_handles)
                 listeners.deleteListener(listener_handles(i));
             end
         end
-        if isprop(results, 'external_event_listeners')
-            listeners = results.external_event_listeners;
+        if isprop(results, 'external_event_listener')
+            listeners = results.external_event_listener;
             listener_handles = listeners.ListenerObjects;
             for i = 1:length(listener_handles)
                 listeners.deleteListener(listener_handles(i));
