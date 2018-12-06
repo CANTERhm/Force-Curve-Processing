@@ -1,4 +1,4 @@
-function SetPropertyEventListener(EditFunction, varargin)
+function SetPropertyEventListener(varargin)
 %SETPROPERTYEVENTLISTENER PropertyEventListener for results-object
 %   Sets the property event listener neccessary to keep the graphical input
 %   and output elemnts updated. This Listener objects listen to changes of
@@ -9,11 +9,17 @@ function SetPropertyEventListener(EditFunction, varargin)
     handles = guidata(main);
     results = getappdata(handles.figure1, EditFunction);
     
-    if results.singleton == false % only add property listener once
-        
-        results.singleton = true;
-        
+    % if results_listener property has been removed 
+    if ~isprop(results, 'property_event_listener')
+        results.addproperty('property_event_listener');
+        results.property_event_listener = PropListener();
     end
+
+    % delete all listeners, if Baseline is not acitve
+    editfunctions = handles.guiprops.Features.edit_buttons;
+    VerticalTipPositionFcn = editfunctions.VerticalTipPosition;
+    results.property_event_listener.addListener(VerticalTipPositionFcn.UserData.on_gui, 'Status', 'PostSet',...
+        {@Callbacks.DeleteListenerCallback, VerticalTipPositionFcn}); 
     
     % update handles and results-object
     setappdata(handles.figure1, EditFunction, results);

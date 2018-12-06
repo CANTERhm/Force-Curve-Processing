@@ -21,13 +21,8 @@ function SetOutputElements(varargin)
         'Spacing', 5,...
         'Tag', 'vtp_results_grid');
     
-    %% select note
-    switch results.results_news
-        case 'good'
-            disclaimer_string = 'Vertical Tip Position successfully calculated';
-        case 'bad'
-            disclaimer_string = 'error: fist calibrate curves';
-    end
+    %% calculation status
+    disclaimer_string = EditFunctions.VerticalTipPosition.AuxillaryFcn.UserDefined.CalculationStatus(results.calculation_status);
     
     %% graphical elements
     

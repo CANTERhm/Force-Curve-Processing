@@ -43,13 +43,16 @@ function main(varargin)
         results.addproperty('calculated_data');
         results.addproperty('settings_xchannel_popup_value');
         results.addproperty('settings_ychannel_popup_value');
-        results.addproperty('results_news');
+        results.addproperty('calculation_status');
+        results.addproperty('singleton');
         if isempty(data)
             loaded_input = handles.procedure.VerticalTipPosition;
             results.userdata = loaded_input.userdata;
             results.Sensitivity = loaded_input.Sensitivity;
             results.SpringConstant = loaded_input.SpringConstant;
             results.calculated_data = loaded_input.calculated_data;
+            results.calculation_status = loaded_input.calculation_status;
+            results.singleton = loaded_input.singleton;
         else
             % use values from data as default
             % the singleton property has to be resettet to false in every
@@ -60,14 +63,10 @@ function main(varargin)
             results.Sensitivity = data.Sensitivity;
             results.SpringConstant = data.SpringConstant;
             results.calculated_data = data.calculated_data;
+            results.calculation_status = data.calculation_status;
+            results.singleton = data.singleton;
             results.settings_xchannel_popup_value = data.settings_xchannel_popup_value;
             results.settings_ychannel_popup_value = data.settings_ychannel_popup_value;
-        end
-        
-        if handles.curveprops.Calibrated
-            results.results_news = 'good';
-        else
-            results.results_new = 'bad';
         end
 
         % update appdata if new results-object for Baseline has been created
@@ -78,12 +77,37 @@ function main(varargin)
     button_handle = findobj(allchild(handles.guiprops.Panels.processing_panel),...
         'Type', 'UIControl', 'Tag', 'VerticalTipPosition');
     
+    %% determine calculation status
+    
+    % curves are not calibrated
+    if ~handles.curveprops.Calibrated
+        results.calculation_status = 2;
+    end
     
     %% operations on Figure and Axes 
     UtilityFcn.RefreshGraph();
     UtilityFcn.ResetMainFigureCallbacks();
 
-    %% Setup Graphical Elements
+    %% on/off gui behavior
+    GuiStatus = button_handle.UserData.on_gui.Status;
+    switch GuiStatus
+        case true
+            if ~isprop(results, 'input_elements') && ~isprop(results, 'output_elements')
+                SetupGraphicalElements(container);
+            end
+            if ~results.singleton
+                SetupListeners();
+                results.singleton = true;
+            end
+    end
+    
+    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
+    setappdata(handles.figure1, 'VerticalTipPosition', results);
+    guidata(handles.figure1, handles);
+    results.FireEvent('UpdateObject');
+end % main
+
+function SetupGraphicalElements(container)
 
     % clear results panel 
     delete(allchild(container));
@@ -110,7 +134,8 @@ function main(varargin)
     main_scrolling_panel.Heights = 400;
     main_scrolling_panel.Widths = 345;
 
-    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
-    guidata(handles.figure1, handles);
-    results.FireEvent('UpdateObject');
-end % main
+end % SetupGraphicalElements
+
+function SetupListeners()
+    EditFunctions.VerticalTipPosition.AuxillaryFcn.SetPropertyEventListener();
+end % SetupListeners

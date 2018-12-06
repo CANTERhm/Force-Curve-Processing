@@ -17,6 +17,8 @@
 # Sensitivity: []
 # SpringConstant: []
 # calculated_data: []
+# calculation_status: 1
+# singleton: false
 # userdata: []
 
 # function: ChainFit
