@@ -7,17 +7,12 @@ function SetExternalEventListener(varargin)
     % handles and results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, EditFunction);
+    results = getappdata(handles.figure1, 'VerticalTipPosition');
     
-    if results.singleton == false % only add property listener once
-        
-        results.singleton = true;
-        
-    end
+    % do stuff
     
     % update handles and results-object
-    setappdata(handles.figure1, EditFunction, results);
-    handles.curveprops.(curvename).Results.EditFunction = results;
+    setappdata(handles.figure1, 'VerticalTipPosition', results);
     guidata(handles.figure1, handles);
 
 end % SetExternalEventListener

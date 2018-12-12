@@ -8,7 +8,7 @@ function SetInputElements(varargin)
     handles = guidata(main);
     results = getappdata(handles.figure1, 'VerticalTipPosition');
     
-    %% variable
+    %% variables
     curve_xchannel_popup_string = handles.guiprops.Features.curve_xchannel_popup.String;
     curve_ychannel_popup_string = handles.guiprops.Features.curve_ychannel_popup.String;
     if handles.curveprops.Calibrated
@@ -132,11 +132,13 @@ function SetInputElements(varargin)
     springconstant_checkbox = uicontrol('Parent', grid3,...
         'Style', 'checkbox',...
         'Tag', 'vtp_settings_springconstant_checkbox',...
-        'Value', 1);
+        'Value', 1,...
+        'Callback', @EditFunctions.VerticalTipPosition.Callbacks.ElementCallbacks.SettingsSpringconstantCallback);
     sensitivity_checkbox = uicontrol('Parent', grid3,...
         'Style', 'checkbox',...
         'Tag', 'vtp_settings_sensitivity_checkbox',...
-        'Value', 0);
+        'Value', 0,...
+        'Callback', @EditFunctions.VerticalTipPosition.Callbacks.ElementCallbacks.SettingsSensitivityCallback);
     grid3.Heights = [20 20];
     grid3.Widths = [-1 -1 -0.5 -1];
     
@@ -171,6 +173,12 @@ function SetInputElements(varargin)
     input_elements.sensitivity_unit = sensitivity_unit;
     input_elements.springconstant_checkbox = springconstant_checkbox;
     input_elements.sensitivity_checkbox = sensitivity_checkbox;
+    
+    % defaults for results-object
+    results.settings_xchannel_popup_value = curve_xchannel_popup_value;
+    results.settings_ychannel_popup_value = curve_ychannel_popup_value;
+    results.settings_springconstant_checkbox_value = 1;
+    results.settings_sensitivity_checkbox_value = 0;
     
     results.input_elements = input_elements;
     

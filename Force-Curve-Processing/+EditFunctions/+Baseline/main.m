@@ -75,7 +75,8 @@ if isempty(results)
         results.slope = data.slope;
         results.offset = data.offset;
         results.offset_fitted = data.offset_fitted;
-        results.singleton = data.singleton; 
+%         results.singleton = data.singleton; 
+        results.singleton = false; 
         results.calculated_data = data.calculated_data;
         results.xchannel_popup_start_value = data.xchannel_popup_start_value;
         results.ychannel_popup_start_value = data.ychannel_popup_start_value;
@@ -94,7 +95,7 @@ end
         'Type', 'UIControl', 'Tag', 'Baseline');
     
     %% operations on Figure and Axes 
-    UtilityFcn.RefreshGraph();
+    UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
     
     %% Baseline procedure
@@ -163,7 +164,7 @@ end
             end
 
             % Set Event Listeners
-            if results.singleton == false
+            if ~results.singleton
                 EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
                 EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
                 results.singleton = true;

@@ -43,13 +43,15 @@ function main(varargin)
         results.addproperty('calculated_data');
         results.addproperty('settings_xchannel_popup_value');
         results.addproperty('settings_ychannel_popup_value');
+        results.addproperty('settings_springconstant_checkbox_value');
+        results.addproperty('settings_sensitivity_checkbox_value');
         results.addproperty('calculation_status');
         results.addproperty('singleton');
         if isempty(data)
             loaded_input = handles.procedure.VerticalTipPosition;
             results.userdata = loaded_input.userdata;
-            results.Sensitivity = loaded_input.Sensitivity;
-            results.SpringConstant = loaded_input.SpringConstant;
+            results.Sensitivity = handles.curveprops.CalibrationValues.Sensitivity;
+            results.SpringConstant = handles.curveprops.CalibrationValues.SpringConstant;
             results.calculated_data = loaded_input.calculated_data;
             results.calculation_status = loaded_input.calculation_status;
             results.singleton = loaded_input.singleton;
@@ -67,6 +69,8 @@ function main(varargin)
             results.singleton = data.singleton;
             results.settings_xchannel_popup_value = data.settings_xchannel_popup_value;
             results.settings_ychannel_popup_value = data.settings_ychannel_popup_value;
+            results.settings_springconstant_checkbox_value = data.settings_springconstant_checkbox_value;
+            results.settings_sensitivity_checkbox_value = data.settings_sensitivity_checkbox_value;
         end
 
         % update appdata if new results-object for Baseline has been created
@@ -78,17 +82,23 @@ function main(varargin)
         'Type', 'UIControl', 'Tag', 'VerticalTipPosition');
     
     %% determine calculation status
+    table = handles.guiprops.Features.edit_curve_table;
     
-    % curves are not calibrated
-    if ~handles.curveprops.Calibrated
+    % if no curves are loaded
+    if isempty(table.Data)
         results.calculation_status = 2;
     end
     
+    % curves are not calibrated
+    if ~handles.curveprops.Calibrated && ~isempty(table.Data)
+        results.calculation_status = 3;
+    end
+    
     %% operations on Figure and Axes 
-%     UtilityFcn.RefreshGraph('RefreshAll', false);
+    UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
 
-    %% on/off gui behavior
+    %% gui on/off behavior
     GuiStatus = button_handle.UserData.on_gui.Status;
     switch GuiStatus
         case true
@@ -101,6 +111,21 @@ function main(varargin)
                 results.singleton = true;
             end
     end
+    
+    %% show corrected data
+    
+    % Refresh results
+    results = getappdata(handles.figure1, 'VerticalTipPosition');    
+
+    % apply vertical tip position on data
+    EditFunctions.VerticalTipPosition.AuxillaryFcn.UserDefined.ApplyVerticalTipPosition();
+    
+    % refresh graph
+    UtilityFcn.RefreshGraph([], [],...
+        results.settings_xchannel_popup_value,...
+        results.settings_ychannel_popup_value,...
+        'EditFunction', 'VerticalTipPosition',...
+        'RefreshAll', true);
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     setappdata(handles.figure1, 'VerticalTipPosition', results);
@@ -139,4 +164,5 @@ end % SetupGraphicalElements
 
 function SetupListeners()
     EditFunctions.VerticalTipPosition.AuxillaryFcn.SetPropertyEventListener();
+    EditFunctions.VerticalTipPosition.AuxillaryFcn.SetExternalEventListener();
 end % SetupListeners

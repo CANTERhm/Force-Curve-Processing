@@ -19,7 +19,9 @@ function disclaimer = CalculationStatus(status, varargin)
         case 1
             disclaimer = 'Vertical Tip Position successfully calculated';
         case 2
-            disclaimer = 'error 2: curves are not calibrated';
+            disclaimer = 'error 2: No loaded curves';
+        case 3
+            disclaimer = 'error 3: Curves are not calibrated';
     end
 
 end % CalculationStatus

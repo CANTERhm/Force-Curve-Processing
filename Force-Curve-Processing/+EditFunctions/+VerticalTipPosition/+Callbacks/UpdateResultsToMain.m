@@ -13,7 +13,7 @@ function UpdateResultsToMain(src, evt)
     % handles and results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, EditFunction);
+    results = getappdata(handles.figure1, 'VerticalTipPosition');
     table = handles.guiprops.Features.edit_curve_table;
     
     % abort function, if no curve was loaded
