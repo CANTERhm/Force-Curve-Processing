@@ -120,7 +120,7 @@ function ApplyVerticalTipPosition(varargin)
     results.calculated_data = corrected_data;
     
     % update results object and handles-struct
-    setappdata(handles.figure1, 'Baseline', results);
+    setappdata(handles.figure1, 'VerticalTipPosition', results);
     guidata(handles.figure1, handles);
 
     % trigger update to handles.curveprops.curvename.Results.EditFunction
@@ -160,14 +160,14 @@ function out_data = CalculateViaSensitivity(data, sensitivity, xchannel, ychanne
                 end
             end
             if ~isempty(xdata) && ~isempty(ydata)
-                xdata = xdata - ydata.*sensitivity;
+                xdata = xdata - abs(ydata).*sensitivity;
                 data.(segment).(channels{xchannel}) = xdata;
             end
         end
     else     
         xdata = data(:, xchannel);
         ydata = data(:, ychannel);
-        xdata = xdata - ydata.*sensitivity;
+        xdata = xdata - abs(ydata).*sensitivity;
         data(:, xchannel) = xdata;
     end
     
@@ -207,14 +207,14 @@ function out_data = CalculateViaSpringConstant(data, springconstant, xchannel, y
                 end
             end
             if ~isempty(xdata) && ~isempty(ydata)
-                xdata = xdata - ydata./springconstant;
+                xdata = xdata - abs(ydata)./springconstant;
                 data.(segment).(channels{xchannel}) = xdata;
             end
         end
     else     
         xdata = data(:, xchannel);
         ydata = data(:, ychannel);
-        xdata = xdata - ydata./springconstant;
+        xdata = xdata - abs(ydata)./springconstant;
         data(:, xchannel) = xdata;
     end
     

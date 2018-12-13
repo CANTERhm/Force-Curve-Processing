@@ -201,6 +201,12 @@ end
                 results.input_elements.input_segments_popup.Value);
             
     end % switch
+
+    % delete results object if edit function is not active, after all tasks
+    % are done 
+    if ~status
+        UtiltiyFcn.DeleteListener('EditFunction', 'VerticalTipPosition');
+    end
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     setappdata(handles.figure1, 'Baseline', results);

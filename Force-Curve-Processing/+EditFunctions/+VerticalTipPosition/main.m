@@ -127,6 +127,12 @@ function main(varargin)
         'EditFunction', 'VerticalTipPosition',...
         'RefreshAll', true);
     
+    % delete results object if edit function is not active, after all tasks
+    % are done 
+    if ~GuiStatus
+        UtiltiyFcn.DeleteListener('EditFunction', 'VerticalTipPosition');
+    end
+    
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     setappdata(handles.figure1, 'VerticalTipPosition', results);
     guidata(handles.figure1, handles);

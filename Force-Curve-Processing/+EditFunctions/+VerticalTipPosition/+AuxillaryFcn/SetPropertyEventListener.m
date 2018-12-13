@@ -21,6 +21,12 @@ function SetPropertyEventListener(varargin)
     results.property_event_listener.addListener(VerticalTipPositionFcn.UserData.on_gui, 'Status', 'PostSet',...
         {@Callbacks.DeleteListenerCallback, VerticalTipPositionFcn}); 
     
+    % event listener to update handles.curveprops.curvename.Results.Baseline
+    % This step is important, because it update the handles-struct; it is
+    % kind of an output from Baseline
+    results.property_event_listener.addListener(results, 'UpdateObject',...
+    @EditFunctions.VerticalTipPosition.Callbacks.UpdateResultsToMain);
+    
     % update handles and results-object
     setappdata(handles.figure1, 'VerticalTipPosition', results);
     guidata(handles.figure1, handles);

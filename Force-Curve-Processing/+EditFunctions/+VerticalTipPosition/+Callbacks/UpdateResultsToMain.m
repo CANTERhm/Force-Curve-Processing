@@ -23,7 +23,7 @@ function UpdateResultsToMain(src, evt)
     
     % abort function if Basline is not registered in curvename.Results
     names = fieldnames(handles.curveprops.(table.UserData.CurrentCurveName).Results);
-    if ~ismember(names, EditFunction)
+    if ~ismember(names, 'VerticalTipPosition')
         return
     end
     
@@ -41,7 +41,7 @@ function UpdateResultsToMain(src, evt)
     for i = 1:length(load_to_data)
         data.(load_to_data{i}) = results.(load_to_data{i});
     end
-    handles.curveprops.(table.UserData.CurrentCurveName).Results.EditFunction = data;
+    handles.curveprops.(table.UserData.CurrentCurveName).Results.VerticalTipPosition = data;
     
     % update handles-struct
     % Do not update results-object! is modified an not possible to use it
