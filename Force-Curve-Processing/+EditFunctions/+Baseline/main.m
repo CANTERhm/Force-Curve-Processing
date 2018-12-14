@@ -75,7 +75,6 @@ if isempty(results)
         results.slope = data.slope;
         results.offset = data.offset;
         results.offset_fitted = data.offset_fitted;
-%         results.singleton = data.singleton; 
         results.singleton = false; 
         results.calculated_data = data.calculated_data;
         results.xchannel_popup_start_value = data.xchannel_popup_start_value;

@@ -66,7 +66,7 @@ function main(varargin)
             results.SpringConstant = data.SpringConstant;
             results.calculated_data = data.calculated_data;
             results.calculation_status = data.calculation_status;
-            results.singleton = data.singleton;
+            results.singleton = false;
             results.settings_xchannel_popup_value = data.settings_xchannel_popup_value;
             results.settings_ychannel_popup_value = data.settings_ychannel_popup_value;
             results.settings_springconstant_checkbox_value = data.settings_springconstant_checkbox_value;

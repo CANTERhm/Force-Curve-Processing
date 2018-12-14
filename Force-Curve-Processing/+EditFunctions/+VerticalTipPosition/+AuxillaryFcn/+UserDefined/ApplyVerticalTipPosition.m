@@ -86,9 +86,9 @@ function ApplyVerticalTipPosition(varargin)
     
     if ~strcmp(last_edit_function, 'procedure_root_btn')
         res = handles.curveprops.(curvename).Results.(last_edit_function);
-        if isa(res, 'sturct')
+        if isa(res, 'struct')
             props = fieldnames(res);
-            if ismember(props, 'calculated_data')
+            if any(ismember(props, 'calculated_data'))
                 calculated_data = res.calculated_data;
                 if ~isempty(calculated_data)
                     data = calculated_data;
@@ -160,14 +160,34 @@ function out_data = CalculateViaSensitivity(data, sensitivity, xchannel, ychanne
                 end
             end
             if ~isempty(xdata) && ~isempty(ydata)
-                xdata = xdata - abs(ydata).*sensitivity;
+                for n = 1:length(xdata)
+                    if xdata(n) < 0 && ydata(n) < 0
+                        xdata(n) = xdata(n) - ydata(n)*sensitivity;
+                    elseif xdata(n) < 0 && ydata(n) >= 0
+                        xdata(n) = xdata(n) + ydata(n)*sensitivity;
+                    elseif xdata(n) >= 0 && ydata(n) < 0
+                        xdata(n) = xdata(n) + ydata(n)*sensitivity;
+                    elseif xdata(n) >= 0 && ydata(n) >= 0
+                        xdata(n) = xdata(n) - ydata(n)*sensitivity;
+                    end
+                end
                 data.(segment).(channels{xchannel}) = xdata;
             end
         end
     else     
         xdata = data(:, xchannel);
         ydata = data(:, ychannel);
-        xdata = xdata - abs(ydata).*sensitivity;
+        for n = 1:length(xdata)
+            if xdata(n) < 0 && ydata(n) < 0
+                xdata(n) = xdata(n) - ydata(n)*sensitivity;
+            elseif xdata(n) < 0 && ydata(n) >= 0
+                xdata(n) = xdata(n) + ydata(n)*sensitivity;
+            elseif xdata(n) >= 0 && ydata(n) < 0
+                xdata(n) = xdata(n) + ydata(n)*sensitivity;
+            elseif xdata(n) >= 0 && ydata(n) >= 0
+                xdata(n) = xdata(n) - ydata(n)*sensitivity;
+            end
+        end
         data(:, xchannel) = xdata;
     end
     
@@ -207,17 +227,37 @@ function out_data = CalculateViaSpringConstant(data, springconstant, xchannel, y
                 end
             end
             if ~isempty(xdata) && ~isempty(ydata)
-                xdata = xdata - abs(ydata)./springconstant;
+                xdata = xdata + ydata./springconstant;
                 data.(segment).(channels{xchannel}) = xdata;
             end
         end
     else     
         xdata = data(:, xchannel);
         ydata = data(:, ychannel);
-        xdata = xdata - abs(ydata)./springconstant;
+        xdata = xdata + ydata./springconstant;
+
         data(:, xchannel) = xdata;
     end
     
     out_data = data;
     
 end % CalculateViaSpringConstant
+
+%         for n = 1:length(xdata)
+%             % III. Quadrant
+%             if xdata(n) < 0 && ydata(n) < 0
+%                 xdata(n) = xdata(n) + ydata(n)/springconstant;
+%                 
+%             % II. Quadrant
+%             elseif xdata(n) < 0 && ydata(n) >= 0
+%                 xdata(n) = xdata(n) + ydata(n)/springconstant;
+%                 
+%             % IV. Quadrant
+%             elseif xdata(n) >= 0 && ydata(n) < 0
+%                 xdata(n) = xdata(n) + ydata(n)/springconstant;
+%                 
+%             % I. Quadrant
+%             elseif xdata(n) >= 0 && ydata(n) >= 0
+%                 xdata(n) = xdata(n) + ydata(n)/springconstant;
+%             end
+%         end
