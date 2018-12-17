@@ -22,6 +22,8 @@ function disclaimer = CalculationStatus(status, varargin)
             disclaimer = 'error 2: No loaded curves';
         case 3
             disclaimer = 'error 3: Curves are not calibrated';
+        case 4
+            disclaimer = 'error 4: No baseline correction for loaded curves';
     end
 
 end % CalculationStatus

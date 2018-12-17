@@ -114,6 +114,10 @@ function ApplyVerticalTipPosition(varargin)
             sensitivity,...
             xchannel_idx,...
             ychannel_idx);
+    else
+        % no gui elements visible, because function executed without
+        % GuiStatus == true
+        corrected_data = [];
     end
     
     %% update all Results
@@ -160,34 +164,14 @@ function out_data = CalculateViaSensitivity(data, sensitivity, xchannel, ychanne
                 end
             end
             if ~isempty(xdata) && ~isempty(ydata)
-                for n = 1:length(xdata)
-                    if xdata(n) < 0 && ydata(n) < 0
-                        xdata(n) = xdata(n) - ydata(n)*sensitivity;
-                    elseif xdata(n) < 0 && ydata(n) >= 0
-                        xdata(n) = xdata(n) + ydata(n)*sensitivity;
-                    elseif xdata(n) >= 0 && ydata(n) < 0
-                        xdata(n) = xdata(n) + ydata(n)*sensitivity;
-                    elseif xdata(n) >= 0 && ydata(n) >= 0
-                        xdata(n) = xdata(n) - ydata(n)*sensitivity;
-                    end
-                end
+                xdata = xdata + ydata.*sensitivity;
                 data.(segment).(channels{xchannel}) = xdata;
             end
         end
     else     
         xdata = data(:, xchannel);
         ydata = data(:, ychannel);
-        for n = 1:length(xdata)
-            if xdata(n) < 0 && ydata(n) < 0
-                xdata(n) = xdata(n) - ydata(n)*sensitivity;
-            elseif xdata(n) < 0 && ydata(n) >= 0
-                xdata(n) = xdata(n) + ydata(n)*sensitivity;
-            elseif xdata(n) >= 0 && ydata(n) < 0
-                xdata(n) = xdata(n) + ydata(n)*sensitivity;
-            elseif xdata(n) >= 0 && ydata(n) >= 0
-                xdata(n) = xdata(n) - ydata(n)*sensitivity;
-            end
-        end
+        xdata = xdata + ydata.*sensitivity;
         data(:, xchannel) = xdata;
     end
     
@@ -235,7 +219,6 @@ function out_data = CalculateViaSpringConstant(data, springconstant, xchannel, y
         xdata = data(:, xchannel);
         ydata = data(:, ychannel);
         xdata = xdata + ydata./springconstant;
-
         data(:, xchannel) = xdata;
     end
     

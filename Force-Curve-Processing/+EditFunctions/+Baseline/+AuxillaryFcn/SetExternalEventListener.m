@@ -16,20 +16,64 @@ function SetExternalEventListener(EditFunction, varargin)
     end
 
     % curveparts
-    results.property_event_listener.addListener(results.input_elements.input_parts_popup, 'Value', 'PostSet',...
-        @EditFunctions.Baseline.main);
+    try
+        results.property_event_listener.addListener(results.input_elements.input_parts_popup, 'Value', 'PostSet',...
+            @EditFunctions.Baseline.main);
+    catch ME
+        switch ME.identifier
+            case 'MATLAB:noSuchMethodOrField'
+                % Reason: No appropriate method, property, or field
+                % "input_elements" for class Results.
+                %
+                % move on
+        end
+            
+    end
 
     % curvesegments
-    results.property_event_listener.addListener(results.input_elements.input_segments_popup, 'Value', 'PostSet',...
-        @EditFunctions.Baseline.main);
-
+    try
+        results.property_event_listener.addListener(results.input_elements.input_segments_popup, 'Value', 'PostSet',...
+            @EditFunctions.Baseline.main);
+    catch ME
+        switch ME.identifier
+            case 'MATLAB:noSuchMethodOrField'
+                % Reason: No appropriate method, property, or field
+                % "input_elements" for class Results.
+                %
+                % move on
+        end
+            
+    end
+    
     % xchannel
-    results.property_event_listener.addListener(results.input_elements.input_xchannel_popup, 'Value', 'PostSet',...
-        @EditFunctions.Baseline.main);
+    try
+        results.property_event_listener.addListener(results.input_elements.input_xchannel_popup, 'Value', 'PostSet',...
+            @EditFunctions.Baseline.main);
+    catch ME
+        switch ME.identifier
+            case 'MATLAB:noSuchMethodOrField'
+                % Reason: No appropriate method, property, or field
+                % "input_elements" for class Results.
+                %
+                % move on
+        end
+            
+    end
 
     % ychannel
-    results.property_event_listener.addListener(results.input_elements.input_ychannel_popup, 'Value', 'PostSet',...
-        @EditFunctions.Baseline.main);
+    try
+        results.property_event_listener.addListener(results.input_elements.input_ychannel_popup, 'Value', 'PostSet',...
+            @EditFunctions.Baseline.main);
+    catch ME
+        switch ME.identifier
+            case 'MATLAB:noSuchMethodOrField'
+                % Reason: No appropriate method, property, or field
+                % "input_elements" for class Results.
+                %
+                % move on
+        end
+            
+    end
     
     % update handles and results-object
     setappdata(handles.figure1, 'Baseline', results);

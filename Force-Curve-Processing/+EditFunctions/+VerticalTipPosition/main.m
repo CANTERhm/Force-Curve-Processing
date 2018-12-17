@@ -94,6 +94,19 @@ function main(varargin)
         results.calculation_status = 3;
     end
     
+    % no baseline correction applied prior to vertical tip position
+    % calculation
+    edit_functions = allchild(handles.guiprops.Panels.processing_panel);
+    to_test = false(length(edit_functions), 1);
+    for i = 1:length(to_test)
+        if strcmp(edit_functions(i).Tag, 'Baseline')
+            to_test(i) = true;
+        end
+    end
+    if ~any(to_test)
+        results.calculation_status = 4;
+    end
+    
     %% operations on Figure and Axes 
     UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
@@ -106,6 +119,11 @@ function main(varargin)
             if ~isprop(results, 'input_elements') && ~isprop(results, 'output_elements')
                 SetupGraphicalElements(container);
             end
+            if ~results.singleton
+                SetupListeners();
+                results.singleton = true;
+            end
+        case false
             if ~results.singleton
                 SetupListeners();
                 results.singleton = true;
@@ -127,16 +145,16 @@ function main(varargin)
         'EditFunction', 'VerticalTipPosition',...
         'RefreshAll', true);
     
+    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
+    setappdata(handles.figure1, 'VerticalTipPosition', results);
+    guidata(handles.figure1, handles);
+    results.FireEvent('UpdateObject');
+    
     % delete results object if edit function is not active, after all tasks
     % are done 
     if ~GuiStatus
         UtiltiyFcn.DeleteListener('EditFunction', 'VerticalTipPosition');
     end
-    
-    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
-    setappdata(handles.figure1, 'VerticalTipPosition', results);
-    guidata(handles.figure1, handles);
-    results.FireEvent('UpdateObject');
 end % main
 
 function SetupGraphicalElements(container)

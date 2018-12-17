@@ -199,17 +199,45 @@ end
                 results.input_elements.input_parts_popup.Value,...
                 results.input_elements.input_segments_popup.Value);
             
-    end % switch
+        case false
+            
+            % Refresh results
+            results = getappdata(handles.figure1, 'Baseline');
+            
+            % Data Correction
+            parts_popup = handles.guiprops.Features.curve_parts_popup;
+            segments_popup = handles.guiprops.Features.curve_segments_popup;
+            xchannel_popup = handles.guiprops.Features.curve_xchannel_popup;
+            ychannel_popup = handles.guiprops.Features.curve_ychannel_popup;
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection([], [],...
+                xchannel_popup.Value,...
+                ychannel_popup.Value,...
+                parts_popup.Value,...
+                segments_popup.Value);
 
-    % delete results object if edit function is not active, after all tasks
-    % are done 
-    if ~status
-        UtiltiyFcn.DeleteListener('EditFunction', 'VerticalTipPosition');
-    end
+            % Apply Data Correction
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection([], [],...
+                xchannel_popup.Value,...
+                ychannel_popup.Value);
+            
+            % Set Event Listeners
+            if ~results.singleton
+                EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
+                EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
+                results.singleton = true;
+            end
+            
+    end % switch
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     setappdata(handles.figure1, 'Baseline', results);
     guidata(handles.figure1, handles);
     results.FireEvent('UpdateObject');
+    
+    % delete results object if edit function is not active, after all tasks
+    % are done 
+    if ~status
+        UtilityFcn.DeleteListener('EditFunction', 'Baseline');
+    end
 
 end % main

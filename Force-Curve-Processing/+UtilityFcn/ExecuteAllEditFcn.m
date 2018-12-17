@@ -42,7 +42,7 @@ function ExecuteAllEditFcn(varargin)
         catch ME
             switch ME.identifier
                 case 'MATLAB:undefinedVarOrClass'
-                    % 'Undefined variable "EditFunctions" or class "EditFunctions.Baseline.Baseline".'
+                    % 'Undefined variable "EditFunctions" or class "EditFunctions.functionname.main".'
                     % reason: main does not exists
                     % move on
                 case 'MATLAB:badsubscript'

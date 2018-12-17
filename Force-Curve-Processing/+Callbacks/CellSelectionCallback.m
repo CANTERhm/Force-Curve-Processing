@@ -25,7 +25,7 @@ if ~isempty(evt.Indices)
     xch_idx = handles.guiprops.Features.curve_xchannel_popup.Value;
     ych_idx = handles.guiprops.Features.curve_ychannel_popup.Value; 
     
-    %% recalculate all editfunctions
+    %% recalculate all editfunctions for all curves
     UtilityFcn.ExecuteAllEditFcn();
     
     %% Replot graph according to active editfunction
