@@ -33,7 +33,7 @@ function [sensitivity, springconstant, handles] = CalibrationValues(handles)
         for n = 1:length(segments)
             
             try
-                info = handles.curveprops.(curvenames{i}).RawData.SpecialInformation.(segments{i});
+                info = handles.curveprops.(curvenames{i}).RawData.SpecialInformation.(segments{n});
             catch ME % if you can
                 switch ME.identifier
                     case 'MATLAB:nonExistentField' % only if something went wrong with segmentnames

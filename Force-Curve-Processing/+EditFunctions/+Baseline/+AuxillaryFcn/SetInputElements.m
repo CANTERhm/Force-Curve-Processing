@@ -106,25 +106,25 @@ function SetInputElements(PanelObject)
     curve_parts_popup_string = handles.guiprops.Features.curve_parts_popup.String;
     curve_segments_popup_string = handles.guiprops.Features.curve_segments_popup.String;
     
-    if isempty(results.xchannel_popup_start_value)
+    if isempty(results.xchannel_popup_value)
         curve_xchannel_popup_value = handles.guiprops.Features.curve_xchannel_popup.Value;
     else
-        curve_xchannel_popup_value = results.xchannel_popup_start_value;
+        curve_xchannel_popup_value = results.xchannel_popup_value;
     end
-    if isempty(results.ychannel_popup_start_value)
+    if isempty(results.ychannel_popup_value)
         curve_ychannel_popup_value = handles.guiprops.Features.curve_ychannel_popup.Value;
     else
-        curve_ychannel_popup_value = results.ychannel_popup_start_value;
+        curve_ychannel_popup_value = results.ychannel_popup_value;
     end
-    if isempty(results.parts_popup_start_value)
+    if isempty(results.parts_popup_value)
         curve_parts_popup_value = handles.guiprops.Features.curve_parts_popup.Value;
     else
-        curve_parts_popup_value = results.parts_popup_start_value;
+        curve_parts_popup_value = results.parts_popup_value;
     end
-    if isempty(results.segments_popup_start_value)
+    if isempty(results.segments_popup_value)
         curve_segments_popup_value = handles.guiprops.Features.curve_segments_popup.Value;
     else
-        curve_segments_popup_value = results.segments_popup_start_value;
+        curve_segments_popup_value = results.segments_popup_value;
     end
     
     % label for curve parts for baseline correction
@@ -176,14 +176,16 @@ function SetInputElements(PanelObject)
         'Style', 'popupmenu',...
         'String', curve_xchannel_popup_string,...
         'Tag', 'input_xchannel_popup',...
-        'Value', curve_xchannel_popup_value);
+        'Value', curve_xchannel_popup_value,...
+        'Callback', @EditFunctions.Baseline.Callbacks.ElementCallbacks.InputXchannelPopupCallback);
     
     % popup for curve ychannel for baseline correction
     input_ychannel_popup = uicontrol('Parent', grid3,...
         'Style', 'popupmenu',...
         'String', curve_ychannel_popup_string,...
         'Tag', 'input_ychannel_popup',...
-        'Value', curve_ychannel_popup_value);
+        'Value', curve_ychannel_popup_value,...
+        'Callback', @EditFunctions.Baseline.Callbacks.ElementCallbacks.InputYChannelPopupCallback);
     
     grid3.Heights = [-1 -1];
     grid3.Widths = [-1 -1];

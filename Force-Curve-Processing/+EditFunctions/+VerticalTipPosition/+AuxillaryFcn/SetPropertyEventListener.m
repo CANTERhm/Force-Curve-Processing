@@ -21,6 +21,23 @@ function SetPropertyEventListener(varargin)
     results.property_event_listener.addListener(VerticalTipPositionFcn.UserData.on_gui, 'Status', 'PostSet',...
         {@Callbacks.DeleteListenerCallback, VerticalTipPositionFcn}); 
     
+    
+    % settings xchannel popup
+    results.property_event_listener.addListener(results, 'settings_xchannel_popup_value', 'PostSet',...
+        @EditFunctions.VerticalTipPosition.Callbacks.ElementCallbacks.XChannelValueChanged); 
+        
+    % settings ychannel popup
+    results.property_event_listener.addListener(results, 'settings_ychannel_popup_value', 'PostSet',...
+        @EditFunctions.VerticalTipPosition.Callbacks.ElementCallbacks.YChannelValueChanged); 
+        
+    % settings springconstant checkbox
+    results.property_event_listener.addListener(results, 'settings_springconstant_checkbox_value', 'PostSet',...
+        @EditFunctions.VerticalTipPosition.Callbacks.ElementCallbacks.SpringConstantValueChanged); 
+        
+    % settings sensitivity checkbox
+    results.property_event_listener.addListener(results, 'settings_sensitivity_checkbox_value', 'PostSet',...
+        @EditFunctions.VerticalTipPosition.Callbacks.ElementCallbacks.SensitivityValueChanged); 
+        
     % event listener to update handles.curveprops.curvename.Results.Baseline
     % This step is important, because it update the handles-struct; it is
     % kind of an output from Baseline

@@ -108,7 +108,6 @@ function main(varargin)
     end
     
     %% operations on Figure and Axes 
-    UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
 
     %% gui on/off behavior
@@ -123,27 +122,33 @@ function main(varargin)
                 SetupListeners();
                 results.singleton = true;
             end
+            
+            % Refresh results
+            results = getappdata(handles.figure1, 'VerticalTipPosition');    
+
+            % apply vertical tip position on data
+            EditFunctions.VerticalTipPosition.AuxillaryFcn.UserDefined.ApplyVerticalTipPosition();
+
+            % refresh graph
+            UtilityFcn.RefreshGraph([], [],...
+                results.settings_xchannel_popup_value,...
+                results.settings_ychannel_popup_value,...
+                'EditFunction', 'VerticalTipPosition',...
+                'RefreshAll', true);
+        
         case false
             if ~results.singleton
                 SetupListeners();
                 results.singleton = true;
             end
-    end
-    
-    %% show corrected data
-    
-    % Refresh results
-    results = getappdata(handles.figure1, 'VerticalTipPosition');    
 
-    % apply vertical tip position on data
-    EditFunctions.VerticalTipPosition.AuxillaryFcn.UserDefined.ApplyVerticalTipPosition();
-    
-    % refresh graph
-    UtilityFcn.RefreshGraph([], [],...
-        results.settings_xchannel_popup_value,...
-        results.settings_ychannel_popup_value,...
-        'EditFunction', 'VerticalTipPosition',...
-        'RefreshAll', true);
+            % Refresh results
+            results = getappdata(handles.figure1, 'VerticalTipPosition');    
+
+            % apply vertical tip position on data
+            EditFunctions.VerticalTipPosition.AuxillaryFcn.UserDefined.ApplyVerticalTipPosition();
+            
+    end
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
     setappdata(handles.figure1, 'VerticalTipPosition', results);

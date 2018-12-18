@@ -5,7 +5,7 @@ function InputSegmentsPopupCallback(src, evt)
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
     
-    results.segments_popup_start_value = src.Value;
+    results.segments_popup_value = src.Value;
     
     % write handles and results
     setappdata(handles.figure1, 'Baseline', results);

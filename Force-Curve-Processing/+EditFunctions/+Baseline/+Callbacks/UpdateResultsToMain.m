@@ -3,12 +3,13 @@ function UpdateResultsToMain(src, evt)
 %   write it to handles.curveprops.curvename.Results.Baseline, if this
 %   field exits
 
-    % handles and results-object
+    %% handles and results-object
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
     table = handles.guiprops.Features.edit_curve_table;
     
+    %% work off criteria for abortion
     % abort function, if no curve was loaded
     if isempty(table.Data)
         return
@@ -20,6 +21,7 @@ function UpdateResultsToMain(src, evt)
         return
     end
     
+    %% broadcast specific properties for one specific curve
     % load results without input_elements, output_elements,
     % PropertyEventListener and ExternalEventListener to
     % handles.curveprops.curvename.Reuslts.Baseline
@@ -36,6 +38,25 @@ function UpdateResultsToMain(src, evt)
     end
     handles.curveprops.(table.UserData.CurrentCurveName).Results.Baseline = data;
     
+    %% broadcast common properties for all curves
+    % there are certain properties, if changed, all curves should be
+    % noticed about the change
+    % if this is not the case, comment the whole sections
+    discard_props = {'calculated_data',...
+        'slope',...
+        'offset',...
+        'offset_fitted'};
+    mask = ~ismember(props, discard_props);
+    load_to_data = props(mask);
+    for i = 1:length(load_to_data)
+        data.(load_to_data{i}) = results.(load_to_data{i});
+    end
+    curves = table.Data(:, 1);
+    for i = 1:length(curves)
+        handles.curveprops.(curves{i}).Results.Baseline = data;
+    end
+    
+    %% update handles 
     % update handles-struct
     % Do not update results-object! is modified an not possible to use it
     % futher in activeEditfunction
