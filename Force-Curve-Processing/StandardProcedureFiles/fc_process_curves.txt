@@ -1,9 +1,9 @@
 # function: Baseline
 # Status: []
 # singleton: false
-# correction_type: 1
+# correction_type: 2
 # units: 'relative'
-# selection_borders: [0.99 1]
+# selection_borders: [0 0.9]
 # slope: []
 # offset: []
 # offset_fitted: []
@@ -13,7 +13,13 @@
 # userdata: []
 
 # function: VerticalTipPosition
-# nargin: 0
+# Status: []
+# Sensitivity: []
+# SpringConstant: []
+# calculated_data: []
+# calculation_status: 1
+# singleton: false
+# userdata: []
 
 # function: ChainFit
 # nargin: 0

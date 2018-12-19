@@ -5,7 +5,7 @@ function InputYchannelPopupCallback(src, evt)
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
     
-    results.ychannel_popup_start_value = src.Value;
+    results.ychannel_popup_value = src.Value;
     
     % write handles and results
     setappdata(handles.figure1, 'Baseline', results);

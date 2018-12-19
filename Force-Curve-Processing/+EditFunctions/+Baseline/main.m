@@ -45,10 +45,10 @@ if isempty(results)
     results.addproperty('offset_fitted');
     results.addproperty('singleton');
     results.addproperty('calculated_data');
-    results.addproperty('xchannel_popup_start_value');
-    results.addproperty('ychannel_popup_start_value');
-    results.addproperty('parts_popup_start_value');
-    results.addproperty('segments_popup_start_value');
+    results.addproperty('xchannel_popup_value');
+    results.addproperty('ychannel_popup_value');
+    results.addproperty('parts_popup_value');
+    results.addproperty('segments_popup_value');
     results.addproperty('userdata');
     
     if isempty(data)
@@ -75,12 +75,12 @@ if isempty(results)
         results.slope = data.slope;
         results.offset = data.offset;
         results.offset_fitted = data.offset_fitted;
-        results.singleton = data.singleton; 
+        results.singleton = false; 
         results.calculated_data = data.calculated_data;
-        results.xchannel_popup_start_value = data.xchannel_popup_start_value;
-        results.ychannel_popup_start_value = data.ychannel_popup_start_value;
-        results.parts_popup_start_value = data.parts_popup_start_value;
-        results.segments_popup_start_value = data.segments_popup_start_value;
+        results.xchannel_popup_value = data.xchannel_popup_value;
+        results.ychannel_popup_value = data.ychannel_popup_value;
+        results.parts_popup_value = data.parts_popup_value;
+        results.segments_popup_value = data.segments_popup_value;
         results.userdata = data.userdata;
     end
     
@@ -94,7 +94,6 @@ end
         'Type', 'UIControl', 'Tag', 'Baseline');
     
     %% operations on Figure and Axes 
-    UtilityFcn.RefreshGraph();
     UtilityFcn.ResetMainFigureCallbacks();
     
     %% Baseline procedure
@@ -163,7 +162,7 @@ end
             end
 
             % Set Event Listeners
-            if results.singleton == false
+            if ~results.singleton
                 EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
                 EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
                 results.singleton = true;
@@ -171,9 +170,6 @@ end
             
             % Refresh results
             results = getappdata(handles.figure1, 'Baseline');
-            
-            % Refresh Graph
-            UtilityFcn.RefreshGraph('EditFunction', 'Baseline', 'RefreshAll', true);
 
             % Data Correction
             EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection([], [],...
@@ -193,11 +189,40 @@ end
                 results.input_elements.input_ychannel_popup.Value,...
                 'EditFunction', 'Baseline',...
                 'RefreshAll', true);
+            
             EditFunctions.Baseline.AuxillaryFcn.UserDefined.MarkupData([], [],...
                 results.input_elements.input_xchannel_popup.Value,...
                 results.input_elements.input_ychannel_popup.Value,...
                 results.input_elements.input_parts_popup.Value,...
                 results.input_elements.input_segments_popup.Value);
+            
+        case false
+            
+            % Refresh results
+            results = getappdata(handles.figure1, 'Baseline');
+            
+            % Data Correction
+            parts_popup_value = results.parts_popup_value;
+            segments_popup_value = results.segments_popup_value;
+            xchannel_popup_value = results.xchannel_popup_value;
+            ychannel_popup_value = results.ychannel_popup_value;
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.CalculateCorrection([], [],...
+                xchannel_popup_value,...
+                ychannel_popup_value,...
+                parts_popup_value,...
+                segments_popup_value);
+
+            % Apply Data Correction
+            EditFunctions.Baseline.AuxillaryFcn.UserDefined.ApplyCorrection([], [],...
+                xchannel_popup_value,...
+                ychannel_popup_value);
+            
+            % Set Event Listeners
+            if ~results.singleton
+                EditFunctions.Baseline.AuxillaryFcn.SetPropertyEventListener();
+                EditFunctions.Baseline.AuxillaryFcn.SetExternalEventListener();
+                results.singleton = true;
+            end
             
     end % switch
     
@@ -205,5 +230,11 @@ end
     setappdata(handles.figure1, 'Baseline', results);
     guidata(handles.figure1, handles);
     results.FireEvent('UpdateObject');
+    
+    % delete results object if edit function is not active, after all tasks
+    % are done 
+    if ~status
+        UtilityFcn.DeleteListener('EditFunction', 'Baseline');
+    end
 
 end % main

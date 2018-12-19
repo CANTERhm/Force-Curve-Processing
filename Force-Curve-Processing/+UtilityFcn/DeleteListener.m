@@ -1,6 +1,10 @@
 function DeleteListener(varargin)
-%DELETELISTENER Deletes all results_listener object for editfunctions which
-%are not active
+%DELETELISTENER Deletes all results_listener object for editfunctions 
+%
+% it main purpos is to delete the listener objects from editfunctions,
+% which are not needed because the eidtfunction is no longer active.
+% Additionally it deletes the created results-object from this editfunction
+% and deletes the entry in appdata for this results object.
 
     %% input parser
     p = inputParser;
@@ -34,15 +38,15 @@ function DeleteListener(varargin)
     end
     
     if ~isempty(results)
-        if isprop(results, 'property_event_listeners')
-            listeners = results.property_event_listeners;
+        if isprop(results, 'property_event_listener')
+            listeners = results.property_event_listener;
             listener_handles = listeners.ListenerObjects;
             for i = 1:length(listener_handles)
                 listeners.deleteListener(listener_handles(i));
             end
         end
-        if isprop(results, 'external_event_listeners')
-            listeners = results.external_event_listeners;
+        if isprop(results, 'external_event_listener')
+            listeners = results.external_event_listener;
             listener_handles = listeners.ListenerObjects;
             for i = 1:length(listener_handles)
                 listeners.deleteListener(listener_handles(i));

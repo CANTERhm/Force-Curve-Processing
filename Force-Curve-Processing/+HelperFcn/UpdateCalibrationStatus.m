@@ -28,7 +28,7 @@ for i = 1:length(elements) % go through everey curves
     segment_springConstant = false(length(segments), 1);
     segment_sensitivity = false(length(segments), 1);
     for n = 1:length(segments) % go through every segment
-        info = handles.curveprops.(elements{i}).RawData.SpecialInformation.(segments{i});
+        info = handles.curveprops.(elements{i}).RawData.SpecialInformation.(segments{n});
         if ~isempty(info.springConstant) %&& any(ismember(info.units, 'N'))
             springconst = true;
         else

@@ -55,7 +55,7 @@ function MarkupData(varargin)
     EditFunction = p.Results.EditFunction;
 
     %% refresh handles and results
-
+    
     % get latest references to handles and result
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     if ~isempty(main)
