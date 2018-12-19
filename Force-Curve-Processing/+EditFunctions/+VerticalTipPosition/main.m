@@ -96,14 +96,25 @@ function main(varargin)
     
     % no baseline correction applied prior to vertical tip position
     % calculation
+    
+    % find indeces for baseline and vtp
     edit_functions = allchild(handles.guiprops.Panels.processing_panel);
-    to_test = false(length(edit_functions), 1);
-    for i = 1:length(to_test)
-        if strcmp(edit_functions(i).Tag, 'Baseline')
-            to_test(i) = true;
-        end
+    tags = cell(length(edit_functions), 1);
+    for i = 1:length(tags)
+        tags{i, 1} = edit_functions(i).Tag;
     end
-    if ~any(to_test)
+    vtp_in_tags = ismember(tags, 'VerticalTipPosition');
+    baseline_in_tags = ismember(tags, 'Baseline');
+    vtp_idx = find(vtp_in_tags);
+    baseline_idx = find(baseline_in_tags);
+    
+    % if indices are vectorial, more baseline- ore vtp-corrections are
+    % loaded; just use the lowest index
+    vtp_idx = vtp_idx(1);
+    baseline_idx = baseline_idx(1);
+    
+    % set calculation status
+    if isempty(baseline_idx) || (baseline_idx < vtp_idx)
         results.calculation_status = 4;
     end
     

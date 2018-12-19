@@ -37,7 +37,7 @@ function ApplyVerticalTipPosition(varargin)
     
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
-
+    
     %% variables
     
     % handles and results-object
