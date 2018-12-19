@@ -5,7 +5,7 @@ function InputXchannelPopupCallback(src, evt)
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
     
-    results.xchannel_popup_start_value = src.Value;
+    results.xchannel_popup_value = src.Value;
     
     % write handles and results
     setappdata(handles.figure1, 'Baseline', results);

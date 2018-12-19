@@ -5,7 +5,7 @@ function InputPartsPopupCallback(src, evt)
     handles = guidata(main);
     results = getappdata(handles.figure1, 'Baseline');
     
-    results.parts_popup_start_value = src.Value;
+    results.parts_popup_value = src.Value;
     
     % write handles and results
     setappdata(handles.figure1, 'Baseline', results);

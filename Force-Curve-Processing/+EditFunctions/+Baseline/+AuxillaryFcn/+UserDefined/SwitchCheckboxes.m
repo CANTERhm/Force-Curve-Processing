@@ -8,4 +8,4 @@ function SwitchCheckboxes(src, obj_list)
             list(i).Value = 1;
         end
     end
-end % SwitchTiltCheckboxes
+end % SwitchCheckboxes

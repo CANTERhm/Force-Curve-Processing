@@ -1,7 +1,13 @@
 function varargout = ForceCurveProcessing(varargin)
 %==========================================================================
-% ForceCurveProcessing 0.0.0
+% ForceCurveProcessing 0.2.0
 %==========================================================================
+%
+% New Features:
+%   - Baseline Correction
+%   - Vertical Tip Position Calculation
+%
+%
 % FORCECURVEPROCESSING MATLAB code for ForceCurveProcessing.fig
 %      FORCECURVEPROCESSING, by itself, creates a new FORCECURVEPROCESSING or raises the existing
 %      singleton*.
