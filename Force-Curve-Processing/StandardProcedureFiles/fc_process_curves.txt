@@ -12,6 +12,18 @@
 # results_features: []
 # userdata: []
 
+# function: ContactPoint
+# Status: []
+# singleton: false
+# part_index: []
+# segment_index: []
+# xchannel_index: []
+# ychannel_index: []
+# offset: []
+# calculated_data: []
+# userdata: []
+
+
 # function: VerticalTipPosition
 # Status: []
 # Sensitivity: []

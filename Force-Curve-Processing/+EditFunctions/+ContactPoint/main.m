@@ -23,14 +23,14 @@ function main(varargin)
     
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
     handles = guidata(main);
-    results = getappdata(handles.figure1, 'EditFunction');
+    results = getappdata(handles.figure1, 'ContactPoint');
     
     % obtain data from curvename, to use it as default values if neccessary
     table = handles.guiprops.Features.edit_curve_table;
     if ~isempty(table.Data)
         curvename = table.UserData.CurrentCurveName;
-        if isprop(handles.curveprops.(curvename).Results, 'EditFunction')
-            data = handles.curveprops.(curvename).Results.EditFunction;
+        if isprop(handles.curveprops.(curvename).Results, 'ContactPoint')
+            data = handles.curveprops.(curvename).Results.ContactPoint;
         else
             data = [];
         end
@@ -54,12 +54,12 @@ function main(varargin)
         end
 
         % update appdata if new results-object for Baseline has been created
-        setappdata(handles.figure1, 'EditFunction', results);
+        setappdata(handles.figure1, 'ContactPoint', results);
     end
     
     container = handles.guiprops.Panels.results_panel;
     button_handle = findobj(allchild(handles.guiprops.Panels.processing_panel),...
-        'Type', 'UIControl', 'Tag', 'EditFunction');
+        'Type', 'UIControl', 'Tag', 'ContactPoint');
     
     %% operations on Figure and Axes 
     UtilityFcn.RefreshGraph('RefreshAll', false);
@@ -80,14 +80,14 @@ function main(varargin)
     end
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
-    setappdata(handles.figure1, 'EditFunction', results);
+    setappdata(handles.figure1, 'ContactPoint', results);
     guidata(handles.figure1, handles);
     results.FireEvent('UpdateObject');
     
     % delete results object if edit function is not active, after all tasks
     % are done 
     if ~GuiStatus
-        UtiltiyFcn.DeleteListener('EditFunction', 'EditFunction');
+        UtilityFcn.DeleteListener('EditFunction', 'ContactPoint');
     end
 
 end % main
@@ -106,10 +106,10 @@ function SetupGraphicalElements(container)
         'Visible', 'off');
     
     % Settings 
-    EditFunctions.EditFunction.AuxillaryFcn.SetInputElements(main_vbox)
+    EditFunctions.ContactPoint.AuxillaryFcn.SetInputElements(main_vbox)
     
     % Results
-    EditFunctions.EditFunction.AuxillaryFcn.SetOutputElements(main_vbox)
+    EditFunctions.ContactPoint.AuxillaryFcn.SetOutputElements(main_vbox)
     
     % make graphical elements visible
     main_vbox.Visible = 'on';
@@ -122,6 +122,6 @@ function SetupGraphicalElements(container)
 end % SetupGraphicalElements
 
 function SetupListeners()
-    EditFunctions.EditFunction.AuxillaryFcn.SetPropertyEventListener();
-    EditFunctions.EditFunction.AuxillaryFcn.SetExternalEventListener();
+    EditFunctions.ContactPoint.AuxillaryFcn.SetPropertyEventListener();
+    EditFunctions.ContactPoint.AuxillaryFcn.SetExternalEventListener();
 end % SetupListeners
