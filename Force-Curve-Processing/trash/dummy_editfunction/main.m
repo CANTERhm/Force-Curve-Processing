@@ -44,6 +44,7 @@ function main(varargin)
         if isempty(data)
             loaded_input = handles.procedure.VerticalTipPosition;
             results.userdata = loaded_input.userdata;
+            results.singleton = loaded_input.singleton;
         else
             % use values from data as default
             % the singleton property has to be resettet to false in every
@@ -51,6 +52,7 @@ function main(varargin)
             % properly
             results.Status = data.Status;
             results.userdata = data.userdata;
+            results.singleton = false;
         end
 
         % update appdata if new results-object for Baseline has been created
@@ -62,7 +64,6 @@ function main(varargin)
         'Type', 'UIControl', 'Tag', 'EditFunction');
     
     %% operations on Figure and Axes 
-    UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
     
     %% gui on/off behavior
@@ -77,6 +78,16 @@ function main(varargin)
                 SetupListeners();
                 results.singleton = true;
             end
+            
+        case false
+            
+            % do different stuff
+            
+            if ~results.singleton
+                SetupListeners();
+                results.singleton = true;
+            end
+            
     end
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
@@ -115,9 +126,9 @@ function SetupGraphicalElements(container)
     main_vbox.Visible = 'on';
     
     % panelposition adjustment
-    main_vbox.Heights = [-1 -0.6];
-    main_scrolling_panel.Heights = 400;
-    main_scrolling_panel.Widths = 345;
+%     main_vbox.Heights = ...;
+%     main_scrolling_panel.Heights = ...;
+%     main_scrolling_panel.Widths = ...;
 
 end % SetupGraphicalElements
 

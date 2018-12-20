@@ -12,7 +12,6 @@ function SetInputElements(varargin)
     
     % update handles and results-object
     setappdata(handles.figure1, EditFunction, results);
-    handles.curveprops.(curvename).Results.EditFunction = results;
     guidata(handles.figure1, handles);
 
 end % SetInputElements

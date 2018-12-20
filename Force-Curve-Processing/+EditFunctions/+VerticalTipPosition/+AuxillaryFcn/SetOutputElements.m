@@ -36,6 +36,18 @@ function SetOutputElements(varargin)
     grid.Widths = -1;
     
     %% update handles and results-object
+    results = results.addproperty('output_elements');
+    
+    % main panels
+    output_elements.panel = panel;
+    output_elements.vbox = vbox;
+    output_elements.grid = grid;
+    
+    % graphical elements
+    output_elements.disclaimer = disclaimer;
+    
+    results.output_elements = output_elements;
+    
     setappdata(handles.figure1, 'VerticalTipPosition', results);
     guidata(handles.figure1, handles);
 

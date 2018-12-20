@@ -12,7 +12,7 @@ function SetExternalEventListener(varargin)
     % do stuff
     
     % update handles and results-object
-    setappdata(handles.figure1, 'EditFunction', results);
+    setappdata(handles.figure1, 'ContactPoint', results);
     guidata(handles.figure1, handles);
 
 end % SetExternalEventListener

@@ -41,9 +41,17 @@ function main(varargin)
     if isempty(results)
         results = Results();
         results.addproperty('userdata');
+        results.addproperty('singleton');
+        results.addproperty('offset');
+        results.addproperty('part_index');
+        results.addproperty('segment_index');
         if isempty(data)
-            loaded_input = handles.procedure.VerticalTipPosition;
+            loaded_input = handles.procedure.ContactPoint;
             results.userdata = loaded_input.userdata;
+            results.singleton = loaded_input.singleton;
+            results.offset = loaded_input.offset;
+            results.part_index = loaded_input.part_index;
+            results.segment_index = loaded_input.segment_index;
         else
             % use values from data as default
             % the singleton property has to be resettet to false in every
@@ -51,6 +59,10 @@ function main(varargin)
             % properly
             results.Status = data.Status;
             results.userdata = data.userdata;
+            results.singleton = false;
+            results.offset = data.offset;
+            results.part_index = data.part_index;
+            results.segment_index = data.segment_index;
         end
 
         % update appdata if new results-object for Baseline has been created
@@ -62,7 +74,6 @@ function main(varargin)
         'Type', 'UIControl', 'Tag', 'ContactPoint');
     
     %% operations on Figure and Axes 
-    UtilityFcn.RefreshGraph('RefreshAll', false);
     UtilityFcn.ResetMainFigureCallbacks();
     
     %% gui on/off behavior
@@ -77,6 +88,13 @@ function main(varargin)
                 SetupListeners();
                 results.singleton = true;
             end
+            
+        case false
+            if ~results.singleton
+                SetupListeners();
+                results.singleton = true;
+            end
+            
     end
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
