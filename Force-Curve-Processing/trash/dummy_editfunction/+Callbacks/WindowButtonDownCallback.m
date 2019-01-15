@@ -1,4 +1,4 @@
-function WindowsButtonDownCallback(src, evt)
+function WindowButtonDownCallback(src, evt)
 % WBDCB window button down callback
 
     % get results-object

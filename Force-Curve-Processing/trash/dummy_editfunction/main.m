@@ -70,6 +70,10 @@ function main(varargin)
     GuiStatus = button_handle.UserData.on_gui.Status;
     switch GuiStatus
         case true
+            
+            % uncomment if WindowButtonDownFcn should be setted
+            % handles.guiprops.MainFigure.WindowButtonDownFcn = @EditFunctions.(EditFunction).Callbacks.WindowButtonDownCallback;
+            
             UtilityFcn.RefreshGraph();
             if ~isprop(results, 'input_elements') && ~isprop(results, 'output_elements')
                 SetupGraphicalElements(container);
@@ -90,16 +94,8 @@ function main(varargin)
             
     end
     
-    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
-    setappdata(handles.figure1, 'EditFunction', results);
-    guidata(handles.figure1, handles);
-    results.FireEvent('UpdateObject');
-    
-    % delete results object if edit function is not active, after all tasks
-    % are done 
-    if ~GuiStatus
-        UtiltiyFcn.DeleteListener('EditFunction', 'EditFunction');
-    end
+    %% publish results
+    PublishResults(GuiStatus, 'EditFunction', handles, results);
 
 end % main
 
