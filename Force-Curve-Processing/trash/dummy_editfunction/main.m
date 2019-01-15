@@ -21,9 +21,7 @@ function main(varargin)
     
     %% preparation of variables
     
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'EditFunction');
+    [~, handles, results] = GetCommonVariables('EditFunction');
     
     % obtain data from curvename, to use it as default values if neccessary
     table = handles.guiprops.Features.edit_curve_table;
@@ -94,8 +92,13 @@ function main(varargin)
             
     end
     
+    %% calculation procedure
+    AuxillaryFcn.ApplyEditFunction();
+    
     %% publish results
-    PublishResults(GuiStatus, 'EditFunction', handles, results);
+    PublishResults('EditFunction', handles, results,...
+        'FireEvent', true,...
+        'GuiStatus', GuiStatus);
 
 end % main
 

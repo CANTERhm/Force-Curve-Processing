@@ -1,8 +1,18 @@
-function ApplyDummy(varargin)
-%APPLYDUMMY empty framework for the calculation procedue of EidtFunctions
+function ApplyEditFunction(varargin)
+%APPLYEDITFUNCTION empty framework for the calculation procedue of EidtFunctions
 
-    % don´t forget to subsitute all occurances of ´dummy´ with your 
-    % editfunction name!!
+% Before usage:
+%
+%   - create an Function that calculates the desired values and applies it
+%     to the data in the folder ´AuxillaryFcn.UserDefined´
+%
+%   - replace ´ApplyDummyCalculation´ with your functionname
+%
+%   - don´t forget to publish the calculated values to handles and results
+%     in your created function
+%
+%   - don´t forget to subsitute all occurances of ´EditFunction´ with your 
+%     editfunction name!!
 
     %% input parsing
     p = inputParser;
@@ -18,16 +28,14 @@ function ApplyDummy(varargin)
     %% variables
     
     % handles and results-object
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'dummy');
+    [~, handles, results] = GetCommonVariables('EditFunction');
     
     % from results-object
     % ...
     
     % obtain last editfunction
     editfunctions = allchild(handles.guiprops.Panels.processing_panel);
-    edit_function = findobj(editfunctions, 'Tag', 'dummy');
+    edit_function = findobj(editfunctions, 'Tag', 'EditFunction');
     last_editfunction_index = find(editfunctions == edit_function) + 1;
     if ~isempty(last_editfunction_index)
         last_edit_function = editfunctions(last_editfunction_index).Tag;
@@ -69,20 +77,17 @@ function ApplyDummy(varargin)
     
     %% calculation procedure
     
-    % create a function for data calculation
-    % corrected_data = ApplyDummyCalculation(data);
+    % create a function for data calculation in AuxillaryFcn.UserDefined
+     corrected_data = AuxillaryFcn.UserDefined.ApplyDummyCalculation(data);
     
     %% update all Results
     
     % uncomment this, if corrected_data exists
-    %results.calculated_data = corrected_data;
+    results.calculated_data = corrected_data;
     
-    % update results object and handles-struct
-    setappdata(handles.figure1, 'dummy', results);
-    guidata(handles.figure1, handles);
-
-    % trigger update to handles.curveprops.curvename.Results.ContactPoint
-    results.FireEvent('UpdateObject');
+    % update results object and handles-struct    
+    PublishResults('EditFunction', handles, results,...
+        'FireEvent', true);
 
 end % ApplyDummy
 
