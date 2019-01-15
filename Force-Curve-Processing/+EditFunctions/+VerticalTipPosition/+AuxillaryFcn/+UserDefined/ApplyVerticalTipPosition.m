@@ -38,6 +38,11 @@ function ApplyVerticalTipPosition(varargin)
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
     
+    parse(p, varargin{:});
+    
+    src = p.Results.src;
+    evt = p.Results.evt;
+    
     %% variables
     
     % handles and results-object
