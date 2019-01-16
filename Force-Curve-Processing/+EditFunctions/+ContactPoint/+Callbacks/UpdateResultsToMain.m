@@ -7,9 +7,7 @@ function UpdateResultsToMain(src, evt)
 % you are working on!
 
     %% handles and results-object
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'ContactPoint');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     table = handles.guiprops.Features.edit_curve_table;
     
     %% work off criteria for abortion

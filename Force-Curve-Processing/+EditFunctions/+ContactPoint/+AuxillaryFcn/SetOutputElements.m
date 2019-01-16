@@ -4,9 +4,7 @@ function SetOutputElements(varargin)
 %   the activated Editfunction
 
     %% handles and results-object
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'ContactPoint');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     %% variables
     value = results.offset;
@@ -77,8 +75,7 @@ function SetOutputElements(varargin)
     
     results.output_elements = output_elements;
     
-    setappdata(handles.figure1, 'ContactPoint', results);
-    guidata(handles.figure1, handles);
+    UtilityFcn.PublishResults('ContactPoint', handles, results);
 
 end % SetOutputElements
 

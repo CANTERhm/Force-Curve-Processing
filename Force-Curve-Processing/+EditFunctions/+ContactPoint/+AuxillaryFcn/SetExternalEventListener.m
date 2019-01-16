@@ -5,15 +5,12 @@ function SetExternalEventListener(varargin)
 %   properties in the results-object of each editfunction.
 
     % handles and results-object
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     % do stuff
     
     % update handles and results-object
-    setappdata(handles.figure1, 'ContactPoint', results);
-    guidata(handles.figure1, handles);
+    UtilityFcn.PublishResults('ContactPoint', handles, results);
 
 end % SetExternalEventListener
 

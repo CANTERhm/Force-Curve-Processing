@@ -4,12 +4,12 @@ function SetInputElements(varargin)
 %   the activated Editfunction
 
     % handles and results-object
-    [~, handles, results] = GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
     
     % do Stuff
     
     % update handles and results-object
-    PublishResults('EditFunction', handles, results);
+    UtilityFcn.PublishResults('EditFunction', handles, results);
 
 end % SetInputElements
 

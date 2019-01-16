@@ -4,9 +4,7 @@ function SetInputElements(varargin)
 %   the activated Editfunction
 
     %% handles and results-object
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'ContactPoint');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     %% variables
     curve_part_popup_string = handles.guiprops.Features.curve_parts_popup.String;
@@ -104,10 +102,9 @@ function SetInputElements(varargin)
     results.part_index = curve_part_popup_value;
     results.segment_index = curve_segment_popup_value;
     
+    % update handles-struct and results-object
     results.input_elements = input_elements;
-    
-    setappdata(handles.figure1, 'ContactPoint', results);
-    guidata(handles.figure1, handles);
+    UtilityFcn.PublishResults('ContactPoint', handles, results);
 
 end % SetInputElements
 

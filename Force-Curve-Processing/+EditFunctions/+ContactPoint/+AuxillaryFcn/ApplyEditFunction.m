@@ -1,4 +1,4 @@
-function ApplyContactPoint(varargin)
+function ApplyEditFunction(varargin)
 %APPLYCONTACTPOINT  shifts a force-curve along the x-axis to zero
 
     %% input parsing
@@ -15,14 +15,23 @@ function ApplyContactPoint(varargin)
     %% variables
     
     % handles and results-object
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'ContactPoint');
+    [~, handles, results] = EditFunctions.ContactPoint.GetCommonVariables('ContactPoint');
     
     % from results-object
-    offset = results.offset;
-    part_index = results.part_index;
-    segment_index = results.segment_index;
+    try
+        offset = results.offset;
+        part_index = results.part_index;
+        segment_index = results.segment_index;
+    catch ME
+        switch ME.identifier
+            case 'MATLAB:structRefFromNonStruct'
+                % occurance: struct operation on non struct-object
+                % reason: results is empty or not correctly loaded
+                offset = [];
+                part_index = [];
+                segment_index = [];
+        end
+    end
     xchannel_index = handles.guiprops.Features.curve_xchannel_popup.Value;
     ychannel_index = handles.guiprops.Features.curve_ychannel_popup.Value;
     
@@ -38,12 +47,22 @@ function ApplyContactPoint(varargin)
     
     % other 
     table = handles.guiprops.Features.edit_curve_table;
-    curvename = table.UserData.CurrentCurveName;
+    try
+        curvename = table.UserData.CurrentCurveName;
+    catch ME
+        switch ME.identifier
+            case 'MATLAB:structRefFromNonStruct'
+                % occurance: struct operation on non-struct object
+                % reason: table.UserData is empty because there are no
+                % curves loaded
+                curvename = [];
+        end
+    end
     
     %% return conditions
     
     % no curves have been loaded
-    if isempty(table.Data)
+    if isempty(table.Data) || isempty(curvename)
         return
     end
     
@@ -70,23 +89,18 @@ function ApplyContactPoint(varargin)
     end
     
     %% find contact point
-    corrected_data = CalculateCorrectOffsetedData(data,...
-        part_index,...
-        segment_index,...
-        xchannel_index,...
-        ychannel_index);
+    corrected_data = CalculateCorrectOffsetedData('data', data,...
+        'offset', offset,...
+        'part_index', part_index,...
+        'segment_index', segment_index,...
+        'xchannel_index', xchannel_index,...
+        'ychannel_index', ychannel_index);
     
     %% update all Results
     results.calculated_data = corrected_data;
     
     % update results object and handles-struct
-    setappdata(handles.figure1, 'ContactPoint', results);
-    guidata(handles.figure1, handles);
-
-    % trigger update to handles.curveprops.curvename.Results.ContactPoint
-    results.FireEvent('UpdateObject');
+    PublishResults('ContactPoint', handles, results,...
+        'FireEvent', true);
+    
 end % ApplyContactPoint
-
-function corrected_data = CalculateCorrectOffsetedData(data, part_index, segment_index, xchannel_index, ychannel_index)
-    corrected_data = [];
-end % CalcluateCorrectOffsetedData

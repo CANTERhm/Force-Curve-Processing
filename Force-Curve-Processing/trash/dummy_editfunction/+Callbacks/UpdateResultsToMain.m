@@ -7,7 +7,7 @@ function UpdateResultsToMain(src, evt)
 % you are working on!
 
     %% handles and results-object
-    [~, handles, results] = GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
     table = handles.guiprops.Features.edit_curve_table;
     
     %% work off criteria for abortion

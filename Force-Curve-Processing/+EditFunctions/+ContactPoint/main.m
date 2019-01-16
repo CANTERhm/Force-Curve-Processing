@@ -21,9 +21,7 @@ function main(varargin)
     
     %% preparation of variables
     
-    main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
-    handles = guidata(main);
-    results = getappdata(handles.figure1, 'ContactPoint');
+    [~, handles, results] = EditFunctions.ContactPoint.GetCommonVariables('ContactPoint');
     
     % obtain data from curvename, to use it as default values if neccessary
     table = handles.guiprops.Features.edit_curve_table;
@@ -97,10 +95,12 @@ function main(varargin)
             
     end
     
+    %% apply calculation
+    EditFunctions.ContactPoint.AuxillaryFcn.ApplyEditFunction();
+    
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
-    setappdata(handles.figure1, 'ContactPoint', results);
-    guidata(handles.figure1, handles);
-    results.FireEvent('UpdateObject');
+    EditFunctions.ContactPoint.PublishResults('ContactPoint', handles, results,...
+        'FireEvent', true);
     
     % delete results object if edit function is not active, after all tasks
     % are done 

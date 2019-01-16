@@ -21,7 +21,7 @@ function main(varargin)
     
     %% preparation of variables
     
-    [~, handles, results] = GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
     
     % obtain data from curvename, to use it as default values if neccessary
     table = handles.guiprops.Features.edit_curve_table;
@@ -93,10 +93,10 @@ function main(varargin)
     end
     
     %% calculation procedure
-    AuxillaryFcn.ApplyEditFunction();
+    EditFunction.EditFunction.AuxillaryFcn.ApplyEditFunction();
     
     %% publish results
-    PublishResults('EditFunction', handles, results,...
+    UtilityFcn.PublishResults('EditFunction', handles, results,...
         'FireEvent', true,...
         'GuiStatus', GuiStatus);
 

@@ -28,7 +28,7 @@ function ApplyEditFunction(varargin)
     %% variables
     
     % handles and results-object
-    [~, handles, results] = GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
     
     % from results-object
     % ...
@@ -86,7 +86,7 @@ function ApplyEditFunction(varargin)
     results.calculated_data = corrected_data;
     
     % update results object and handles-struct    
-    PublishResults('EditFunction', handles, results,...
+    UtilityFcn.PublishResults('EditFunction', handles, results,...
         'FireEvent', true);
 
 end % ApplyDummy

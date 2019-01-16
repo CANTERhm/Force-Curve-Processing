@@ -8,7 +8,7 @@ function SetPropertyEventListener(varargin)
 %   current EditFunction name!!
 
     %% handles and results-object
-    [~, handles, results] = GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
 
     %% general listeners 
     % if results_listener property has been removed 
@@ -33,7 +33,7 @@ function SetPropertyEventListener(varargin)
     % do stuff
 
     %% update handles and results-object
-    PublishResults('EditFunction', handles, results);
+    UtilityFcn.PublishResults('EditFunction', handles, results);
 
 end % SetPropertyEventListener
 
