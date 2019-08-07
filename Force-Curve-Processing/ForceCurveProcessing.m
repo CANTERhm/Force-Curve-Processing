@@ -31,7 +31,7 @@ function varargout = ForceCurveProcessing(varargin)
 
 % Edit the above text to modify the response to help ForceCurveProcessing
 
-% Last Modified by GUIDE v2.5 31-Aug-2018 11:20:27
+% Last Modified by GUIDE v2.5 07-Aug-2019 15:13:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -288,3 +288,10 @@ handles = UtilityFcn.SetupMainFigure(handles);
 plottools();
 
 
+
+
+% --------------------------------------------------------------------
+function delete_curves_submenu_Callback(hObject, eventdata, handles)
+% hObject    handle to delete_curves_submenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
