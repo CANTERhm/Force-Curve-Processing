@@ -3,7 +3,7 @@ function handles = UpdateCalibrationStatus(handles)
 % updates the curveprops.Calibrated-property accordingly
 
 % Abort if no curves are loaded
-if isempty(handles.curveprops.DynamicProps)
+if isempty(fieldnames(handles.curveprops.DynamicProps))
     return
 else
     elements = fieldnames(handles.curveprops.DynamicProps);

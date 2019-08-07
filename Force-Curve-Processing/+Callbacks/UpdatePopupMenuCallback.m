@@ -108,6 +108,15 @@ if ~isempty(table_userdata)
         ychannel_popup.String = channels;
         curve_parts_popup.String = 'All';
     end
+else
+    curve_parts_popup.String = {'All', 'Trace', 'Retrace'};
+    curve_segments_popup.String = 'no segments...';
+    xchannel_popup.Value = 1;
+    xchannel_popup.UserData.HasDefaultValue = false;
+    xchannel_popup.String = 'no xchannels...';
+    ychannel_popup.Value = 1;
+    ychannel_popup.UserData.HasDefaultValue = false;
+    ychannel_popup.String = 'no ychannels...';
     
 end % if
 guidata(handles.figure1, handles);
