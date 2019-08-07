@@ -8,7 +8,11 @@ unprocessed_label = handles.guiprops.Features.count_unprocessed_num;
 discarded_label = handles.guiprops.Features.count_discarded_num;
 
 % obtain specific elementinformation
-table_stat = table.Data(:,2);
+if ~isempty(table.Data)
+    table_stat = table.Data(:,2);
+else
+    table_stat = [];
+end
 
 % update labels in processing_information_panel
 if isempty(table.Data)
