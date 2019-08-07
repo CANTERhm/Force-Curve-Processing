@@ -21,7 +21,7 @@ function main(varargin)
     
     %% preparation of variables
     
-    [~, handles, results] = EditFunctions.ContactPoint.GetCommonVariables('ContactPoint');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     % obtain data from curvename, to use it as default values if neccessary
     table = handles.guiprops.Features.edit_curve_table;
@@ -99,7 +99,7 @@ function main(varargin)
     EditFunctions.ContactPoint.AuxillaryFcn.ApplyEditFunction();
     
     %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
-    EditFunctions.ContactPoint.PublishResults('ContactPoint', handles, results,...
+    UtilityFcn.PublishResults('ContactPoint', handles, results,...
         'FireEvent', true);
     
     % delete results object if edit function is not active, after all tasks

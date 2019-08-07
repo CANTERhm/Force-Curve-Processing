@@ -15,7 +15,7 @@ function ApplyEditFunction(varargin)
     %% variables
     
     % handles and results-object
-    [~, handles, results] = EditFunctions.ContactPoint.GetCommonVariables('ContactPoint');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     % from results-object
     try
