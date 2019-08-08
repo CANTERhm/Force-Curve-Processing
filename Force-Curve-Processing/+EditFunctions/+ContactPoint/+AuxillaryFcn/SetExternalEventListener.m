@@ -5,12 +5,12 @@ function SetExternalEventListener(varargin)
 %   properties in the results-object of each editfunction.
 
     % handles and results-object
-    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     % do stuff
     
     % update handles and results-object
-    UtilityFcn.PublishResults('EditFunction', handles, results);
+    UtilityFcn.PublishResults('ContactPoint', handles, results);
 
 end % SetExternalEventListener
 

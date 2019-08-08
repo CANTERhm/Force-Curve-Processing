@@ -21,14 +21,14 @@ function main(varargin)
     
     %% preparation of variables
     
-    [~, handles, results] = UtilityFcn.GetCommonVariables('EditFunction');
+    [~, handles, results] = UtilityFcn.GetCommonVariables('ContactPoint');
     
     % obtain data from curvename, to use it as default values if neccessary
     table = handles.guiprops.Features.edit_curve_table;
     if ~isempty(table.Data)
         curvename = table.UserData.CurrentCurveName;
-        if isprop(handles.curveprops.(curvename).Results, 'EditFunction')
-            data = handles.curveprops.(curvename).Results.EditFunction;
+        if isprop(handles.curveprops.(curvename).Results, 'ContactPoint')
+            data = handles.curveprops.(curvename).Results.ContactPoint;
         else
             data = [];
         end
@@ -39,10 +39,17 @@ function main(varargin)
     if isempty(results)
         results = Results();
         results.addproperty('userdata');
+        results.addproperty('singleton');
+        results.addproperty('offset');
+        results.addproperty('part_index');
+        results.addproperty('segment_index');
         if isempty(data)
-            loaded_input = handles.procedure.VerticalTipPosition;
+            loaded_input = handles.procedure.ContactPoint;
             results.userdata = loaded_input.userdata;
             results.singleton = loaded_input.singleton;
+            results.offset = loaded_input.offset;
+            results.part_index = loaded_input.part_index;
+            results.segment_index = loaded_input.segment_index;
         else
             % use values from data as default
             % the singleton property has to be resettet to false in every
@@ -51,15 +58,18 @@ function main(varargin)
             results.Status = data.Status;
             results.userdata = data.userdata;
             results.singleton = false;
+            results.offset = data.offset;
+            results.part_index = data.part_index;
+            results.segment_index = data.segment_index;
         end
 
         % update appdata if new results-object for Baseline has been created
-        setappdata(handles.figure1, 'EditFunction', results);
+        setappdata(handles.figure1, 'ContactPoint', results);
     end
     
     container = handles.guiprops.Panels.results_panel;
     button_handle = findobj(allchild(handles.guiprops.Panels.processing_panel),...
-        'Type', 'UIControl', 'Tag', 'EditFunction');
+        'Type', 'UIControl', 'Tag', 'ContactPoint');
     
     %% operations on Figure and Axes 
     UtilityFcn.ResetMainFigureCallbacks();
@@ -68,10 +78,6 @@ function main(varargin)
     GuiStatus = button_handle.UserData.on_gui.Status;
     switch GuiStatus
         case true
-            
-            % uncomment if WindowButtonDownFcn should be setted
-            % handles.guiprops.MainFigure.WindowButtonDownFcn = @EditFunctions.(EditFunction).Callbacks.WindowButtonDownCallback;
-            
             UtilityFcn.RefreshGraph();
             if ~isprop(results, 'input_elements') && ~isprop(results, 'output_elements')
                 SetupGraphicalElements(container);
@@ -82,9 +88,6 @@ function main(varargin)
             end
             
         case false
-            
-            % do different stuff
-            
             if ~results.singleton
                 SetupListeners();
                 results.singleton = true;
@@ -92,13 +95,18 @@ function main(varargin)
             
     end
     
-    %% calculation procedure
-    EditFunction.EditFunction.AuxillaryFcn.ApplyEditFunction();
+    %% apply calculation
+    EditFunctions.ContactPoint.AuxillaryFcn.ApplyEditFunction();
     
-    %% publish results
-    UtilityFcn.PublishResults('EditFunction', handles, results,...
-        'FireEvent', true,...
-        'GuiStatus', GuiStatus);
+    %% trigger UpdateResultsToMain to update handles.curveprops.curvename.Results.Baseline
+    UtilityFcn.PublishResults('ContactPoint', handles, results,...
+        'FireEvent', true);
+    
+    % delete results object if edit function is not active, after all tasks
+    % are done 
+    if ~GuiStatus
+        UtilityFcn.DeleteListener('EditFunction', 'ContactPoint');
+    end
 
 end % main
 
@@ -116,22 +124,22 @@ function SetupGraphicalElements(container)
         'Visible', 'off');
     
     % Settings 
-    EditFunctions.EditFunction.AuxillaryFcn.SetInputElements(main_vbox)
+    EditFunctions.ContactPoint.AuxillaryFcn.SetInputElements(main_vbox)
     
     % Results
-    EditFunctions.EditFunction.AuxillaryFcn.SetOutputElements(main_vbox)
+    EditFunctions.ContactPoint.AuxillaryFcn.SetOutputElements(main_vbox)
     
     % make graphical elements visible
     main_vbox.Visible = 'on';
     
     % panelposition adjustment
-%     main_vbox.Heights = ...;
-%     main_scrolling_panel.Heights = ...;
-%     main_scrolling_panel.Widths = ...;
+    main_vbox.Heights = [-1 -0.6];
+    main_scrolling_panel.Heights = 400;
+    main_scrolling_panel.Widths = 345;
 
 end % SetupGraphicalElements
 
 function SetupListeners()
-    EditFunctions.EditFunction.AuxillaryFcn.SetPropertyEventListener();
-    EditFunctions.EditFunction.AuxillaryFcn.SetExternalEventListener();
+    EditFunctions.ContactPoint.AuxillaryFcn.SetPropertyEventListener();
+    EditFunctions.ContactPoint.AuxillaryFcn.SetExternalEventListener();
 end % SetupListeners
