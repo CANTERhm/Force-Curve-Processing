@@ -1,10 +1,5 @@
+t.one = 1;
+t.two = 2;
+t.three = 3;
 
-clearvars
-
-res = Results();
-lh = PropListener();
-lh.addListener(res, 'Status', 'PostSet', @listener);
-
-function listener(src, evt)
-    disp('listener executed');
-end
+c = structfun(@(x)x=[] if )

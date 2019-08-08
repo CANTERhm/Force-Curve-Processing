@@ -336,4 +336,7 @@ handles.curveprops.CalibrationValues.SpringConstant = springconstant;
 % clear main axes
 cla(handles.guiprops.MainAxes);
 
+% reset editfunctions in procedure-object
+handles = HelperFcn.LoadEditFunctions(handles);
+
 guidata(handles.figure1, handles);
