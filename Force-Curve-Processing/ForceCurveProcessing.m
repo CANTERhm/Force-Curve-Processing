@@ -161,7 +161,9 @@ function load_curves_submenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = UtilityFcn.UIGetFilepath(handles);
 handles = IOData.ImportData(handles);
-handles = HelperFcn.LoadEditFunctions(handles);
+if ~isempty(handles.curveprops.DynamicProps) 
+    handles = HelperFcn.AddFunctionsToCurve(handles);
+end
 guidata(handles.figure1, handles);
 
 
