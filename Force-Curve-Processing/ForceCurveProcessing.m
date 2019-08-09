@@ -161,8 +161,8 @@ function load_curves_submenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = UtilityFcn.UIGetFilepath(handles);
 handles = IOData.ImportData(handles);
+handles = HelperFcn.LoadEditFunctions(handles);
 guidata(handles.figure1, handles);
-
 
 
 % --------------------------------------------------------------------
@@ -211,8 +211,10 @@ function delete_procedure_submenu_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Delete edit_functions from appdata
-handles = HelperFcn.DeleteFunctionsFromAppdata(handles);
+% % this might be obsolete, because the results of editfunctions get stored
+% % within die curveporps.(curvneame).Results-object anyways
+% % Delete edit_functions from appdata
+% handles = HelperFcn.DeleteFunctionsFromAppdata(handles);
 
 % Delete edit_functions from curveprops.curvename.Results-Object
 handles = HelperFcn.DeleteFunctionsFromCurve(handles);
@@ -335,8 +337,5 @@ handles.curveprops.CalibrationValues.SpringConstant = springconstant;
 
 % clear main axes
 cla(handles.guiprops.MainAxes);
-
-% reset editfunctions in procedure-object
-handles = HelperFcn.LoadEditFunctions(handles);
 
 guidata(handles.figure1, handles);
