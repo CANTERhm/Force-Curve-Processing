@@ -1,7 +1,11 @@
 # function: Baseline
 # OnGui: false
 # AlreadyDisplayed: false
-# correction_type: 2
+# curve_parts_index: 1
+# curve_segments_index: 1
+# xchannel_index: 1
+# ychannel_index: 2
+# correction_type: 1
 # units: 'relative'
 # selection_borders: [0 0.9]
 # slope: []

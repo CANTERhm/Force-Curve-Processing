@@ -37,8 +37,8 @@ if ~isempty(table_userdata)
             else
                 curve_parts_popup.String = 'All';
                 curve_segments_popup.String = 'All';
-%                 note = 'no segments or segment-names has been found';
-%                 HelperFcn.ShowNotification(note);
+                note = 'no segments or segment-names has been found';
+                HelperFcn.ShowNotification(note);
             end
         otherwise
             if chosen_curvepart_idx == 2

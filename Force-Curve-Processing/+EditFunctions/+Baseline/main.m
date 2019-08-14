@@ -41,6 +41,10 @@ function main(varargin)
         results.addproperty('calculated_data');
         results.addproperty('property_listener');
         results.addproperty('gui_elements');
+        results.addproperty('curve_parts_index');
+        results.addproperty('curve_segments_index');
+        results.addproperty('xchannel_index');
+        results.addproperty('ychannel_index');
         results.addproperty('correction_type');
         results.addproperty('units');
         results.addproperty('selection_borders');
@@ -53,12 +57,19 @@ function main(varargin)
         results.calculated_data = [];
         results.property_listener = [];
         results.gui_elements = [];
+        results.curve_parts_index = handles.procedure.Baseline.curve_parts_index;
+        results.curve_segments_index = handles.procedure.Baseline.curve_segments_index;
+        results.xchannel_index = handles.procedure.Baseline.xchannel_index;
+        results.ychannel_index = handles.procedure.Baseline.ychannel_index;
         results.correction_type = handles.procedure.Baseline.correction_type;
         results.units = handles.procedure.Baseline.units;
         results.selection_borders = handles.procedure.Baseline.selection_borders;
         results.slope = handles.procedure.Baseline.slope;
         results.offset = handles.procedure.Baseline.offset;
         results.userdata = handles.procedure.Baseline.userdata;
+        
+        % update handles-struct in function workspace
+        handles.curveprops.(curvename).Results.Baseline = results;
     end
     
     %% check if baseline gui should be on screen
@@ -91,8 +102,7 @@ function main(varargin)
         results.property_listener = [];
     end
     
-    %% write results to handles
-    handles.curveprops.(curvename).Results.Baseline = results;
+    %% update handles-struct for app
     guidata(handles.figure1, handles);
 end
 

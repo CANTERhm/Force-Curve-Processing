@@ -123,7 +123,7 @@ function WindowButtonUpCallback(src, evt)
     curvename = table.UserData.CurrentCurveName;
     results = handles.curveprops.(curvename).Baseline.Results;
     
-    % because r_wbucb.UserData.new_borders comes in absolute units
+    % because selection_borders come in absolute units
     % (due to CurrentPoint-proerty from Axes) one has to convert it 
     % into relative ones 
     RawData = handles.curveprops.(curvename).RawData;
@@ -131,7 +131,7 @@ function WindowButtonUpCallback(src, evt)
     ychannel = results.gui_elements.input_ychannel_popup.Value;
     part = results.gui_elements.input_parts_popup.Value;
     segment = results.gui_elements.input_segments_popup.Value;
-    curvedata = UtilityFcn.ExtractPlotData(RawData, h_wbucb,...
+    curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
         xchannel,...
         ychannel,...
         part,...
