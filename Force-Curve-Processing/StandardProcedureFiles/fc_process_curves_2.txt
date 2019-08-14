@@ -1,0 +1,34 @@
+# function: Baseline
+# OnGui: false
+# AlreadyDisplayed: false
+# correction_type: 2
+# units: 'relative'
+# selection_borders: [0 0.9]
+# slope: []
+# offset: []
+# userdata: []
+
+# function: ContactPoint
+# Status: []
+# singleton: false
+# part_index: []
+# segment_index: []
+# offset: []
+# calculated_data: []
+# userdata: []
+
+
+# function: VerticalTipPosition
+# Status: []
+# Sensitivity: []
+# SpringConstant: []
+# calculated_data: []
+# calculation_status: 1
+# singleton: false
+# userdata: []
+
+# function: StepFinder
+# nargin: 0
+
+# function: ChainFit
+# nargin: 0

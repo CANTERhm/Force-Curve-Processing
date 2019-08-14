@@ -13,6 +13,7 @@ UtilityFcn.ResetMainFigureCallbacks();
 
 % clear results panel 
 delete(allchild(handles.guiprops.Panels.results_panel))
+UtilityFcn.ExecuteAllEditFcn();
 
 % clear FCP Graph Window from previouse editing artefacts
 ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
