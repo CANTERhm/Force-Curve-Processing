@@ -55,7 +55,7 @@ function main(varargin)
         results.OnGui = handles.procedure.Baseline.OnGui;
         results.AlreadyDisplayed = handles.procedure.Baseline.AlreadyDisplayed;
         results.calculated_data = [];
-        results.property_listener = [];
+        results.property_listener = PropListener();
         results.gui_elements = [];
         results.curve_parts_index = handles.procedure.Baseline.curve_parts_index;
         results.curve_segments_index = handles.procedure.Baseline.curve_segments_index;
