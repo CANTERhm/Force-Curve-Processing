@@ -33,73 +33,74 @@ function main(varargin)
         'Type', 'UIControl', 'Tag', 'Baseline');
     
     % test if Baseline-results-object exists
-    results = handles.curveprops.(curvename).Results.Baseline;
-    if isempty(results)
-        results = Results();
-        results.addproperty('OnGui');
-        results.addproperty('AlreadyDisplayed');
-        results.addproperty('calculated_data');
-        results.addproperty('property_listener');
-        results.addproperty('gui_elements');
-        results.addproperty('curve_parts_index');
-        results.addproperty('curve_segments_index');
-        results.addproperty('xchannel_index');
-        results.addproperty('ychannel_index');
-        results.addproperty('correction_type');
-        results.addproperty('units');
-        results.addproperty('selection_borders');
-        results.addproperty('slope');
-        results.addproperty('offset');
-        results.addproperty('userdata');
+    baseline_results = handles.curveprops.(curvename).Results.Baseline;
+    baseline_properties = handles.procedure.Baseline.function_properties;
+    if isempty(baseline_results) && isempty(baseline_properties)
         
-        results.OnGui = handles.procedure.Baseline.OnGui;
-        results.AlreadyDisplayed = handles.procedure.Baseline.AlreadyDisplayed;
-        results.calculated_data = [];
-        results.property_listener = PropListener();
-        results.gui_elements = [];
-        results.curve_parts_index = handles.procedure.Baseline.curve_parts_index;
-        results.curve_segments_index = handles.procedure.Baseline.curve_segments_index;
-        results.xchannel_index = handles.procedure.Baseline.xchannel_index;
-        results.ychannel_index = handles.procedure.Baseline.ychannel_index;
-        results.correction_type = handles.procedure.Baseline.correction_type;
-        results.units = handles.procedure.Baseline.units;
-        results.selection_borders = handles.procedure.Baseline.selection_borders;
-        results.slope = handles.procedure.Baseline.slope;
-        results.offset = handles.procedure.Baseline.offset;
-        results.userdata = handles.procedure.Baseline.userdata;
+        baseline_results = Results();
+        baseline_results.addproperty('calculated_data');
+        baseline_results.addproperty('curve_parts_index');
+        baseline_results.addproperty('curve_segments_index');
+        baseline_results.addproperty('xchannel_index');
+        baseline_results.addproperty('ychannel_index');
+        baseline_results.addproperty('correction_type');
+        baseline_results.addproperty('units');
+        baseline_results.addproperty('selection_borders');
+        baseline_results.addproperty('slope');
+        baseline_results.addproperty('offset');
+        baseline_results.addproperty('userdata');
+        baseline_results.calculated_data = [];
+        baseline_results.curve_parts_index = handles.procedure.Baseline.curve_parts_index;
+        baseline_results.curve_segments_index = handles.procedure.Baseline.curve_segments_index;
+        baseline_results.xchannel_index = handles.procedure.Baseline.xchannel_index;
+        baseline_results.ychannel_index = handles.procedure.Baseline.ychannel_index;
+        baseline_results.correction_type = handles.procedure.Baseline.correction_type;
+        baseline_results.units = handles.procedure.Baseline.units;
+        baseline_results.selection_borders = handles.procedure.Baseline.selection_borders;
+        baseline_results.slope = handles.procedure.Baseline.slope;
+        baseline_results.offset = handles.procedure.Baseline.offset;
+        baseline_results.userdata = handles.procedure.Baseline.userdata;
+        
+        baseline_properties = Results();
+        baseline_properties.addproperty('gui_elements');
+        baseline_properties.addproperty('property_listener');
+        baseline_properties.gui_elements = [];
+        baseline_properties.property_listener = PropListener();
         
         % update handles-struct in function workspace
-        handles.curveprops.(curvename).Results.Baseline = results;
+        handles.curveprops.(curvename).Results.Baseline = baseline_results;
+        handles.procedure.Baseline.function_properties = baseline_properties;
     end
     
     %% check if baseline gui should be on screen
     if edit_button_handle.Value == edit_button_handle.Max
-        results.OnGui = true;
+        handles.procedure.Baseline.OnGui = true;
     else
-        results.OnGui = false;
+        handles.procedure.Baseline.OnGui = false;
     end
     
-    if results.OnGui
-        if results.AlreadyDisplayed
+    if handles.procedure.Baseline.OnGui
+        if handles.procedure.Baseline.AlreadyDisplayed
 %             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData();
         else
-            results.AlreadyDisplayed = true;
+            handles.procedure.Baseline.AlreadyDisplayed = true;
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.Baseline.AuxillaryFcn.CreateGuiElements(handles);
-%             handles = EditFunctions.BaselineAuxillaryFcn.SetWindowButtonCallbacks(handles);
-%             EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener();
+            handles = EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener(handles);
+            handles = EditFunctions.Baseline.AuxillaryFcn.SetWindowButtonCallbacks(handles);
 %             EditFunctions.Baseline.AuxillaryFcn.InitiateGraphicalRepresentation();
 %             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData();
         end
     else
-        results.AlreadyDisplayed = false;
-        if ~isempty(results.property_listener)
-            for i = 1:length(results.property_listener)
-                delete(results.property_listener(i))
+        handles.procedure.Baseline.AlreadyDisplayed = false;
+        UtilityFcn.ResetMainFigureCallbacks();
+        if ~isempty(baseline_properties.property_listener)
+            for i = 1:length(baseline_properties.property_listener)
+                delete(baseline_properties.property_listener(i))
             end
         end
-        results.property_listener = [];
+        baseline_properties.property_listener = [];
     end
     
     %% update handles-struct for app

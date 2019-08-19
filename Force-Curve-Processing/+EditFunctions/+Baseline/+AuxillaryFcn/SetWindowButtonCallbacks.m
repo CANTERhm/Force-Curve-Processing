@@ -1,7 +1,7 @@
 function handles = SetWindowButtonCallbacks(handles)
 % SETWINDOWBUTTONCALLBACKS set the window button callbacks properly in order
 % to ensure correct behavior for the EditFunction: Baseline
-    handles.figure1.WindowButtonDownFcn = @WindowButtonDownCallback;
+    handles.guiprops.MainFigure.WindowButtonDownFcn = @WindowButtonDownCallback;
 end
 
 %% used Callbacks
@@ -36,9 +36,9 @@ function WindowButtonDownCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    results = handles.curveprops.(curvename).Baseline.Results;
+    results = handles.curveprops.(curvename).Results.Baseline;
 
-    cp = h_wbdcb.guiprops.MainAxes.CurrentPoint;
+    cp = handles.guiprops.MainAxes.CurrentPoint;
     results.selection_borders = [cp(1, 1) cp(1, 1)];
 
     % refresh results object and handles
@@ -62,14 +62,14 @@ function WindowButtonMoveCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    results = handles.curveprops.(curvename).Baseline.Results;
+    results = handles.curveprops.(curvename).Results.Baseline;
 
     cp = handles.guiprops.MainAxes.CurrentPoint;
     new_borders = [results.selection_borders(1) cp(1, 1)];
     results.selection_borders = new_borders;
 
     % renew an initial markup while moving the mouse
-    ax = findobj(h_wbmcb.guiprops.MainFigure, 'Type', 'Axes');
+    ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
     markup = findobj(allchild(groot), 'Type', 'Patch', 'Tag', 'markup');
 
     xpoints = [new_borders(1) new_borders(2) new_borders(2) new_borders(1)];
@@ -121,26 +121,29 @@ function WindowButtonUpCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    results = handles.curveprops.(curvename).Baseline.Results;
+    results = handles.curveprops.(curvename).Results.Baseline;
+    baseline_properties = handles.procedure.Baseline.function_properties;
     
     % because selection_borders come in absolute units
     % (due to CurrentPoint-proerty from Axes) one has to convert it 
     % into relative ones 
-    RawData = handles.curveprops.(curvename).RawData;
-    xchannel = results.gui_elements.input_xchannel_popup.Value;
-    ychannel = results.gui_elements.input_ychannel_popup.Value;
-    part = results.gui_elements.input_parts_popup.Value;
-    segment = results.gui_elements.input_segments_popup.Value;
-    curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
-        xchannel,...
-        ychannel,...
-        part,...
-        segment);
-    linedata = UtilityFcn.ConvertToVector(curvedata);
-    new_relative_borders = EditFunctions.Baseline.AuxillaryFcn.BorderTransformation(linedata,...
-        'absolute-relative',...
-        'user_defined_borders', results.selection_borders);
-    results.selection_borders = sort(new_relative_borders);
+    if strcmp(results.units, 'relative')
+        RawData = handles.curveprops.(curvename).RawData;
+        xchannel = baseline_properties.gui_elements.setting_xchannel_dropdown.Value;
+        ychannel = baseline_properties.gui_elements.setting_ychannel_dropdown.Value;
+        part = baseline_properties.gui_elements.setting_parts_dropdown.Value;
+        segment = baseline_properties.gui_elements.setting_segments_dropdown.Value;
+        curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
+            xchannel,...
+            ychannel,...
+            part,...
+            segment);
+        linedata = UtilityFcn.ConvertToVector(curvedata);
+        new_relative_borders = EditFunctions.Baseline.AuxillaryFcn.BorderTransformation(linedata,...
+            'absolute-relative',...
+            'user_defined_borders', results.selection_borders);
+        results.selection_borders = sort(new_relative_borders);
+    end
     markup = findobj(allchild(groot), 'Type', 'Patch', 'Tag', 'markup');
     delete(markup);
     

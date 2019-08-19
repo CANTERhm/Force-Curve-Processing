@@ -155,11 +155,37 @@ switch segment_idx
             for i = trace_idx(1):trace_idx(2)
                 segname = segments{i};
                 if ~isempty(Data)
-                    Trace.(segname).XData = Data.(segname).(xchannel);
-                    Trace.(segname).YData = Data.(segname).(ychannel);
+                    try
+                        Trace.(segname).XData = Data.(segname).(xchannel);
+                        Trace.(segname).YData = Data.(segname).(ychannel);
+                    catch ME
+                        switch ME.identifier
+                            case 'MATLAB:nonExistentField' % non existing channel or segname
+                                note = ME.message;
+                                HelperFcn.ShowNotification(note);
+                                varargout{1} = [];
+                                varargout{2} = handles;
+                                return
+                            otherwise
+                                rethrow(ME);
+                        end
+                    end
                 else
-                    Trace.(segname).XData = RawData.CurveData.(segname).(xchannel);
-                    Trace.(segname).YData = RawData.CurveData.(segname).(ychannel);
+                    try
+                        Trace.(segname).XData = RawData.CurveData.(segname).(xchannel);
+                        Trace.(segname).YData = RawData.CurveData.(segname).(ychannel);
+                    catch ME
+                        switch ME.identifier
+                            case 'MATLAB:nonExistentField' % non existing channel or segname
+                                note = ME.message;
+                                HelperFcn.ShowNotification(note);
+                                varargout{1} = [];
+                                varargout{2} = handles;
+                                return
+                            otherwise
+                                rethrow(ME);
+                        end
+                    end
                 end
             end
 

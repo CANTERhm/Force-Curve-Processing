@@ -70,7 +70,7 @@ if ~isempty(curvename)
 end
 
 % prepare plot data
-if ~isempty(LineData.Trace)
+if ~isempty(LineData) && ~isempty(LineData.Trace)
     segment = fieldnames(LineData.Trace);
     for i = 1:length(segment)
         if ~isempty(LineData.Trace.(segment{i}).XData) && ...
@@ -82,9 +82,12 @@ if ~isempty(LineData.Trace)
             trace_y = [];
         end
     end
+else
+    trace_x = [];
+    trace_y = [];
 end
 
-if ~isempty(LineData.Retrace)
+if ~isempty(LineData) && ~isempty(LineData.Retrace)
     segment = fieldnames(LineData.Retrace);
     for i = 1:length(segment)
         if ~isempty( LineData.Retrace.(segment{i}).XData) && ...
@@ -96,6 +99,9 @@ if ~isempty(LineData.Retrace)
             retrace_y = [];
         end
     end
+else
+    retrace_x = [];
+    retrace_y = [];
 end
 
 % convert trace from cell to mat if necessary

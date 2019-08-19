@@ -1,4 +1,4 @@
-function BLUpdatePopupMenuCallback(src, evt)
+function BLUpdateDropdownMenuCallback(src, evt)
 % BLUPDATEPOPUPMENUCALLBACK keeping the baseline_..._dropdown strig up to
 % date, based on the choice made for baseline_parts_dropdown
 
@@ -14,14 +14,9 @@ function BLUpdatePopupMenuCallback(src, evt)
     
     curvename = table.UserData.CurrentCurveName;
     curve = handles.curveprops.(curvename).RawData;
-    parts_dropdown = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_parts_dropdown;
-    segments_dropdown = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_segments_dropdown;
-    xchannel_dropdown = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_xchannel_dropdown;
-    ychannel_dropdown = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_ychannel_dropdown;
+    parts_dropdown = handles.procedure.Baseline.function_properties.gui_elements.setting_parts_dropdown;
+    segments_dropdown = handles.procedure.Baseline.function_properties.gui_elements.setting_segments_dropdown;
     part_index = handles.curveprops.(curvename).Results.Baseline.curve_parts_index;
-    segment_index = handles.curveprops.(curvename).Results.Baseline.curve_segments_index;
-    xchannel_index = handles.curveprops.(curvename).Results.Baseline.xchannel_index;
-    ychannel_index = handles.curveprops.(curvename).Results.Baseline.ychannel_index;
     
     %% update curve segments popup depending on curve part index
         % special_info = [] if EsyImport true or afm couldn't apply SearchQuery

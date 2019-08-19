@@ -13,7 +13,7 @@ function RightBorderValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    left_border = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_left_border;
+    left_border = handles.procedure.Baseline.function_properties.gui_elements.setting_left_border;
     
     %% evaluate input
     input = src.String;

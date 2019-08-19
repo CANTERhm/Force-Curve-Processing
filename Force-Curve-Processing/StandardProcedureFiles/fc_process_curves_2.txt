@@ -11,6 +11,7 @@
 # slope: []
 # offset: []
 # userdata: []
+# function_properties: []
 
 # function: ContactPoint
 # Status: []

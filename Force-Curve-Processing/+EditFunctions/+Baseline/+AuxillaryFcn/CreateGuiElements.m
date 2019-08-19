@@ -62,11 +62,11 @@ function handles = CreateGuiElements(handles)
     
     setting_grid1.Heights = [15 15];
     setting_grid1.Widths = [-1 -1];
-    
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_offset_label = setting_offset_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_offset_radio_btn = setting_offset_radio_btn;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_offset_tilt_label = setting_offset_tilt_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_offset_tilt_radio_btn = setting_offset_tilt_radio_btn;
+
+    handles.procedure.Baseline.function_properties.gui_elements.setting_offset_label = setting_offset_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_offset_radio_btn = setting_offset_radio_btn;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_offset_tilt_label = setting_offset_tilt_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_offset_tilt_radio_btn = setting_offset_tilt_radio_btn;
     
     % for baseline range
     setting_baseline_range_panel = uix.Panel('Parent', settings_vbox,...
@@ -102,11 +102,11 @@ function handles = CreateGuiElements(handles)
 
     setting_grid2.Heights = [15 20];
     setting_grid2.Widths = [-1 -1];
-    
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_left_border_label = setting_left_border_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_left_border = setting_left_border;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_right_border_label = setting_right_border_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_right_border = setting_right_border;
+
+    handles.procedure.Baseline.function_properties.gui_elements.setting_left_border_label = setting_left_border_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_left_border = setting_left_border;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_right_border_label = setting_right_border_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_right_border = setting_right_border;
     
     % for units
     setting_units_panel = uix.Panel('Parent', settings_vbox,...
@@ -139,11 +139,11 @@ function handles = CreateGuiElements(handles)
     
     setting_grid3.Heights = [15 15];
     setting_grid3.Widths = [-1 -1];
-    
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_relative_units_label = setting_relative_units_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_relative_units_radio_btn = setting_relative_units_radio_btn;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_absolute_units_label = setting_absolute_units_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_absolute_units_radio_btn = setting_absolute_units_radio_btn;
+
+    handles.procedure.Baseline.function_properties.gui_elements.setting_relative_units_label = setting_relative_units_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_relative_units_radio_btn = setting_relative_units_radio_btn;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_absolute_units_label = setting_absolute_units_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_absolute_units_radio_btn = setting_absolute_units_radio_btn;
     
     % for curve settings
     
@@ -195,27 +195,26 @@ function handles = CreateGuiElements(handles)
         'Style', 'popupmenu',...
         'String', xchannel.String,...
         'Value', xchannel.Value,...
-        'Tag', 'baseline_xchannel_dropdown');
+        'Tag', 'baseline_xchannel_dropdown',...
+        'Callback', @EditFunctions.Baseline.Callbacks.CurveXchannelDropdownCallback);
     setting_ychannel_dropdown = uicontrol('Parent', setting_grid4,...
         'Style', 'popupmenu',...
         'String', ychannel.String,...
         'Value', ychannel.Value,...
-        'Tag', 'baseline_ychannel_dropdown');
+        'Tag', 'baseline_ychannel_dropdown',...
+        'Callback', @EditFunctions.Baseline.Callbacks.CurveYchannelDropdownCallback);
     
     setting_grid4.Heights = [20 20 20 20];
     setting_grid4. Widths = [-1 -1];
-    
-    handles.curveprops.(curvename).Results.Baseline.property_listener.addListener(handles.curveprops.(curvename).Results.Baseline,...
-        'curve_parts_index', 'PostSet', @EditFunctions.Baseline.Callbacks.BLUpdatePopupMenuCallback);
-    
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_parts_label = setting_parts_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_segments_label = setting_segments_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_xchannel_label = setting_xchannel_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_ychannel_label = setting_ychannel_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_parts_dropdown = setting_parts_dropdown;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_segments_dropdown = setting_segments_dropdown;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_xchannel_dropdown = setting_xchannel_dropdown;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_ychannel_dropdown = setting_ychannel_dropdown;
+
+    handles.procedure.Baseline.function_properties.gui_elements.setting_parts_label = setting_parts_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_segments_label = setting_segments_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_xchannel_label = setting_xchannel_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_ychannel_label = setting_ychannel_label;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_parts_dropdown = setting_parts_dropdown;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_segments_dropdown = setting_segments_dropdown;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_xchannel_dropdown = setting_xchannel_dropdown;
+    handles.procedure.Baseline.function_properties.gui_elements.setting_ychannel_dropdown = setting_ychannel_dropdown;
     
     %% calculation results
     results_panel = uix.Panel('Parent', tab_panel,...
@@ -248,10 +247,10 @@ function handles = CreateGuiElements(handles)
     
     results_grid1.Heights = 20;
     results_grid1.Widths = [-1 -1 -1];
-    
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.results_offset_label = results_offset_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.results_offset_value = results_offset_value;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.results_offset_unit = results_offset_unit;
+
+    handles.procedure.Baseline.function_properties.gui_elements.results_offset_label = results_offset_label;
+    handles.procedure.Baseline.function_properties.gui_elements.results_offset_value = results_offset_value;
+    handles.procedure.Baseline.function_properties.gui_elements.results_offset_unit = results_offset_unit;
     
     % for slope
     results_grid2 = uix.Grid('Parent', results_vbox,...
@@ -275,10 +274,10 @@ function handles = CreateGuiElements(handles)
     
     results_grid1.Heights = 20;
     results_grid1.Widths = [-1 -1 -1];
-    
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.results_tilt_label = results_tilt_label;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.results_tilt_value = results_tilt_value;
-    handles.curveprops.(curvename).Results.Baseline.gui_elements.results_tilt_unit = results_tilt_unit;
+
+    handles.procedure.Baseline.function_properties.gui_elements.results_tilt_label = results_tilt_label;
+    handles.procedure.Baseline.function_properties.gui_elements.results_tilt_value = results_tilt_value;
+    handles.procedure.Baseline.function_properties.gui_elements.results_tilt_unit = results_tilt_unit;
     
     %% Tabs for tab_panel
     tab_panel.TabTitles = {'Settings', 'Results'};

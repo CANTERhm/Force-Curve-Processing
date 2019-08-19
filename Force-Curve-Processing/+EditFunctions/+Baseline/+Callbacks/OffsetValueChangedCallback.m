@@ -13,7 +13,7 @@ function OffsetValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    offset_tilt = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_offset_tilt_radio_btn;
+    offset_tilt = handles.procedure.Baseline.function_properties.gui_elements.setting_offset_tilt_radio_btn;
     
     %% toggle like behavior of radio buttons
     if src.Value == 0

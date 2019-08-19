@@ -13,7 +13,7 @@ function RelativeUnitsValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    absolute = handles.curveprops.(curvename).Results.Baseline.gui_elements.setting_absolute_units_radio_btn;
+    absolute = handles.procedure.Baseline.function_properties.gui_elements.setting_absolute_units_radio_btn;
     
     %% toggle like behavior of radio buttons
     if src.Value == 0
