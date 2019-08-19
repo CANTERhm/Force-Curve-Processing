@@ -144,8 +144,6 @@ function WindowButtonUpCallback(src, evt)
             'user_defined_borders', results.selection_borders);
         results.selection_borders = sort(new_relative_borders);
     end
-    markup = findobj(allchild(groot), 'Type', 'Patch', 'Tag', 'markup');
-    delete(markup);
     
     src.WindowButtonMotionFcn = '';
     src.WindowButtonUpFcn = '';

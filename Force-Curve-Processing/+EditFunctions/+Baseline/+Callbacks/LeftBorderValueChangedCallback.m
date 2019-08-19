@@ -13,7 +13,6 @@ function LeftBorderValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    right_border = handles.procedure.Baseline.function_properties.gui_elements.setting_right_border;
     
     %% evaluate input
     input = src.String;
@@ -26,22 +25,10 @@ function LeftBorderValueChangedCallback(src, evt)
         return
     end
     
-    %% check the order of left and right border values
-    if src.Value < right_border.Value
-        small_value = src.Value;
-        big_value = right_border.Value;
-    else
-        small_value = right_border.Value;
-        big_value = src.Value;
-    end
-    src.Value = small_value;
-    src.String = num2str(small_value);
-    right_border.Value = big_value;
-    right_border.String = num2str(big_value);
+
     
     %% update handles-struct
-    handles.curveprops.(curvename).Results.Baseline.selection_borders(1) = small_value;
-    handles.curveprops.(curvename).Results.Baseline.selection_borders(2) = big_value;
+    handles.curveprops.(curvename).Results.Baseline.selection_borders(1) = src.Value;
     guidata(handles.figure1, handles);
 end
 
