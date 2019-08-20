@@ -76,9 +76,7 @@ function main(varargin)
 
             baseline_properties = Results();
             baseline_properties.addproperty('gui_elements');
-%             baseline_properties.addproperty('property_listener');
             baseline_properties.gui_elements = [];
-    %         baseline_properties.property_listener = PropListener();
 
             % update handles-struct in function workspace
             handles.procedure.Baseline.function_properties = baseline_properties;
@@ -96,7 +94,8 @@ function main(varargin)
     
     if handles.procedure.Baseline.OnGui
         if handles.procedure.Baseline.AlreadyDisplayed
-%             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData();
+%             handles = EditFunctions.Baseline.AuxillaryFcn.UpdateGuiElements(handles);
+%             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
         else
             handles.procedure.Baseline.AlreadyDisplayed = true;
             delete(allchild(results_panel));
