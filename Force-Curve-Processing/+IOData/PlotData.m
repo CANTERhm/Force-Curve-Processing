@@ -90,13 +90,12 @@ end
 if ~isempty(LineData) && ~isempty(LineData.Retrace)
     segment = fieldnames(LineData.Retrace);
     for i = 1:length(segment)
-        if ~isempty( LineData.Retrace.(segment{i}).XData) && ...
+        if ~isempty(LineData.Retrace.(segment{i}).XData) && ...
                 ~isempty(LineData.Retrace.(segment{i}).YData)
             retrace_x = [retrace_x; LineData.Retrace.(segment{i}).XData];
             retrace_y = [retrace_y; LineData.Retrace.(segment{i}).YData];
         else
-            retrace_x = [];
-            retrace_y = [];
+            continue
         end
     end
 else
@@ -122,26 +121,43 @@ end
 
 % plot trace and retrace
 if ~isempty(trace_x) && ~isempty(trace_y)
-    trace = line(ax, trace_x, trace_y);
-    trace.Color = handles.curveprops.TraceColor;
-    trace.LineStyle = 'none';
+%     % try to use scatter plots instead of line, because they can be
+%     % processed faster in matlab
+    hold(ax, 'on');
+    trace = scatter(ax, trace_x, trace_y);
+    hold(ax, 'off');
     trace.Marker = 'o';
-    trace.MarkerSize = 2;
-    trace.MarkerEdgeColor = 'none';
+    trace.MarkerEdgeColor = handles.curveprops.TraceColor;
     trace.MarkerFaceColor = handles.curveprops.TraceColor;
-    trace.DisplayName = 'Retrace';
+    trace.SizeData = 2;
+%     trace = line(ax, trace_x, trace_y);
+%     trace.Color = handles.curveprops.TraceColor;
+%     trace.LineStyle = 'none';
+%     trace.Marker = 'o';
+%     trace.MarkerSize = 2;
+%     trace.MarkerEdgeColor = 'none';
+%     trace.MarkerFaceColor = handles.curveprops.TraceColor;
     trace.DisplayName = 'Trace';
     trace.Tag = 'ForceCurve';
 end
 
 if ~isempty(retrace_x) && ~isempty(retrace_y)
-    retrace = line(ax, retrace_x, retrace_y);
-    retrace.Color = handles.curveprops.RetraceColor;
-    retrace.LineStyle = 'none';
+%     % try to use scatter plots instead of line, because they can be
+%     % processed faster in matlab
+    hold(ax, 'on');
+    retrace = scatter(ax, retrace_x, retrace_y);
+    hold(ax, 'off');
     retrace.Marker = 'o';
-    retrace.MarkerSize = 2;
-    retrace.MarkerEdgeColor = 'none';
+    retrace.MarkerEdgeColor = handles.curveprops.RetraceColor;
     retrace.MarkerFaceColor = handles.curveprops.RetraceColor;
+    retrace.SizeData = 2;
+%     retrace = line(ax, retrace_x, retrace_y);
+%     retrace.Color = handles.curveprops.RetraceColor;
+%     retrace.LineStyle = 'none';
+%     retrace.Marker = 'o';
+%     retrace.MarkerSize = 2;
+%     retrace.MarkerEdgeColor = 'none';
+%     retrace.MarkerFaceColor = handles.curveprops.RetraceColor;
     retrace.DisplayName = 'Retrace';
     retrace.Tag = 'ForceCurve';
 end
