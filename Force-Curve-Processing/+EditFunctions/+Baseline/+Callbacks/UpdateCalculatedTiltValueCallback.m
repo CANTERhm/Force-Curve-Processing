@@ -20,7 +20,7 @@ function UpdateCalculatedTiltValueCallback(src, evt, tilt_value_handle, tilt_pro
     value_label.String = num2str(value);
     
     %% update handles-struct
-    handles.procedure.Baseline.function_properties.gui_elements.(tilt_value_handles) = value_label;
+    handles.procedure.Baseline.function_properties.gui_elements.(tilt_value_handle) = value_label;
     guidata(handles.figure1, handles);
 end
 

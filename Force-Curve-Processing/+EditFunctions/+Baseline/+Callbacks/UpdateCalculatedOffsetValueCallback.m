@@ -20,7 +20,7 @@ function UpdateCalculatedOffsetValueCallback(src, evt, offset_value_handle, offs
     value_label.String = num2str(value);
     
     %% update handles-struct
-    handles.procedure.Baseline.function_properties.gui_elements.(offset_value_handles) = value_label;
+    handles.procedure.Baseline.function_properties.gui_elements.(offset_value_handle) = value_label;
     guidata(handles.figure1, handles);
 
 end
