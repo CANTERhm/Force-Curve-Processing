@@ -108,7 +108,7 @@ function main(varargin)
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.Baseline.AuxillaryFcn.CreateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener(handles);
-            handles = EditFunctions.Baseline.AuxillaryFcn.SetWindowButtonCallbacks(handles);
+%             handles = EditFunctions.Baseline.AuxillaryFcn.SetWindowButtonCallbacks(handles);
 %             EditFunctions.Baseline.AuxillaryFcn.InitiateGraphicalRepresentation();
 %             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData();
         end

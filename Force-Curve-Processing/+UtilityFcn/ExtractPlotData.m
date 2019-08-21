@@ -7,11 +7,18 @@ function varargout = ExtractPlotData(RawData, handles, varargin)
 %   - RawData: afm-object
 %   - handles: handles-struct obtained via guide-apps
 % optional input:
-%   - xchannel_idx: index from xchannel popup form fcp-app (default: 1)
-%   - ychannel_idx: index from ychannel popup from fcp-app (default: 2)
+%   - xchannel_idx: index from xchannel popup form fcp-app. Also allowed 
+%     are char-vectors or string-scalars representing the channel-name
+%     (default: 1)
+%
+%   - ychannel_idx: index from ychannel popup from fcp-app. Also allowed 
+%     are char-vectors or string-scalars representing the channel-name 
+%     (default: 2)
+%
 %   - curve_part_idx: index indicating from which curve part the data
 %                      has to be extracted.
 %                      (default: fcp-app-curve_parts_popup)
+%
 %   - curve_segment_idx: index indicating from which segment the data has
 %                         to be extracted.
 %                         (default: fcp-app-curve_segments_popup)
@@ -45,20 +52,24 @@ DefaultValues.curve_part_idx = [];
 DefaultValues.curve_segment_idx = [];
 DefaultValues.active_edit_button = 'procedure_root_btn';
 DefaultValues.edit_button = [];
+ValidChannelTypes = {'double', 'char', 'string'};
 
-ValidChannelInput = @(x)assert(isa(x, 'double'),...
-    'FCProcessing:ExtractPlotData:invalidInput',...
-    'input was not type "double", representing a valid channel.');
+ValidChannelInput = @(x) any(validatestring(class(x), ValidChannelTypes));
+
 ValidButtonTag = @(x)assert(isa(x, 'char'),...
     'FCProcessing:ExtractPlotData:invalidInput',...
     'input for edit_button was no character-vector.');
 
 addRequired(p, 'RawData');
 addRequired(p, 'handles');
-addOptional(p, 'xchannel_idx', DefaultValues.xchannel, ValidChannelInput);
-addOptional(p, 'ychannel_idx', DefaultValues.ychannel, ValidChannelInput);
-addOptional(p, 'curve_part_idx', DefaultValues.curve_part_idx, ValidChannelInput);
-addOptional(p, 'curve_segment_idx', DefaultValues.curve_segment_idx, ValidChannelInput);
+% addOptional(p, 'xchannel_idx', DefaultValues.xchannel);
+% addOptional(p, 'ychannel_idx', DefaultValues.ychannel);
+% addOptional(p, 'curve_part_idx', DefaultValues.curve_part_idx);
+% addOptional(p, 'curve_segment_idx', DefaultValues.curve_segment_idx);
+addParameter(p, 'xchannel_idx', DefaultValues.xchannel, ValidChannelInput);
+addParameter(p, 'ychannel_idx', DefaultValues.ychannel, ValidChannelInput);
+addParameter(p, 'curve_part_idx', DefaultValues.curve_part_idx, ValidChannelInput);
+addParameter(p, 'curve_segment_idx', DefaultValues.curve_segment_idx, ValidChannelInput);
 addParameter(p, 'edit_button', DefaultValues.edit_button, ValidButtonTag);
 
 parse(p, RawData, handles, varargin{:});
@@ -73,12 +84,19 @@ edit_button = p.Results.edit_button;
 
 %% function procedure
 curvename = handles.guiprops.Features.edit_curve_table.UserData.CurrentCurveName;
-if isa(handles.guiprops.Features.curve_xchannel_popup.String, 'cell')
-    xchannel = handles.guiprops.Features.curve_xchannel_popup.String{xchannel_idx};
-    ychannel = handles.guiprops.Features.curve_ychannel_popup.String{ychannel_idx};
-else % only one choice for popup, if there are no named channels
-    xchannel = handles.guiprops.Features.curve_xchannel_popup.String;
-    ychannel = handles.guiprops.Features.curve_ychannel_popup.String;
+if isa(xchannel_idx, 'double') && isa(ychannel_idx, 'double')
+    if isa(handles.guiprops.Features.curve_xchannel_popup.String, 'cell')
+        xchannel = handles.guiprops.Features.curve_xchannel_popup.String{xchannel_idx};
+        ychannel = handles.guiprops.Features.curve_ychannel_popup.String{ychannel_idx};
+    else % only one choice for popup, if there are no named channels
+        xchannel = handles.guiprops.Features.curve_xchannel_popup.String;
+        ychannel = handles.guiprops.Features.curve_ychannel_popup.String;
+    end
+else 
+    % the only two possibilities left are char-vec or string-scalar according
+    % to the ValidChannelInput-function
+    xchannel = xchannel_idx;
+    ychannel = ychannel_idx;
 end
 
 % determin segment_idx 
