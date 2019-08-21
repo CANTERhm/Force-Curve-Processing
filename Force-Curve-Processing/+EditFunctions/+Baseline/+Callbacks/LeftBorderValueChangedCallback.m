@@ -1,4 +1,4 @@
-function LeftBorderValueChangedCallback(src, evt)
+function LeftBorderValueChangedCallback(src, evt, property)
 % LEFTBORDERVALUECHANGEDCALLBACK updates the selection border property of
 % the results-object according to the left border edit field value
 
@@ -13,6 +13,7 @@ function LeftBorderValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
+    selection_borders = handles.curveprops.(curvename).Results.Baseline.(property);
     
     %% evaluate input
     input = src.String;
@@ -25,10 +26,10 @@ function LeftBorderValueChangedCallback(src, evt)
         return
     end
     
-
+    selection_borders(1) = src.Value;
     
     %% update handles-struct
-    handles.curveprops.(curvename).Results.Baseline.selection_borders(1) = src.Value;
+    handles.curveprops.(curvename).Results.Baseline.(property) = selection_borders;
     guidata(handles.figure1, handles);
 end
 

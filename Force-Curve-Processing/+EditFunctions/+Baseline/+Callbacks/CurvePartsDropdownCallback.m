@@ -1,4 +1,4 @@
-function CurvePartsDropdownCallback(src, evt)
+function CurvePartsDropdownCallback(src, evt, parts_index)
 % CURVEPARTSDROPDOWNCALLBACK update the curvepart property in the
 % results-object of the baseline-editfunction
 
@@ -15,7 +15,7 @@ function CurvePartsDropdownCallback(src, evt)
     curvename = table.UserData.CurrentCurveName;
     
     %% update curveparts property
-    handles.curveprops.(curvename).Results.Baseline.curve_parts_index = src.Value;
+    handles.curveprops.(curvename).Results.Baseline.(parts_index) = src.Value;
     
     %% update handles-struct
     guidata(handles.figure1, handles);

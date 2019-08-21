@@ -1,4 +1,4 @@
-function RightBorderValueChangedCallback(src, evt)
+function RightBorderValueChangedCallback(src, evt, property)
 %RIGHTBORDERVALUECHANGEDCALLBACK updates the selection border property of
 % the results-object according to the right border edit field value
 
@@ -13,6 +13,7 @@ function RightBorderValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
+    selection_borders = handles.curveprops.(curvename).Results.Baseline.(property);
     
     %% evaluate input
     input = src.String;
@@ -24,9 +25,10 @@ function RightBorderValueChangedCallback(src, evt)
         src.String = num2str(old_num);
         return
     end
+    selection_borders(2) = src.Value;
     
     %% update handles-struct
-    handles.curveprops.(curvename).Results.Baseline.selection_borders(2) = src.Value;
+    handles.curveprops.(curvename).Results.Baseline.(property) = selection_borders;
     guidata(handles.figure1, handles);
 end
 

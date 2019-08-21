@@ -2,14 +2,17 @@
 # OnGui: false
 # AlreadyDisplayed: false
 # curve_parts_index: 1
+# curve_parts_index_2: 1
 # curve_segments_index: 1
-# xchannel_index: 1
-# ychannel_index: 2
+# curve_segments_index_2: 1
 # correction_type: 1
-# units: 'relative'
+# correction_type_2: 1
 # selection_borders: [0 0.9]
+# selection_borders_2: [0 0.9]
 # slope: []
+# slope_2: []
 # offset: []
+# offset_2: []
 # userdata: []
 # function_properties: []
 

@@ -1,4 +1,4 @@
-function BLUpdateDropdownMenuCallback(src, evt)
+function BLUpdateDropdownMenuCallback(src, evt, curve_parts_dropdown, curve_segments_dropdown, curve_parts_index)
 % BLUPDATEPOPUPMENUCALLBACK keeping the baseline_..._dropdown strig up to
 % date, based on the choice made for baseline_parts_dropdown
 
@@ -14,12 +14,11 @@ function BLUpdateDropdownMenuCallback(src, evt)
     
     curvename = table.UserData.CurrentCurveName;
     curve = handles.curveprops.(curvename).RawData;
-    parts_dropdown = handles.procedure.Baseline.function_properties.gui_elements.setting_parts_dropdown;
-    segments_dropdown = handles.procedure.Baseline.function_properties.gui_elements.setting_segments_dropdown;
-    part_index = handles.curveprops.(curvename).Results.Baseline.curve_parts_index;
+    parts_dropdown = handles.procedure.Baseline.function_properties.gui_elements.(curve_parts_dropdown);
+    segments_dropdown = handles.procedure.Baseline.function_properties.gui_elements.(curve_segments_dropdown);
+    parts_index = handles.curveprops.(curvename).Results.Baseline.(curve_parts_index);
     
     %% update curve segments popup depending on curve part index
-        % special_info = [] if EsyImport true or afm couldn't apply SearchQuery
     if ~isempty(curve.SpecialInformation)
         segments = fieldnames(curve.SpecialInformation);
     else
@@ -27,7 +26,7 @@ function BLUpdateDropdownMenuCallback(src, evt)
     end
     mask = false(length(segments), 1);
     
-    switch part_index
+    switch parts_index
         case 1
             curve_segments = cell(length(segments), 1);
 
@@ -46,11 +45,11 @@ function BLUpdateDropdownMenuCallback(src, evt)
                 HelperFcn.ShowNotification(note);
             end
         otherwise
-            if part_index == 2
+            if parts_index == 2
                 start = handles.curveprops.CurvePartIndex.trace(1);
                 stop = handles.curveprops.CurvePartIndex.trace(2);
             end
-            if part_index == 3
+            if parts_index == 3
                 start = handles.curveprops.CurvePartIndex.retrace(1);
                 stop = handles.curveprops.CurvePartIndex.retrace(2);
             end

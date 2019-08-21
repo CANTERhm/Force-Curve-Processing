@@ -1,4 +1,4 @@
-function CurveSegmentsDropdownCallback(src, evt)
+function CurveSegmentsDropdownCallback(src, evt, parts_index, segments_index)
 % CURVESEGMENTSDROPDOWNCALLBACK update the curve-segments-property of the
 % results-object of the baseline-editfunction. 
 
@@ -13,15 +13,15 @@ function CurveSegmentsDropdownCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    curve_parts_index = handles.curveprops.(curvename).Results.Baseline.curve_parts_index;
+    curve_parts_index = handles.curveprops.(curvename).Results.Baseline.(parts_index);
     
     %% update the curve-parts-property
     if curve_parts_index >= 3
-        segments_index = src.Value + 2;
+        seg_index = src.Value + 2;
     else
-        segments_index = src.Value;
+        seg_index = src.Value;
     end
-    handles.curveprops.(curvename).Results.Baseline.curve_segments_index = segments_index;
+    handles.curveprops.(curvename).Results.Baseline.(segments_index) = seg_index;
     
     %% update handles-struct
     guidata(handles.figure1, handles);

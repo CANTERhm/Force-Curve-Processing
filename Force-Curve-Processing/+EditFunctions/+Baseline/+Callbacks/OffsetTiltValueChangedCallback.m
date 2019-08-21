@@ -1,4 +1,4 @@
-function OffsetTiltValueChangedCallback(src, evt)
+function OffsetTiltValueChangedCallback(src, evt, other_btn, property)
 % OFFSETTILTVALUECHANGEDCALLBACK updates the correction_type property
 % according to the the offset_radio_btn value
     
@@ -13,15 +13,14 @@ function OffsetTiltValueChangedCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    offset = handles.procedure.Baseline.function_properties.gui_elements.setting_offset_radio_btn;
     
     %% toggle like behavior of radio buttons
     if src.Value == 0
-        offset.Value = 1;
-        handles.curveprops.(curvename).Results.Baseline.correction_type = 1;
+        other_btn.Value = 1;
+        handles.curveprops.(curvename).Results.Baseline.(property) = 2;
     else
-        offset.Value = 0;
-        handles.curveprops.(curvename).Results.Baseline.correction_type = 2;
+        other_btn.Value = 0;
+        handles.curveprops.(curvename).Results.Baseline.(property) = 1;
     end
     
     %% upate handles-struct
