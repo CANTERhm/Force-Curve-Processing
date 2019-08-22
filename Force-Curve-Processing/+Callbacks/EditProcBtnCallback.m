@@ -11,17 +11,13 @@ try
     EditFunctions.(name).main();
 catch ME
     switch ME.identifier
-        case 'MATLAB:subscripting:classHasNoPropertyOrMethod'
-            % message: 'The class EditFunctions has no Constant property or Static method named 'SomeFunction'.'
-            % reason: the editfunction specified by "name" does not exist
-            % solution: move on
-        case 'MATLAB:structRefFromNonStruct'
-            % message: 'Dot indexing is not supported for variables of this type.'
-            % reasion: not sure
-            % solution: move on
+        case 'MATLAB:undefinedVarOrClass'
+            % message: 'Undefined variable "EditFunctions" or class "EditFunctions.<SomeFunction>.main".'
+            % reason: The editfunction specified by "name" does not exist
+            % solution: Leave a note and move on
+            note = sprintf('Error invoking "%s": No such EditFunction', name);
+            HelperFcn.ShowNotification(note);
         otherwise
             rethrow(ME);
     end
-    note = sprintf('Error invoking "%s": No such EditFunction', name);
-    HelperFcn.ShowNotification(note);
 end

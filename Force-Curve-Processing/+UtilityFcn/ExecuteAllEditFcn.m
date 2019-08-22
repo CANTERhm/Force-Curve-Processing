@@ -42,9 +42,12 @@ function ExecuteAllEditFcn(varargin)
         catch ME
             switch ME.identifier
                 case 'MATLAB:undefinedVarOrClass'
-                    % message: 'Undefined variable "EditFunctions" or class "EditFunctions.functionname.main".'
-                    % reason: main does not exists
-                    % solution: move on
+                    % message: 'Undefined variable "EditFunctions" or class "EditFunctions.<SomeFunction>.main".'
+                    % reason: the editfunction specified by "editfunctions{i}" does not exist
+                    % solution: Leave a note and move on
+                    note = sprintf('Error invoking "%s": No such EditFunction',...
+                        editfunctions{i});
+                    HelperFcn.ShowNotification(note);
                 case 'MATLAB:badsubscript'
                     % message: 'Index exceeds array bounds.'
                     % reason: A channel does not have as much choises as in in the
@@ -61,9 +64,6 @@ function ExecuteAllEditFcn(varargin)
                 otherwise
                     rethrow(ME);
             end
-            note = sprintf('Error invoking "%s": No such EditFunction',...
-                editfunctions{i});
-            HelperFcn.ShowNotification(note);
         end
     end
     
