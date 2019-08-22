@@ -8,7 +8,7 @@ HelperFcn.SwitchToggleState(src);
 name = src.Tag;
 UtilityFcn.ResetMainFigureCallbacks();
 try
-    EditFunctions.(name).main;
+    EditFunctions.(name).main();
 catch ME
     switch ME.identifier
         case 'MATLAB:subscripting:classHasNoPropertyOrMethod'
@@ -22,4 +22,6 @@ catch ME
         otherwise
             rethrow(ME);
     end
+    note = sprintf('Error invoking "%s": No such EditFunction', name);
+    HelperFcn.ShowNotification(note);
 end

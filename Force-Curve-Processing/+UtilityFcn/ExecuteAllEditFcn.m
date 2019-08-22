@@ -38,7 +38,7 @@ function ExecuteAllEditFcn(varargin)
     % execute editfunctions
     for i = 1:length(editfunctions)
         try
-            EditFunctions.(editfunctions{i}).main;
+            EditFunctions.(editfunctions{i}).main();
         catch ME
             switch ME.identifier
                 case 'MATLAB:undefinedVarOrClass'
@@ -61,6 +61,9 @@ function ExecuteAllEditFcn(varargin)
                 otherwise
                     rethrow(ME);
             end
+            note = sprintf('Error invoking "%s": No such EditFunction',...
+                editfunctions{i});
+            HelperFcn.ShowNotification(note);
         end
     end
     
