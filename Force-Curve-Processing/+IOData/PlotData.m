@@ -166,7 +166,37 @@ ax.XGrid = 'on';
 ax.YGrid = 'on';
 ax.XMinorGrid = 'on';
 ax.YMinorGrid = 'on';
-ax.XLabel.String = [channels{xchannel_val} ' / ' units{xchannel_val}];
-ax.YLabel.String = [channels{ychannel_val} ' / ' units{ychannel_val}];
+try
+    ax.XLabel.String = [channels{xchannel_val} ' / ' units{xchannel_val}];
+catch ME
+    switch ME.identifier
+        case 'MATLAB:badsubscript'
+            % message: 'Index exceeds the number of array elements (<anyNumber>).'
+            % reason: the channels of an specific curve-segment are not the
+            %         same as in defined above.
+            % solution: take channel names from fcp´s channel dropdowns
+            xchannel_dropdown = handles.guiprops.Features.curve_xchannel_popup;
+            x_idx = xchannel_dropdown.Value;
+            ax.XLabel.String = xchannel_dropdown.String{x_idx};
+        otherwise
+            rethrow(ME)
+    end
+end
+try
+    ax.YLabel.String = [channels{ychannel_val} ' / ' units{ychannel_val}];
+catch ME
+    switch ME.identifier
+        case 'MATLAB:badsubscript'
+            % message: 'Index exceeds the number of array elements (<anyNumber>).'
+            % reason: the channels of an specific curve-segment are not the
+            %         same as in defined above.
+            % solution: take channel names from fcp´s channel dropdowns
+            ychannel_dropdown = handles.guiprops.Features.curve_ychannel_popup;
+            y_idx = ychannel_dropdown.Value;
+            ax.YLabel.String = ychannel_dropdown.String{y_idx};
+        otherwise
+            rethrow(ME)
+    end
+end
 
 guidata(handles.figure1, handles);

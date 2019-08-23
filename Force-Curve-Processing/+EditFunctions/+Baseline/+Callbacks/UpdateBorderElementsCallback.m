@@ -15,12 +15,21 @@ function UpdateBorderElementsCallback(src, evt, part_index_name, segment_index_n
     curvename = table.UserData.CurrentCurveName;
     baseline_results = handles.curveprops.(curvename).Results.Baseline;
     baseline_properties = handles.procedure.Baseline.function_properties;
+    selection_borders = baseline_results.(selection_borders_name);
+    switch selection_borders_name
+        case 'selection_borders'
+            left_border = baseline_properties.gui_elements.setting_left_border;
+            right_border = baseline_properties.gui_elements.setting_right_border;
+        case 'selection_borders_2'
+            left_border = baseline_properties.gui_elements.setting_left_border_2;
+            right_border = baseline_properties.gui_elements.setting_right_border_2;
+    end
     
     %% update Elements
-    baseline_properties.gui_elements.setting_left_border.String = num2str(baseline_results.selection_borders(1));
-    baseline_properties.gui_elements.setting_right_border.String = num2str(baseline_results.selection_borders(2));
-    baseline_properties.gui_elements.setting_left_border.Value = baseline_results.selection_borders(1);
-    baseline_properties.gui_elements.setting_right_border.Value = baseline_results.selection_borders(2);
+    left_border.String = num2str(selection_borders(1));
+    right_border.String = num2str(selection_borders(2));
+    left_border.Value = selection_borders(1);
+    right_border.Value = selection_borders(2);
     
     handles = EditFunctions.Baseline.AuxillaryFcn.UpdateBorderRepresentation(handles, part_index_name, segment_index_name, xchannel_name, ychannel_name, selection_borders_name);
     

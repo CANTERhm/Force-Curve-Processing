@@ -63,6 +63,12 @@ function new_borders = BorderTransformation(linedata, direction, varargin)
         end
     end
     
+    % if all fields of linedata are empty, abort the function
+    if isempty(linedata)
+        new_borders = old_borders;
+        return
+    end
+    
     switch direction
         case 'absolute-relative'
             xdata = linedata(:,1);

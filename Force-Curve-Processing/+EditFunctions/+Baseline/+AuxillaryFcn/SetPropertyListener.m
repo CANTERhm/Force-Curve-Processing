@@ -11,8 +11,6 @@ function handles = SetPropertyListener(handles)
     end
     
     curvenames = fieldnames(handles.curveprops.DynamicProps);
-    current_curvename = table.UserData.CurrentCurveName;
-    current_baseline = handles.curveprops.(current_curvename).Results.Baseline;
     
     %% create listener
     for i = 1:length(curvenames)
@@ -65,6 +63,10 @@ function handles = SetPropertyListener(handles)
             {@EditFunctions.Baseline.Callbacks.UpdateCalculatedTiltValueCallback,...
             'results_tilt_value_2',...
             'slope_2'});
+        
+        % refresh graph after result calculation
+        baseline.property_listener.addListener(baseline, 'calculated_data', 'PostSet',...
+            @EditFunctions.Baseline.Callbacks.UpdateGraph);
         
         %% update handles-struct
         handles.curveprops.(curvename).Results.Baseline = baseline;

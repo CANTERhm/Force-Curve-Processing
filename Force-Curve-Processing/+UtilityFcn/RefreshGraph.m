@@ -84,7 +84,7 @@ function RefreshGraph(varargin)
         curvename = table.UserData.CurrentCurveName;
         res = handles.curveprops.(curvename).Results;
         if isprop(res, EditFunction)
-            if isfield(res.(EditFunction), 'calculated_data')
+            if isprop(res.(EditFunction), 'calculated_data')
                 results = res.(EditFunction).calculated_data;
             else
                 results = [];

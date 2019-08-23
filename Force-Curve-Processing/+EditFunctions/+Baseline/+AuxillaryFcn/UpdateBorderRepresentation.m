@@ -26,6 +26,11 @@ function handles = UpdateBorderRepresentation(handles, part_index_name, segment_
         'curve_part_idx', parts_index,...
         'curve_segment_idx', segments_index);
     LineVector = UtilityFcn.ConvertToVector(LineData);
+    
+    if isempty(LineVector)
+        return
+    end
+    
     line_index_1 = round(length(LineVector(:,1))*border(1));
     line_index_2 = round(length(LineVector(:,1))*border(2));
     if line_index_1 == 0

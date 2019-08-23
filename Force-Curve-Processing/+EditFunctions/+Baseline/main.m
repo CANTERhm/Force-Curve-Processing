@@ -100,17 +100,16 @@ function main(varargin)
     
     if handles.procedure.Baseline.OnGui
         if handles.procedure.Baseline.AlreadyDisplayed
-%             handles = EditFunctions.Baseline.AuxillaryFcn.UpdateGuiElements(handles);
-%             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
+            handles = EditFunctions.Baseline.AuxillaryFcn.UpdateGuiElements(handles);
+            handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
         else
             handles.procedure.Baseline.AlreadyDisplayed = true;
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.Baseline.AuxillaryFcn.CreateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener(handles);
-%             handles = EditFunctions.Baseline.AuxillaryFcn.SetWindowButtonCallbacks(handles);
+            handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
 %             EditFunctions.Baseline.AuxillaryFcn.InitiateGraphicalRepresentation();
-%             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData();
         end
     else
         handles.procedure.Baseline.AlreadyDisplayed = false;

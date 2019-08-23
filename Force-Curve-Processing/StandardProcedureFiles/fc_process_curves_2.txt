@@ -1,14 +1,23 @@
+# function: VerticalTipPosition
+# Status: []
+# Sensitivity: []
+# SpringConstant: []
+# calculated_data: []
+# calculation_status: 1
+# singleton: false
+# userdata: []
+
 # function: Baseline
 # OnGui: false
 # AlreadyDisplayed: false
 # curve_parts_index: 1
 # curve_parts_index_2: 1
-# curve_segments_index: 1
-# curve_segments_index_2: 1
+# curve_segments_index: 2
+# curve_segments_index_2: 6
 # correction_type: 1
 # correction_type_2: 1
-# selection_borders: [0 0.9]
-# selection_borders_2: [0 0.9]
+# selection_borders: [0.001 0.5]
+# selection_borders_2: [0.8 1]
 # slope: []
 # slope_2: []
 # offset: []
@@ -23,16 +32,6 @@
 # segment_index: []
 # offset: []
 # calculated_data: []
-# userdata: []
-
-
-# function: VerticalTipPosition
-# Status: []
-# Sensitivity: []
-# SpringConstant: []
-# calculated_data: []
-# calculation_status: 1
-# singleton: false
 # userdata: []
 
 # function: StepFinder

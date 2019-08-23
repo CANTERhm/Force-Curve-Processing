@@ -138,7 +138,7 @@ function WindowButtonUpCallback(src, evt, setting_part_dropdown_name, setting_se
     
     [new_relative_borders, handles] = transform(handles, borders, setting_part_dropdown_name,...
         setting_segment_dropdown_name, selection_border_property_name);
-    results.(selection_border_property_name) = new_relative_borders;
+    results.(selection_border_property_name) = sort(new_relative_borders);
     results.userdata = [];
     
     src.WindowButtonMotionFcn = '';
