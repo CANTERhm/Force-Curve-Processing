@@ -1,4 +1,4 @@
-function UpdateBorderElementsCallback(src, evt)
+function UpdateBorderElementsCallback(src, evt, part_index_name, segment_index_name, xchannel_name, ychannel_name, selection_borders_name)
 % UPDATEBORDERELEMENTSCALLBACK update all border-elements based on the
 % results-object-property: selection_borders
 
@@ -22,7 +22,7 @@ function UpdateBorderElementsCallback(src, evt)
     baseline_properties.gui_elements.setting_left_border.Value = baseline_results.selection_borders(1);
     baseline_properties.gui_elements.setting_right_border.Value = baseline_results.selection_borders(2);
     
-    handles = EditFunctions.Baseline.AuxillaryFcn.UpdateBorderRepresentation(handles);
+    handles = EditFunctions.Baseline.AuxillaryFcn.UpdateBorderRepresentation(handles, part_index_name, segment_index_name, xchannel_name, ychannel_name, selection_borders_name);
     
     %% update handles-struct
     handles.procedure.Baseline.function_properties = baseline_properties;

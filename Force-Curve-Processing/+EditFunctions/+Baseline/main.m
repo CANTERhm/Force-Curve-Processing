@@ -1,5 +1,5 @@
 function main(varargin)
-%MAIN initialize activated editfunction
+%MAIN initialize activated editfunction "Baseline"
 %
 %   main-function initializes the whole infrastrukture of the respectively
 %   activated editfunction. This Function can also be used as an Callback;

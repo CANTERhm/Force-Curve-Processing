@@ -55,6 +55,7 @@ DefaultValues.edit_button = [];
 ValidChannelTypes = {'double', 'char', 'string'};
 
 ValidChannelInput = @(x) any(validatestring(class(x), ValidChannelTypes));
+ValidCurveSettings = @(x) isnumeric(x);
 
 ValidButtonTag = @(x)assert(isa(x, 'char'),...
     'FCProcessing:ExtractPlotData:invalidInput',...
@@ -68,8 +69,8 @@ addRequired(p, 'handles');
 % addOptional(p, 'curve_segment_idx', DefaultValues.curve_segment_idx);
 addParameter(p, 'xchannel_idx', DefaultValues.xchannel, ValidChannelInput);
 addParameter(p, 'ychannel_idx', DefaultValues.ychannel, ValidChannelInput);
-addParameter(p, 'curve_part_idx', DefaultValues.curve_part_idx, ValidChannelInput);
-addParameter(p, 'curve_segment_idx', DefaultValues.curve_segment_idx, ValidChannelInput);
+addParameter(p, 'curve_part_idx', DefaultValues.curve_part_idx, ValidCurveSettings);
+addParameter(p, 'curve_segment_idx', DefaultValues.curve_segment_idx, ValidCurveSettings);
 addParameter(p, 'edit_button', DefaultValues.edit_button, ValidButtonTag);
 
 parse(p, RawData, handles, varargin{:});

@@ -1,4 +1,4 @@
-function handles = UpdateBorderRepresentation(handles)
+function handles = UpdateBorderRepresentation(handles, part_index_name, segment_index_name, xchannel_name, ychannel_name, selection_borders_name)
 % UPDATEBORDERREPRESENTATION updates the border representation on the
 % main-axes (red/gray patch object) according to the
 % selection_borders-property of the results-object in 
@@ -14,36 +14,27 @@ function handles = UpdateBorderRepresentation(handles)
     
     curvename = table.UserData.CurrentCurveName;
     curve = handles.curveprops.(curvename).RawData;
-    border = handles.curveprops.(curvename).Results.Baseline.selection_borders;
-    units = handles.curveprops.(curvename).Results.Baseline.units;
-    parts_index = handles.curveprops.(curvename).Results.Baseline.curve_parts_index;
-    segments_index = handles.curveprops.(curvename).Results.Baseline.curve_segments_index;
-    xchannel_index = handles.curveprops.(curvename).Results.Baseline.xchannel_index;
-    ychannel_index = handles.curveprops.(curvename).Results.Baseline.ychannel_index;
+    border = handles.curveprops.(curvename).Results.Baseline.(selection_borders_name);
+    parts_index = handles.curveprops.(curvename).Results.Baseline.(part_index_name);
+    segments_index = handles.curveprops.(curvename).Results.Baseline.(segment_index_name);
     ax = handles.guiprops.MainAxes;
     
     %% calculate coordinates
-    switch units
-        case 'relative'
-            [LineData, handles] = UtilityFcn.ExtractPlotData(curve, handles,...
-                xchannel_index,...
-                ychannel_index,...
-                parts_index,...
-                segments_index);
-            LineVector = UtilityFcn.ConvertToVector(LineData);
-            line_index_1 = round(length(LineVector(:,1))*border(1));
-            line_index_2 = round(length(LineVector(:,1))*border(2));
-            if line_index_1 == 0
-                line_index_1 = 1;
-            end
-            if line_index_2 == 0
-                line_index_2 = 1;
-            end
-            x_border = [LineVector(line_index_1,1) LineVector(line_index_2),1];
-
-        case 'absolute'
-            
+    [LineData, handles] = UtilityFcn.ExtractPlotData(curve, handles,...
+        'xchannel_idx', xchannel_name,...
+        'ychannel_idx', ychannel_name,...
+        'curve_part_idx', parts_index,...
+        'curve_segment_idx', segments_index);
+    LineVector = UtilityFcn.ConvertToVector(LineData);
+    line_index_1 = round(length(LineVector(:,1))*border(1));
+    line_index_2 = round(length(LineVector(:,1))*border(2));
+    if line_index_1 == 0
+        line_index_1 = 1;
     end
+    if line_index_2 == 0
+        line_index_2 = 1;
+    end
+    x_border = [LineVector(line_index_1,1) LineVector(line_index_2),1];
     xpoints = [x_border(1) x_border(2) x_border(2) x_border(1)];
     ypoints = [ax.YLim(1) ax.YLim(1) ax.YLim(2) ax.YLim(2)];
 

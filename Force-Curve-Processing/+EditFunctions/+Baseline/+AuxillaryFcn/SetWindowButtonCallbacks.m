@@ -42,20 +42,19 @@ function WindowButtonDownCallback(src, evt, setting_part_dropdown_name, setting_
     results = handles.curveprops.(curvename).Results.Baseline;
 
     cp = handles.guiprops.MainAxes.CurrentPoint;
-    results.(selection_border_property_name) = [cp(1, 1) cp(1, 1)];
+    results.userdata.new_borders = [cp(1, 1) cp(1, 1)];
 
     % refresh results object and handles
     guidata(handles.figure1, handles);
 
-    src.WindowButtonMotionFcn = {@WindowButtonMoveCallback,...
-        selection_border_property_name};
+    src.WindowButtonMotionFcn = @WindowButtonMoveCallback;
     src.WindowButtonUpFcn = {@WindowButtonUpCallback,...
         setting_part_dropdown_name,...
         setting_segment_dropdown_name,...
         selection_border_property_name};
 end % WindowsButtonDownCallback
 
-function WindowButtonMoveCallback(src, evt, selection_border_property_name)
+function WindowButtonMoveCallback(src, evt) % selection_border_property_name
 % WBMCB window button move callback
 
     % get results-object
@@ -72,9 +71,10 @@ function WindowButtonMoveCallback(src, evt, selection_border_property_name)
     results = handles.curveprops.(curvename).Results.Baseline;
 
     cp = handles.guiprops.MainAxes.CurrentPoint;
-    border = results.(selection_border_property_name);
+    border = results.userdata.new_borders;
     new_borders = [border(1) cp(1, 1)];
-    results.(selection_border_property_name) = new_borders;
+    
+    results.userdata.new_borders = new_borders;
 
     % renew an initial markup while moving the mouse
     ax = findobj(handles.guiprops.MainFigure, 'Type', 'Axes');
@@ -130,38 +130,16 @@ function WindowButtonUpCallback(src, evt, setting_part_dropdown_name, setting_se
     
     curvename = table.UserData.CurrentCurveName;
     results = handles.curveprops.(curvename).Results.Baseline;
-    baseline_properties = handles.procedure.Baseline.function_properties;
+    borders = results.userdata.new_borders;
     
     % because selection_borders come in absolute units
     % (due to CurrentPoint-proerty from Axes) one has to convert it 
     % into relative ones 
-    if strcmp(results.units, 'relative')
-        RawData = handles.curveprops.(curvename).RawData;
-%         xchannel = baseline_properties.gui_elements.setting_xchannel_dropdown.Value;
-%         ychannel = baseline_properties.gui_elements.setting_ychannel_dropdown.Value;
-        switch selection_border_property_name
-            case 'selection_borders'
-                xchannel = 'measuredHeight';
-                ychannel = 'vDeflection';
-            case 'selection_borders_2'
-                xchannel = 'seriesTime';
-                ychannel = 'vDeflection';
-        end
-        part_dropdown = baseline_properties.gui_elements.(setting_part_dropdown_name);
-        segment_dropdown = baseline_properties.gui_elements.(setting_segment_dropdown_name);
-        part = part_dropdown.Value;
-        segment = segment_dropdown.Value;
-        curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
-            xchannel,...
-            ychannel,...
-            part,...
-            segment);
-        linedata = UtilityFcn.ConvertToVector(curvedata);
-        new_relative_borders = EditFunctions.Baseline.AuxillaryFcn.BorderTransformation(linedata,...
-            'absolute-relative',...
-            'user_defined_borders', results.(selection_border_property_name));
-        results.(selection_border_property_name) = sort(new_relative_borders);
-    end
+    
+    [new_relative_borders, handles] = transform(handles, borders, setting_part_dropdown_name,...
+        setting_segment_dropdown_name, selection_border_property_name);
+    results.(selection_border_property_name) = new_relative_borders;
+    results.userdata = [];
     
     src.WindowButtonMotionFcn = '';
     src.WindowButtonUpFcn = '';
@@ -169,3 +147,34 @@ function WindowButtonUpCallback(src, evt, setting_part_dropdown_name, setting_se
     % update handles
     guidata(handles.figure1, handles);
 end % WindowsButtonUpCallback
+
+function [new_borders, handles] = transform(handles, user_defined_borders,...
+    setting_part_dropdown_name, setting_segment_dropdown_name, selection_border_property_name)
+
+    table = handles.guiprops.Features.edit_curve_table;
+    curvename = table.UserData.CurrentCurveName;
+    baseline_properties = handles.procedure.Baseline.function_properties;
+    
+    RawData = handles.curveprops.(curvename).RawData;
+    switch selection_border_property_name
+        case 'selection_borders'
+            xchannel = 'measuredHeight';
+            ychannel = 'vDeflection';
+        case 'selection_borders_2'
+            xchannel = 'seriesTime';
+            ychannel = 'vDeflection';
+    end
+    part_dropdown = baseline_properties.gui_elements.(setting_part_dropdown_name);
+    segment_dropdown = baseline_properties.gui_elements.(setting_segment_dropdown_name);
+    part = part_dropdown.Value;
+    segment = segment_dropdown.Value;
+    curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
+        'xchannel_idx', xchannel,...
+        'ychannel_idx', ychannel,...
+        'curve_part_idx', part,...
+        'curve_segment_idx', segment);
+    linedata = UtilityFcn.ConvertToVector(curvedata);
+    new_borders = EditFunctions.Baseline.AuxillaryFcn.BorderTransformation(linedata,...
+        'absolute-relative',...
+        'user_defined_borders', user_defined_borders);
+end

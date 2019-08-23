@@ -1,6 +1,6 @@
 function OffsetTiltValueChangedCallback(src, evt, other_btn, property)
 % OFFSETTILTVALUECHANGEDCALLBACK updates the correction_type property
-% according to the the offset_radio_btn value
+% according to the the setting_offset_tilt_radio_btn values (offset_tilt_btn 1 and 2)
     
     %% create variables
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
@@ -14,12 +14,15 @@ function OffsetTiltValueChangedCallback(src, evt, other_btn, property)
     
     curvename = table.UserData.CurrentCurveName;
     
-    %% toggle like behavior of radio buttons
+    %% toggle behavior
+    HelperFcn.SwitchToggleState(src, other_btn);
+    
+    %% change property value according to button value
     if src.Value == 0
-        other_btn.Value = 1;
+%         other_btn.Value = 1;
         handles.curveprops.(curvename).Results.Baseline.(property) = 2;
     else
-        other_btn.Value = 0;
+%         other_btn.Value = 0;
         handles.curveprops.(curvename).Results.Baseline.(property) = 1;
     end
     
