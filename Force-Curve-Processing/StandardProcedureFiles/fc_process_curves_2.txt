@@ -1,9 +1,9 @@
-# function: VerticalTipPosition
+# function: TipSampleSeperation
 # Status: []
 # Sensitivity: []
 # SpringConstant: []
 # calculated_data: []
-# calculation_status: 1
+# calculation_status: false
 # singleton: false
 # userdata: []
 

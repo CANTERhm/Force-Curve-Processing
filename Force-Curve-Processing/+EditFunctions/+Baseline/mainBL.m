@@ -1,4 +1,4 @@
-function main(varargin)
+function mainBL(varargin)
 %MAIN initialize activated editfunction "Baseline"
 %
 %   main-function initializes the whole infrastrukture of the respectively
