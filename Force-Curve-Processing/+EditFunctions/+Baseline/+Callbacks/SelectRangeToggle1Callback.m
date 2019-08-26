@@ -31,16 +31,20 @@ function SelectRangeToggle1Callback(src, evt)
     % input: handles, part_index_name, segment_index_name, xchannel_name, ychannel_name, selection_borders_name
     handles = EditFunctions.Baseline.AuxillaryFcn.UpdateBorderRepresentation(handles, 'curve_parts_index',...
         'curve_segments_index', 'measuredHeight', 'vDeflection', 'selection_borders');
-    
+
     % switch channels to vDeflection vs. measuredHeight
     % and update fcp´s xchannel and ychannel dropdown menus
     x_idx = find(ismember(xchannel_dropdown.String, 'measuredHeight'));
     y_idx = find(ismember(ychannel_dropdown.String, 'vDeflection'));
     xchannel_dropdown.Value = x_idx;
     ychannel_dropdown.Value = y_idx;
-    UtilityFcn.RefreshGraph('xchannel_idx', 'measuredHeight',...
-        'ychannel_idx', 'vDeflection',...
-        'RefreshAll', false);
+    EditFunctions.Baseline.main();
+    handles = EditFunctions.Baseline.AuxillaryFcn.UpdateBorderRepresentation(handles,...
+        'curve_parts_index',...
+        'curve_segments_index',...
+        'measuredHeight',...
+        'vDeflection',...
+        'selection_borders');
     
     % set WindowButtonCallbacks in MainFigure to prepare the
     % MainFigure for the baselinerange selection
@@ -49,7 +53,7 @@ function SelectRangeToggle1Callback(src, evt)
         'setting_parts_dropdown',...
         'setting_segments_dropdown',...
         'selection_borders');
-
+    
     %% update handles-struct
     guidata(handles.figure1, handles);
 end

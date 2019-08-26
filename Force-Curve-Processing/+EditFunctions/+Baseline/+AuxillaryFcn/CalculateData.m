@@ -9,6 +9,9 @@ function handles = CalculateData(handles)
 %
 % Input:
 %   - handles: an actual reference to the handles-struct
+%
+% Output: 
+%   - updated handles-struct
 
     %% create variables
     table = handles.guiprops.Features.edit_curve_table;
@@ -24,6 +27,7 @@ function handles = CalculateData(handles)
     selection_borders_1 = handles.curveprops.(curvename).Results.Baseline.selection_borders;
     selection_borders_2 = handles.curveprops.(curvename).Results.Baseline.selection_borders_2; 
     correction_type = handles.curveprops.(curvename).Results.Baseline.correction_type;
+    correction_type_2 = handles.curveprops.(curvename).Results.Baseline.correction_type_2;
     part_idx_1 = results.Baseline.curve_parts_index;
     part_idx_2 = results.Baseline.curve_parts_index_2;
     segment_idx_1 = results.Baseline.curve_segments_index;
@@ -64,16 +68,31 @@ function handles = CalculateData(handles)
     %% calculation of the corrections
     
     % force vs. distance
-    offset_1 = mean(sliced_data_1(:,2));
+%     offset_1 = mean(sliced_data_1(:,2));
     
     f = fit(sliced_data_1(:,1), sliced_data_1(:,2), 'poly1');
-    tilt_1 = f.p2;
+    tilt_1 = f.p1;
+    
+    switch correction_type
+        case 1
+            offset_1 = f.p2;
+        case 2
+            offset_1 = mean(sliced_data_1(:,2));
+    end
     
     % force vs. time
-    offset_2 = mean(sliced_data_2(:,2));
+%     offset_2 = mean(sliced_data_2(:,2));
     
     f = fit(sliced_data_2(:,1), sliced_data_2(:,2), 'poly1');
-    tilt_2 = f.p2;
+    tilt_2 = f.p1;
+    
+    switch correction_type_2
+        case 1
+            offset_2 = f.p2;
+        case 2
+            offset_2 = mean(sliced_data_2(:,2));
+    end
+    
     
     results.Baseline.offset = offset_1;
     results.Baseline.offset_2 = offset_2;
@@ -84,10 +103,10 @@ function handles = CalculateData(handles)
     %% apply corrections
     segments = fieldnames(raw_data.CurveData);
     corrected_data = raw_data;
+    corrected_data_2 = raw_data;
     switch correction_type
         case 1
             for i = 1:length(segments)
-                
                 % force vs. distance
                 if isfield(raw_data.CurveData.(segments{i}), 'measuredHeight') ...
                     && isfield(raw_data.CurveData.(segments{i}), 'vDeflection')
@@ -95,17 +114,39 @@ function handles = CalculateData(handles)
                    xdata = raw_data.CurveData.(segments{i}).measuredHeight;
                    ydata = raw_data.CurveData.(segments{i}).vDeflection;
                    
+                   % tilt
+                   new_ydata = ydata - xdata*tilt_1;
+
                    % offset
                    offset_vector = ones(length(ydata),1)*offset_1;
-                   new_ydata = ydata - offset_vector;
-                   
-                   % tilt
-                   new_ydata = new_ydata - xdata*tilt_1;
+                   new_ydata = new_ydata - offset_vector;
                    
                    % update raw_data
                    corrected_data.CurveData.(segments{i}).vDeflection = new_ydata;
                 end
+            end
+            
+        case 2
+            for i = 1:length(segments)
+                % force vs. distance
+                if isfield(raw_data.CurveData.(segments{i}), 'measuredHeight') ...
+                    && isfield(raw_data.CurveData.(segments{i}), 'vDeflection')
                 
+                   ydata = raw_data.CurveData.(segments{i}).vDeflection;
+                   
+                   % offset
+                   offset_vector = ones(length(ydata),1)*offset_1;
+                   new_ydata = ydata - offset_vector;
+                   
+                   % update raw_data
+                   corrected_data.CurveData.(segments{i}).vDeflection = new_ydata;
+                end
+            end
+    end
+    
+    switch correction_type_2
+        case 1
+            for i = 1:length(segments)
                 % force vs. time
                 if isfield(raw_data.CurveData.(segments{i}), 'seriesTime') ...
                     && isfield(raw_data.CurveData.(segments{i}), 'vDeflection')
@@ -121,27 +162,11 @@ function handles = CalculateData(handles)
                    new_ydata = new_ydata - xdata*tilt_2;
                    
                    % update raw_data
-                   corrected_data.CurveData.(segments{i}).vDeflection = new_ydata;
+                   corrected_data_2.CurveData.(segments{i}).vDeflection = new_ydata;
                 end
             end
-            
         case 2
             for i = 1:length(segments)
-                
-                % force vs. distance
-                if isfield(raw_data.CurveData.(segments{i}), 'measuredHeight') ...
-                    && isfield(raw_data.CurveData.(segments{i}), 'vDeflection')
-                
-                   ydata = raw_data.CurveData.(segments{i}).vDeflection;
-                   
-                   % offset
-                   offset_vector = ones(length(ydata),1)*offset_1;
-                   new_ydata = ydata - offset_vector;
-                   
-                   % update raw_data
-                   corrected_data.CurveData.(segments{i}).vDeflection = new_ydata;
-                end
-                
                 % force vs. time
                 if isfiled(raw_data.CurveData.(segments{i}), 'seriesTime') ...
                     && isfield(raw_data.CurveData.(segments{i}), 'vDeflection')
@@ -153,12 +178,25 @@ function handles = CalculateData(handles)
                    new_ydata = ydata - offset_vector;
                    
                    % update raw_data
-                   corrected_data.CurveData.(segments{i}).vDeflection = new_ydata;
+                   corrected_data_2.CurveData.(segments{i}).vDeflection = new_ydata;
                 end
             end
     end
     
-    % update handles-struct
-    handles.curveprops.(curvename).Results.Baseline.calculated_data = corrected_data.CurveData;
+    %% update handles-struct
+    
+    actual_xchannel = handles.guiprops.Features.curve_xchannel_popup.Value;
+    actual_xchannel_string = handles.guiprops.Features.curve_xchannel_popup.String;
+    mHeight_idx = find(ismember(actual_xchannel_string, 'measuredHeight'));
+    sTime_idx = find(ismember(actual_xchannel_string, 'seriesTime'));
+    
+    if actual_xchannel == mHeight_idx
+        handles.curveprops.(curvename).Results.Baseline.calculated_data = corrected_data.CurveData;
+    elseif actual_xchannel == sTime_idx
+        handles.curveprops.(curvename).Results.Baseline.calculated_data = corrected_data_2.CurveData;
+    else
+        handles.curveprops.(curvename).Results.Baseline.calculated_data = raw_data.CurveData;
+    end
+    
 end
 

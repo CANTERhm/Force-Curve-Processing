@@ -10,13 +10,13 @@
 # function: Baseline
 # OnGui: false
 # AlreadyDisplayed: false
-# curve_parts_index: 1
-# curve_parts_index_2: 1
-# curve_segments_index: 2
-# curve_segments_index_2: 6
+# curve_parts_index: 2
+# curve_parts_index_2: 3
+# curve_segments_index: 1
+# curve_segments_index_2: 1
 # correction_type: 1
 # correction_type_2: 1
-# selection_borders: [0.001 0.5]
+# selection_borders: [0.001 0.3]
 # selection_borders_2: [0.8 1]
 # slope: []
 # slope_2: []

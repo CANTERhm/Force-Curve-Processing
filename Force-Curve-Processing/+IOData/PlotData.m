@@ -130,13 +130,6 @@ if ~isempty(trace_x) && ~isempty(trace_y)
     trace.MarkerEdgeColor = handles.curveprops.TraceColor;
     trace.MarkerFaceColor = handles.curveprops.TraceColor;
     trace.SizeData = 2;
-%     trace = line(ax, trace_x, trace_y);
-%     trace.Color = handles.curveprops.TraceColor;
-%     trace.LineStyle = 'none';
-%     trace.Marker = 'o';
-%     trace.MarkerSize = 2;
-%     trace.MarkerEdgeColor = 'none';
-%     trace.MarkerFaceColor = handles.curveprops.TraceColor;
     trace.DisplayName = 'Trace';
     trace.Tag = 'ForceCurve';
 end
@@ -151,13 +144,6 @@ if ~isempty(retrace_x) && ~isempty(retrace_y)
     retrace.MarkerEdgeColor = handles.curveprops.RetraceColor;
     retrace.MarkerFaceColor = handles.curveprops.RetraceColor;
     retrace.SizeData = 2;
-%     retrace = line(ax, retrace_x, retrace_y);
-%     retrace.Color = handles.curveprops.RetraceColor;
-%     retrace.LineStyle = 'none';
-%     retrace.Marker = 'o';
-%     retrace.MarkerSize = 2;
-%     retrace.MarkerEdgeColor = 'none';
-%     retrace.MarkerFaceColor = handles.curveprops.RetraceColor;
     retrace.DisplayName = 'Retrace';
     retrace.Tag = 'ForceCurve';
 end

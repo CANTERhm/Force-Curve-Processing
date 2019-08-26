@@ -111,8 +111,7 @@ function WindowButtonMoveCallback(src, evt) % selection_border_property_name
 
     % update handles
     guidata(handles.figure1, handles);
-
-    drawnow;
+    
 end % WindowsButtonMoveCallback
 
 function WindowButtonUpCallback(src, evt, setting_part_dropdown_name, setting_segment_dropdown_name, selection_border_property_name)
@@ -143,7 +142,9 @@ function WindowButtonUpCallback(src, evt, setting_part_dropdown_name, setting_se
     
     src.WindowButtonMotionFcn = '';
     src.WindowButtonUpFcn = '';
-
+    
+    EditFunctions.Baseline.main();
+    
     % update handles
     guidata(handles.figure1, handles);
 end % WindowsButtonUpCallback

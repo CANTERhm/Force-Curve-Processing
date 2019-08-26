@@ -150,7 +150,7 @@ else
     end % try
 
     % take calculated_data from curveprops.curvename.Results if available
-    if isfield(Data, 'calculated_data')
+    if isprop(Data, 'calculated_data')
         if isempty(Data.calculated_data)
             Data = RawData.CurveData;
         else
