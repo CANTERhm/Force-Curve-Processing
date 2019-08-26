@@ -1,4 +1,4 @@
-function mainBL(varargin)
+function main(varargin)
 %MAIN initialize activated editfunction "Baseline"
 %
 %   main-function initializes the whole infrastrukture of the respectively
@@ -26,8 +26,7 @@ function mainBL(varargin)
     if isempty(table.Data)
         return
     end
-    
-%     curvename = table.UserData.CurrentCurveName;
+
     curvenames = fieldnames(handles.curveprops.DynamicProps);
     results_panel = handles.guiprops.Panels.results_panel;
     edit_button_handle = findobj(allchild(handles.guiprops.Panels.processing_panel),...
@@ -109,7 +108,6 @@ function mainBL(varargin)
             handles = EditFunctions.Baseline.AuxillaryFcn.CreateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
-%             EditFunctions.Baseline.AuxillaryFcn.InitiateGraphicalRepresentation();
         end
     else
         handles.procedure.Baseline.AlreadyDisplayed = false;
