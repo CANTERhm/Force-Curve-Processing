@@ -75,6 +75,12 @@ function SwitchToggleState(src, varargin)
             else
                 src.Value = 0;
             end
+        case 'radiobutton'
+            if src.Value == 0
+                src.Value = 1;
+            else
+                src.Value = 0;
+            end
     end
 
     % if src.Value == 1, set every other toggleelemt.Value = 0

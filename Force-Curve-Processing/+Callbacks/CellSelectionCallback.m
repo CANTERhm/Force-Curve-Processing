@@ -4,7 +4,7 @@ function CellSelectionCallback(src, evt, handles)
 if ~isempty(evt.Indices)
     
     % activating all connected listeners to UpdateObject-Event
-    handles.guiprops.FireEvent('UpdateObject');
+%     handles.guiprops.FireEvent('UpdateObject');
     
     % determine curvename
     row = evt.Indices(1, 1);
@@ -25,12 +25,11 @@ if ~isempty(evt.Indices)
     %% recalculate all editfunctions
     % also replot the graph according to the active edit function if one
     % has been loaded
-    UtilityFcn.ExecuteAllEditFcn
+    UtilityFcn.ExecuteAllEditFcn();
     
     %% replot graph if no edit functions have been loaded or procedure_root_btn is active
     xchannel_value = handles.guiprops.Features.curve_xchannel_popup.Value;
     ychannel_value = handles.guiprops.Features.curve_ychannel_popup.Value;
-    edit_buttons = handles.guiprops.Features.edit_buttons;
     
     edit_functions = allchild(handles.guiprops.Panels.processing_panel);
     to_test = false(length(edit_functions), 1);
@@ -41,12 +40,31 @@ if ~isempty(evt.Indices)
     end
     active_edit_function = edit_functions(to_test);
     
-    if isempty(edit_buttons) || strcmp(active_edit_function.Tag, 'procedure_root_btn')
-        UtilityFcn.RefreshGraph([], [],...
-            xchannel_value,...
-            ychannel_value,...
-            'RefreshAll', true);
-    end
+    UtilityFcn.RefreshGraph([], [],...
+        'xchannel_idx', xchannel_value,...
+        'ychannel_idx', ychannel_value,...
+        'EditFunction', active_edit_function.String,...
+        'RefreshAll', true);
+
+%   % this part might be obsolete. Delete it some time 
+%
+%     edit_buttons = handles.guiprops.Features.edit_buttons;
+%     
+%     edit_functions = allchild(handles.guiprops.Panels.processing_panel);
+%     to_test = false(length(edit_functions), 1);
+%     for i = 1:length(to_test)
+%         if edit_functions(i).Value == 1
+%             to_test(i) = true;
+%         end
+%     end
+%     active_edit_function = edit_functions(to_test);
+%     
+%     if isempty(edit_buttons) || strcmp(active_edit_function.Tag, 'procedure_root_btn')
+%         UtilityFcn.RefreshGraph([], [],...
+%             'xchannel_idx', xchannel_value,...
+%             'ychannel_idx', ychannel_value,...
+%             'RefreshAll', true);
+%     end
     
     
 end

@@ -161,7 +161,9 @@ function load_curves_submenu_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles = UtilityFcn.UIGetFilepath(handles);
 handles = IOData.ImportData(handles);
-handles = HelperFcn.LoadEditFunctions(handles);
+if ~isempty(handles.curveprops.DynamicProps) 
+    handles = HelperFcn.AddFunctionsToCurve(handles);
+end
 guidata(handles.figure1, handles);
 
 
@@ -297,45 +299,5 @@ function delete_curves_submenu_Callback(hObject, eventdata, handles)
 % hObject    handle to delete_curves_submenu (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
-% delete curves from curveprops
-try
-    names = fieldnames(handles.curveprops.DynamicProps);
-catch
-    return
-end
-handles.curveprops.settings.FileSpecifier = [];
-if ~isempty(names)
-    for i = 1:length(names)
-        handles.curveprops = handles.curveprops.delproperty(names{i});
-    end
-end
-
-
-% clean the handles.guiprops.Features.edit_curve_table
-handles.guiprops.Features.edit_curve_table.Data = [];
-handles.guiprops.Features.edit_curve_table.UserData = [];
-
-% reset handles.curveprops.Calibrated and switch the color of
-% handles.guiprops.Features.calibration_status back to red
-handles.curveprops.Calibrated = false;
-
-% refreshing the handles.guiprops.Features.curve_parts_popup property
-handles.guiprops.FireEvent('UpdateObject');
-
-% update processing information labels
-% handles = guidata(handles.figure1);
-handles = HelperFcn.UpdateProcInformationLabels(handles);
-
-% update calibration-statuslabels if curves are calibrated 
-handles = HelperFcn.UpdateCalibrationStatus(handles);
-
-% update CalibrationValues-property of curveprops if available
-[sensitivity, springconstant, handles] = UtilityFcn.CalibrationValues(handles);
-handles.curveprops.CalibrationValues.Sensitivity = sensitivity;
-handles.curveprops.CalibrationValues.SpringConstant = springconstant;
-
-% clear main axes
-cla(handles.guiprops.MainAxes);
-
+Callbacks.ClearAllCurvesBtnCallback([], [], handles);
 guidata(handles.figure1, handles);

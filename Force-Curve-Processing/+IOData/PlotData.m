@@ -70,7 +70,7 @@ if ~isempty(curvename)
 end
 
 % prepare plot data
-if ~isempty(LineData.Trace)
+if ~isempty(LineData) && ~isempty(LineData.Trace)
     segment = fieldnames(LineData.Trace);
     for i = 1:length(segment)
         if ~isempty(LineData.Trace.(segment{i}).XData) && ...
@@ -82,20 +82,25 @@ if ~isempty(LineData.Trace)
             trace_y = [];
         end
     end
+else
+    trace_x = [];
+    trace_y = [];
 end
 
-if ~isempty(LineData.Retrace)
+if ~isempty(LineData) && ~isempty(LineData.Retrace)
     segment = fieldnames(LineData.Retrace);
     for i = 1:length(segment)
-        if ~isempty( LineData.Retrace.(segment{i}).XData) && ...
+        if ~isempty(LineData.Retrace.(segment{i}).XData) && ...
                 ~isempty(LineData.Retrace.(segment{i}).YData)
             retrace_x = [retrace_x; LineData.Retrace.(segment{i}).XData];
             retrace_y = [retrace_y; LineData.Retrace.(segment{i}).YData];
         else
-            retrace_x = [];
-            retrace_y = [];
+            continue
         end
     end
+else
+    retrace_x = [];
+    retrace_y = [];
 end
 
 % convert trace from cell to mat if necessary
@@ -116,26 +121,29 @@ end
 
 % plot trace and retrace
 if ~isempty(trace_x) && ~isempty(trace_y)
-    trace = line(ax, trace_x, trace_y);
-    trace.Color = handles.curveprops.TraceColor;
-    trace.LineStyle = 'none';
+%     % try to use scatter plots instead of line, because they can be
+%     % processed faster in matlab
+    hold(ax, 'on');
+    trace = scatter(ax, trace_x, trace_y);
+    hold(ax, 'off');
     trace.Marker = 'o';
-    trace.MarkerSize = 2;
-    trace.MarkerEdgeColor = 'none';
+    trace.MarkerEdgeColor = handles.curveprops.TraceColor;
     trace.MarkerFaceColor = handles.curveprops.TraceColor;
-    trace.DisplayName = 'Retrace';
+    trace.SizeData = 2;
     trace.DisplayName = 'Trace';
     trace.Tag = 'ForceCurve';
 end
 
 if ~isempty(retrace_x) && ~isempty(retrace_y)
-    retrace = line(ax, retrace_x, retrace_y);
-    retrace.Color = handles.curveprops.RetraceColor;
-    retrace.LineStyle = 'none';
+%     % try to use scatter plots instead of line, because they can be
+%     % processed faster in matlab
+    hold(ax, 'on');
+    retrace = scatter(ax, retrace_x, retrace_y);
+    hold(ax, 'off');
     retrace.Marker = 'o';
-    retrace.MarkerSize = 2;
-    retrace.MarkerEdgeColor = 'none';
+    retrace.MarkerEdgeColor = handles.curveprops.RetraceColor;
     retrace.MarkerFaceColor = handles.curveprops.RetraceColor;
+    retrace.SizeData = 2;
     retrace.DisplayName = 'Retrace';
     retrace.Tag = 'ForceCurve';
 end
@@ -144,7 +152,37 @@ ax.XGrid = 'on';
 ax.YGrid = 'on';
 ax.XMinorGrid = 'on';
 ax.YMinorGrid = 'on';
-ax.XLabel.String = [channels{xchannel_val} ' / ' units{xchannel_val}];
-ax.YLabel.String = [channels{ychannel_val} ' / ' units{ychannel_val}];
+try
+    ax.XLabel.String = [channels{xchannel_val} ' / ' units{xchannel_val}];
+catch ME
+    switch ME.identifier
+        case 'MATLAB:badsubscript'
+            % message: 'Index exceeds the number of array elements (<anyNumber>).'
+            % reason: the channels of an specific curve-segment are not the
+            %         same as in defined above.
+            % solution: take channel names from fcp´s channel dropdowns
+            xchannel_dropdown = handles.guiprops.Features.curve_xchannel_popup;
+            x_idx = xchannel_dropdown.Value;
+            ax.XLabel.String = xchannel_dropdown.String{x_idx};
+        otherwise
+            rethrow(ME)
+    end
+end
+try
+    ax.YLabel.String = [channels{ychannel_val} ' / ' units{ychannel_val}];
+catch ME
+    switch ME.identifier
+        case 'MATLAB:badsubscript'
+            % message: 'Index exceeds the number of array elements (<anyNumber>).'
+            % reason: the channels of an specific curve-segment are not the
+            %         same as in defined above.
+            % solution: take channel names from fcp´s channel dropdowns
+            ychannel_dropdown = handles.guiprops.Features.curve_ychannel_popup;
+            y_idx = ychannel_dropdown.Value;
+            ax.YLabel.String = ychannel_dropdown.String{y_idx};
+        otherwise
+            rethrow(ME)
+    end
+end
 
 guidata(handles.figure1, handles);

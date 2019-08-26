@@ -16,13 +16,6 @@ if ~handles.curveprops.Saved
     end
 end
 
-if ~isempty(handles.curveprops.DynamicProps)
-    list = fieldnames(handles.curveprops.DynamicProps);
-    for i = 1:length(list)
-        handles.curveprops.delproperty(list{i});
-    end
-end
-
 % reset MainFigure
 close(handles.guiprops.MainFigure);
 handles.guiprops.MainFigure = [];
@@ -45,6 +38,32 @@ handles.curveprops.DeflectionAdjusted = false;
 
 % update prcessing information labels
 handles = HelperFcn.UpdateProcInformationLabels(handles);
+
+% delete curves from handles.curveprops
+if ~isempty(handles.curveprops.DynamicProps)
+    list = fieldnames(handles.curveprops.DynamicProps);
+    for i = 1:length(list)
+        handles.curveprops.delproperty(list{i});
+    end
+end
+
+% delete the gui_elements related to each edit function
+if ~isempty(handles.procedure.DynamicProps)
+    list = fieldnames(handles.procedure.DynamicProps);
+    for i = 1:length(list)
+        if isfield(handles.procedure.(list{i}), 'function_properties')
+            if ~isempty(handles.procedure.(list{i}).function_properties)
+                elements = fieldnames(handles.procedure.(list{i}).function_properties.gui_elements);
+                for n = 1:length(elements)
+                    delete(handles.procedure.(list{i}).function_properties.gui_elements.(elements{n}));
+                end
+                handles.procedure.(list{i}).function_properties = [];
+            end
+            handles.procedure.(list{i}).OnGui = false;
+            handles.procedure.(list{i}).AlreadyDisplayed = false;
+        end
+    end
+end
 
 % update handles-structure
 handles.guiprops.Features.curve_segments_popup.String = 'no segments...';

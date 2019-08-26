@@ -29,20 +29,28 @@ function RefreshGraph(varargin)
     %% input parsing
     p = inputParser;
     
-    ValidChar = @(x)assert(isa(x, 'char') || isa(x, 'struct'),...
-        'RefreshGraph:invalidInput',...
-        'input for EditFunction was not a character-vector or a string-scalar.');
+    ValidChannelInputClasses = {'double', 'char', 'string'};
+    ValidEditFuncInputClasses = {'char', 'struct'};
     
-    ValidNumber = @(x)assert(isnumeric(x),...
-        'RefreshGraph:invalidInput',...
-        'input was not numeric of one of the following inputparameters:\n%s\n%s\n%s\n%s.\n',...
-        'xchannel_idx', 'ychannel_idx', 'curve_part_idx', 'curve_segment_idx');
+    ValidChannelInput = @(x) any(validatestring(class(x), ValidChannelInputClasses));
+    ValidEditFuncInput = @(x) any(validatestring(class(x), ValidEditFuncInputClasses));
+
+%   % this part might be obsolete, delete it in the future
+%
+%     ValidChar = @(x)assert(isa(x, 'char') || isa(x, 'struct'),...
+%         'RefreshGraph:invalidInput',...
+%         'input for EditFunction was not a character-vector or a string-scalar.');
+    
+%     ValidNumber = @(x)assert(isnumeric(x),...
+%         'RefreshGraph:invalidInput',...
+%         'input was not numeric of one of the following inputparameters:\n%s\n%s\n%s\n%s.\n',...
+%         'xchannel_idx', 'ychannel_idx', 'curve_part_idx', 'curve_segment_idx');
     
     addOptional(p, 'src', []);
     addOptional(p, 'evt', []);
-    addOptional(p, 'xchannel_idx', [], ValidNumber);
-    addOptional(p, 'ychannel_idx', [], ValidNumber);
-    addParameter(p, 'EditFunction', [], ValidChar)
+    addParameter(p, 'xchannel_idx', [], ValidChannelInput);
+    addParameter(p, 'ychannel_idx', [], ValidChannelInput);
+    addParameter(p, 'EditFunction', [], ValidEditFuncInput)
     addParameter(p, 'RefreshAll', true);
     
     parse(p, varargin{:});
@@ -76,7 +84,7 @@ function RefreshGraph(varargin)
         curvename = table.UserData.CurrentCurveName;
         res = handles.curveprops.(curvename).Results;
         if isprop(res, EditFunction)
-            if isfield(res.(EditFunction), 'calculated_data')
+            if isprop(res.(EditFunction), 'calculated_data')
                 results = res.(EditFunction).calculated_data;
             else
                 results = [];
@@ -106,12 +114,12 @@ function RefreshGraph(varargin)
   
     if ~isempty(results)
         curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
-            xchannel,...
-            ychannel);
+            'xchannel_idx', xchannel,...
+            'ychannel_idx', ychannel);
     else
         curvedata = UtilityFcn.ExtractPlotData(RawData, handles,...
-            xchannel,...
-            ychannel,...
+            'xchannel_idx', xchannel,...
+            'ychannel_idx', ychannel,...
             'edit_button', 'procedure_root_btn');
     end    
     handles = IOData.PlotData(curvedata, handles, 'RefreshAll', refresh_all);

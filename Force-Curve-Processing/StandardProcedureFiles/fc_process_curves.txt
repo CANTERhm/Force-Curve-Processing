@@ -31,5 +31,8 @@
 # singleton: false
 # userdata: []
 
+# function: StepFinder
+# nargin: 0
+
 # function: ChainFit
 # nargin: 0

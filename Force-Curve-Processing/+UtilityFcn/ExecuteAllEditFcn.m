@@ -42,14 +42,25 @@ function ExecuteAllEditFcn(varargin)
         catch ME
             switch ME.identifier
                 case 'MATLAB:undefinedVarOrClass'
-                    % 'Undefined variable "EditFunctions" or class "EditFunctions.functionname.main".'
-                    % reason: main does not exists
-                    % move on
+                    % message: 'Undefined variable "EditFunctions" or class "EditFunctions.<SomeFunction>.main".'
+                    % reason: the editfunction specified by "editfunctions{i}" does not exist
+                    % solution: Leave a note and move on
+                    note = sprintf('Error invoking "%s": No such EditFunction',...
+                        editfunctions{i});
+                    HelperFcn.ShowNotification(note);
                 case 'MATLAB:badsubscript'
-                    % 'Index exceeds array bounds.'
+                    % message: 'Index exceeds array bounds.'
                     % reason: A channel does not have as much choises as in in the
-                    % channels-popup-menus are available
-                    % move on
+                    %   channels-popup-menus are available
+                    % solution: move on
+                case 'MATLAB:subscripting:classHasNoPropertyOrMethod'
+                    % message: 'The class EditFunctions has no Constant property or Static method named 'SomeFunction'.'
+                    % reasion: the editfunction specified by "editfunctions{i}" does not exist
+                    % solution: move on
+                case 'MATLAB:structRefFromNonStruct'
+                    % message: 'Dot indexing is not supported for variables of this type.'
+                    % reasion: not sure
+                    % solution: move on
                 otherwise
                     rethrow(ME);
             end

@@ -24,8 +24,9 @@ function vector_data = ConvertToVector(data)
                 trace_x = [trace_x; data.Trace.(segment{i}).XData];
                 trace_y = [trace_y; data.Trace.(segment{i}).YData];
             else
-                trace_x = [];
-                trace_y = [];
+                continue
+%                 trace_x = [];
+%                 trace_y = [];
             end
         end
     end
@@ -38,8 +39,9 @@ function vector_data = ConvertToVector(data)
                 retrace_x = [retrace_x; data.Retrace.(segment{i}).XData];
                 retrace_y = [retrace_y; data.Retrace.(segment{i}).YData];
             else
-                retrace_x = [];
-                retrace_y = [];
+                continue
+%                 retrace_x = [];
+%                 retrace_y = [];
             end
         end
     end
