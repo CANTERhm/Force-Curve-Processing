@@ -93,7 +93,7 @@ function main(varargin)
             handles.procedure.TipSampleSeperation.AlreadyDisplayed = true;
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
-%             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CreateGuiElements(handles);
+            handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CreateGuiElements(handles);
 %             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.SetPropertyListener(handles);
 %             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
         end
@@ -116,8 +116,5 @@ function main(varargin)
     
     %% update handles-struct
     guidata(handles.figure1, handles);
-    %%%%%%% for tests %%%%%%%%%%%%%%%
-    disp('TipSampleSeperation')
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 

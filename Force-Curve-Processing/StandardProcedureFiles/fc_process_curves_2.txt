@@ -24,8 +24,8 @@
 # SpringConstant: []
 # calculated_data: []
 # calculation_status: false
-# singleton: false
 # userdata: []
+# function_properties: []
 
 # function: ContactPoint
 # Status: []
