@@ -17,6 +17,13 @@ catch ME
             % solution: Leave a note and move on
             note = sprintf('Error invoking "%s": No such EditFunction', name);
             HelperFcn.ShowNotification(note);
+        case 'MATLAB:class:InvalidHandle'
+            % message: 'Invalid or deleted object.'
+            % reason: Some function trys do change an object, which has
+            %         been deleted prior
+            % solution: Leave a note and move on
+            note = sprintf('Error invoking "%s": Updating an deleted Object', name);
+            HelperFcn.ShowNotification(note);
         otherwise
             rethrow(ME);
     end

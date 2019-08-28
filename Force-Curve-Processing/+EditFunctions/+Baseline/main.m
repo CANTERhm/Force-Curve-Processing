@@ -93,6 +93,7 @@ function main(varargin)
     %% check if baseline gui should be on screen
     if edit_button_handle.Value == edit_button_handle.Max
         handles.procedure.Baseline.OnGui = true;
+        handles = HelperFcn.SwitchDisplayStatus(handles);
     else
         handles.procedure.Baseline.OnGui = false;
     end
