@@ -88,7 +88,7 @@ function main(varargin)
     
     if handles.procedure.TipSampleSeperation.OnGui
         if handles.procedure.TipSampleSeperation.AlreadyDisplayed
-%             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
+            handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
 %             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.UpdateGuiElements(handles);
         else
             handles.procedure.TipSampleSeperation.AlreadyDisplayed = true;
@@ -96,7 +96,7 @@ function main(varargin)
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CreateGuiElements(handles);
 %             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.SetPropertyListener(handles);
-%             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
+            handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
         end
     else
         handles.procedure.TipSampleSeperation.AlreadyDisplayed = false;
