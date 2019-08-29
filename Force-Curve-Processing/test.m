@@ -7,21 +7,24 @@ end
 
 curvename = table.UserData.CurrentCurveName;
 RawData = handles.curveprops.(curvename).RawData;
-results = handles.curveprops.(curvename).Results.Baseline.calculated_data;
-fig = figure();
-ax = axes(fig);
-ax.NextPlot = 'add';
-grid on;
-grid minor;
+% results = handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data;
+
+results = [];
+
+% fig = figure();
+% ax = axes(fig);
+% ax.NextPlot = 'add';
+% grid on;
+% grid minor;
 
 if ~isempty(results)
     cd = UtilityFcn.ExtractPlotData(RawData, handles,...
         'xchannel_idx', 'measuredHeight',...
         'ychannel_idx', 'vDeflection',...
-        'edit_button', 'Baseline');
+        'edit_button', 'TipSampleSeperation');
 else
     cd = UtilityFcn.ExtractPlotData(RawData, handles,...
-        'xchannel_idx', 'measuedHeight',...
+        'xchannel_idx', 'measuredHeight',...
         'ychannel_idx', 'vDeflection',...
         'edit_button', 'procedure_root_btn');
 end 
@@ -36,4 +39,4 @@ for i = 1:length(parts)
     end
 end
 
-clearvars -except main handles
+% clearvars -except main handles

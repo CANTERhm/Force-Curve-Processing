@@ -20,9 +20,11 @@ function handles = CalculateData(handles)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    raw_data = handles.curveprops.(curvename).RawData;
-    curve_data = raw_data.CurveData;
+    data = handles.curveprops.(curvename).Results.Baseline;
+    curve_data = data.calculated_data;
     segments = fieldnames(curve_data);
+    sensitivity = handles.curveprops.CalibrationValues.Sensitivity;
+    spring_constant = handles.curveprops.CalibrationValues.SpringConstant;
     
     %% calculate data
     for i = 1:length(segments)
@@ -38,6 +40,10 @@ function handles = CalculateData(handles)
     
     %% update handles-struct
     handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data = curve_data;
+    
+    % write the calibration values to curveprops also
+    handles.curveprops.(curvename).Results.TipSampleSeperation.sensitivity = sensitivity;
+    handles.curveprops.(curvename).Results.TipSampleSeperation.spring_constant = spring_constant;
 
 end
 

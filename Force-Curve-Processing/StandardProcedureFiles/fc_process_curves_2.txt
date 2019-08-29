@@ -20,8 +20,10 @@
 # OnGui: false
 # AlreadyDisplayed: false
 # Status: []
-# Sensitivity: []
-# SpringConstant: []
+# sensitivity: []
+# spring_constant: []
+# curve_parts_index: 1
+# curve_segments_index: 1
 # calculated_data: []
 # calculation_status: false
 # userdata: []

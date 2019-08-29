@@ -44,21 +44,27 @@ function main(varargin)
     for i = 1:length(curvenames)
         % test if Baseline-results-object exists
         curvename = curvenames{i};
-        TSS_results = handles.curveprops.(curvename).Results.Baseline;
-        TSS_properties = handles.procedure.Baseline.function_properties;
+        TSS_results = handles.curveprops.(curvename).Results.TipSampleSeperation;
+        TSS_properties = handles.procedure.TipSampleSeperation.function_properties;
         if isempty(TSS_results)
 
             TSS_results = Results();
             TSS_results.addproperty('calculated_data');
+            TSS_results.addproperty('sensitivity');
+            TSS_results.addproperty('spring_constant');
             TSS_results.addproperty('curve_parts_index');
             TSS_results.addproperty('curve_segments_index');
             TSS_results.addproperty('userdata');
             TSS_results.addproperty('property_listener');
             TSS_results.calculated_data = [];
             TSS_results.property_listener = [];
-            TSS_results.curve_parts_index = handles.procedure.Baseline.curve_parts_index;
-            TSS_results.curve_segments_index = handles.procedure.Baseline.curve_segments_index;
-            TSS_results.userdata = handles.procedure.Baseline.userdata;
+            TSS_results.sensitivity = handles.procedure.TipSampleSeperation.sensitivity;
+            TSS_results.spring_constant = handles.procedure.TipSampleSeperation.spring_constant;
+            TSS_results.curve_parts_index = handles.procedure.TipSampleSeperation.curve_parts_index;
+            TSS_results.curve_segments_index = handles.procedure.TipSampleSeperation.curve_segments_index;
+            TSS_results.curve_parts_index = handles.procedure.TipSampleSeperation.curve_parts_index;
+            TSS_results.curve_segments_index = handles.procedure.TipSampleSeperation.curve_segments_index;
+            TSS_results.userdata = handles.procedure.TipSampleSeperation.userdata;
 
             % update handles-struct in function workspace
             handles.curveprops.(curvename).Results.TipSampleSeperation = TSS_results;
@@ -90,13 +96,14 @@ function main(varargin)
         if handles.procedure.TipSampleSeperation.AlreadyDisplayed
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
 %             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.UpdateGuiElements(handles);
+            EditFunctions.TipSampleSeperation.Callbacks.UpdateGraph([], []);
         else
             handles.procedure.TipSampleSeperation.AlreadyDisplayed = true;
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CreateGuiElements(handles);
-%             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.SetPropertyListener(handles);
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
+            EditFunctions.TipSampleSeperation.Callbacks.UpdateGraph([], []);
         end
     else
         handles.procedure.TipSampleSeperation.AlreadyDisplayed = false;

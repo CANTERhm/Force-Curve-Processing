@@ -11,8 +11,7 @@ function handles = CreateGuiElements(handles)
     end
     
     panel = handles.guiprops.Panels.results_panel;
-%     curvename = table.UserData.CurrentCurveName;
-%     results = handles.curveprops.(curvename).Results.Baseline;
+    curvename = table.UserData.CurrentCurveName;
     
     % clear results_panel
     delete(allchild(panel));
