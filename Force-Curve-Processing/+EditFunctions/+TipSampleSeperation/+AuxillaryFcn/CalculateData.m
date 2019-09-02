@@ -5,7 +5,7 @@ function handles = CalculateData(handles)
 %   "measuredHeight" channel. 
 %
 %   The Tip Sample Seperation gets calculated using following formula:
-%   TSS = measuredHeight - (vDeflection/Springconstant)
+%   TSS = measuredHeight + (vDeflection/Springconstant)
 %
 %   Input:
 %       - handles: an actual reference to the handles-struct
@@ -24,6 +24,7 @@ function handles = CalculateData(handles)
     curvename = table.UserData.CurrentCurveName;
     data = handles.curveprops.(curvename).Results.Baseline;
     raw_data = handles.curveprops.(curvename).RawData;
+    notification = handles.procedure.TipSampleSeperation.function_properties.gui_elements.notification;
     try
         curve_data = data.calculated_data;
     catch ME
@@ -34,6 +35,7 @@ function handles = CalculateData(handles)
                 %         "data" is an empty vector
                 % solution: abort function
                 note = 'Calculation of Tip Sample Seperation has been failed!';
+                notification.String = note;
                 return
             otherwise
                 rethrow(ME);
@@ -53,8 +55,9 @@ function handles = CalculateData(handles)
                 % solution: take data from RawData
                 curve_data = raw_data.CurveData;
                 segments = fieldnames(curve_data);
-            otherwise
                 note = 'Calculate Tip Sample Seperation without Baseline Correction!';
+                notification.String = note;
+            otherwise
                 rethrow(ME);
         end
     end
@@ -67,7 +70,7 @@ function handles = CalculateData(handles)
         vDef = curve_data.(segments{i}).vDeflection;
         spring_constant = handles.curveprops.CalibrationValues.SpringConstant;
         if ~isempty(mHeight) && ~isempty(vDef)
-            mHeight = mHeight - (vDef./spring_constant);
+            mHeight = mHeight + (vDef./spring_constant);
         end
         curve_data.(segments{i}).measuredHeight = mHeight;
         curve_data.(segments{i}).vDeflection = vDef;
@@ -75,6 +78,7 @@ function handles = CalculateData(handles)
     
     %% notification of success
     note = 'Tip Sample Seperation has been calculated without errors!';
+    notification.String = note;
     
     %% update handles-struct
     handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data = curve_data;
