@@ -53,7 +53,20 @@ if ~isempty(handles.procedure.DynamicProps)
     for i = 1:length(list)
         if isfield(handles.procedure.(list{i}), 'function_properties')
             if ~isempty(handles.procedure.(list{i}).function_properties)
-                elements = fieldnames(handles.procedure.(list{i}).function_properties.gui_elements);
+                try
+                    elements = fieldnames(handles.procedure.(list{i}).function_properties.gui_elements);
+                catch ME
+                    switch ME.identifier
+                        case 'MATLAB:fieldnames:InvalidInput'
+                            % message: 'Invalid input argument of type 'double'. Input must be a structure or a Java or COM object.'
+                            % reason: all curves have been deleted prior
+                            %         to the deletion of the procedure
+                            % solution: skip loop
+                            continue
+                        otherwise
+                            rethrow(ME);
+                    end
+                end
                 for n = 1:length(elements)
                     delete(handles.procedure.(list{i}).function_properties.gui_elements.(elements{n}));
                 end

@@ -64,10 +64,6 @@ function handles = SetPropertyListener(handles)
             'results_tilt_value_2',...
             'slope_2'});
         
-        % refresh graph after result calculation
-        baseline.property_listener.addListener(baseline, 'calculated_data', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.UpdateGraph);
-        
         %% update handles-struct
         handles.curveprops.(curvename).Results.Baseline = baseline;
     end

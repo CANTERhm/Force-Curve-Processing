@@ -26,8 +26,7 @@ function main(varargin)
     if isempty(table.Data)
         return
     end
-    
-%     curvename = table.UserData.CurrentCurveName;
+
     curvenames = fieldnames(handles.curveprops.DynamicProps);
     results_panel = handles.guiprops.Panels.results_panel;
     edit_button_handle = findobj(allchild(handles.guiprops.Panels.processing_panel),...
@@ -94,6 +93,7 @@ function main(varargin)
     %% check if baseline gui should be on screen
     if edit_button_handle.Value == edit_button_handle.Max
         handles.procedure.Baseline.OnGui = true;
+        handles = HelperFcn.SwitchDisplayStatus(handles);
     else
         handles.procedure.Baseline.OnGui = false;
     end
@@ -102,6 +102,7 @@ function main(varargin)
         if handles.procedure.Baseline.AlreadyDisplayed
             handles = EditFunctions.Baseline.AuxillaryFcn.UpdateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
+            EditFunctions.Baseline.Callbacks.UpdateGraph([], []);
         else
             handles.procedure.Baseline.AlreadyDisplayed = true;
             delete(allchild(results_panel));
@@ -109,7 +110,7 @@ function main(varargin)
             handles = EditFunctions.Baseline.AuxillaryFcn.CreateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
-%             EditFunctions.Baseline.AuxillaryFcn.InitiateGraphicalRepresentation();
+            EditFunctions.Baseline.Callbacks.UpdateGraph([], []);
         end
     else
         handles.procedure.Baseline.AlreadyDisplayed = false;

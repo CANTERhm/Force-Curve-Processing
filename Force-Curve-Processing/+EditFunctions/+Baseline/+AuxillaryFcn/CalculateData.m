@@ -1,17 +1,19 @@
 function handles = CalculateData(handles)
-% CALCULATEDATA calculate the offset and slope of the force-curve and
-% correct the curve-data. Either only the offset or offset and slope can be
-% corrected, depending of the userinput to restuls.correction_type.
+% CALCULATEDATA calculate data of the EditFunction: Baseline
 %
-% offset: mean value of y-values within the force-curve
-% slope: the fitted slope of the specified range in the
-%       selcection_border-property of results-object
+%   calculate the offset and slope of the force-curve and
+%   correct the curve-data. Either only the offset or offset and slope can be
+%   corrected, depending of the userinput to restuls.correction_type.
 %
-% Input:
-%   - handles: an actual reference to the handles-struct
+%   offset: mean value of y-values within the force-curve
+%   slope: the fitted slope of the specified range in the
+%          selcection_border-property of results-object
 %
-% Output: 
-%   - updated handles-struct
+%   Input:
+%       - handles: an actual reference to the handles-struct
+%
+%    Output: 
+%       - updated handles-struct
 
     %% create variables
     table = handles.guiprops.Features.edit_curve_table;

@@ -1,12 +1,3 @@
-# function: VerticalTipPosition
-# Status: []
-# Sensitivity: []
-# SpringConstant: []
-# calculated_data: []
-# calculation_status: 1
-# singleton: false
-# userdata: []
-
 # function: Baseline
 # OnGui: false
 # AlreadyDisplayed: false
@@ -22,6 +13,19 @@
 # slope_2: []
 # offset: []
 # offset_2: []
+# userdata: []
+# function_properties: []
+
+# function: TipSampleSeperation
+# OnGui: false
+# AlreadyDisplayed: false
+# Status: []
+# sensitivity: []
+# spring_constant: []
+# curve_parts_index: 1
+# curve_segments_index: 1
+# calculated_data: []
+# calculation_status: false
 # userdata: []
 # function_properties: []
 
