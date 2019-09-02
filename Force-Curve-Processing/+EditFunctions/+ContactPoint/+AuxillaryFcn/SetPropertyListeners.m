@@ -1,4 +1,4 @@
-function handles = SetPropertyListener(handles)
+function handles = SetPropertyListeners(handles)
 % SETPROPERTYLISTENER set the property listener for the functionality
 % EditFunction: Contact Point
 
@@ -19,11 +19,11 @@ function handles = SetPropertyListener(handles)
         cp.property_listener = PropListener();
 
         % Baseline Range: update border-edit-controls
-        baseline.property_listener.addListener(baseline, 'offset', 'PostSet',...
-            @EditFunctions.Baseline.Callbacks.UpdateOffsetValueCallback);
+        cp.property_listener.addListener(cp, 'offset', 'PostSet',...
+            @EditFunctions.ContactPoint.Callbacks.UpdateOffsetValueCallback);
         
         %% update handles-struct
-        handles.curveprops.(curvename).Results.Baseline = baseline;
+        handles.curveprops.(curvename).Results.ContactPoint = cp;
     end
     
 

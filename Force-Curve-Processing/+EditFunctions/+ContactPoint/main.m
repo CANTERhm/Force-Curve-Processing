@@ -91,8 +91,9 @@ function main(varargin)
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.ContactPoint.AuxillaryFcn.CreateGuiElements(handles);
+            handles = EditFunctions.ContactPoint.AuxillaryFcn.InitiateGraphicalRepresentation(handles);
             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetWindowButtonCallbacks(handles);
-%             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetPropetyListeners(handles);
+            handles = EditFunctions.ContactPoint.AuxillaryFcn.SetPropertyListeners(handles);
 %             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
 %             EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
         end

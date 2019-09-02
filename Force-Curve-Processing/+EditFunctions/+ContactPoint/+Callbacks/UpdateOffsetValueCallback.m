@@ -12,6 +12,15 @@ function UpdateOffsetValueCallback(src, evt)
     end
     
     curvename = table.UserData.CurrentCurveName;
-
+    offset_value = handles.curveprops.(curvename).Results.ContactPoint.offset;
+    offset_value_handle = handles.procedure.ContactPoint.function_properties.gui_elements.offset_value;
+    
+    %% update Elements
+    offset_value_handle.String = num2str(offset_value);
+    offset_value_handle.Value = offset_value;
+    
+    %% update handles-struct
+    guidata(handles.figure1, handles);
+    
 end
 

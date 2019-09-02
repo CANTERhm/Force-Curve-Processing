@@ -42,6 +42,7 @@ function WindowButtonDownCallback(src, evt)
     results.offset = cp(1, 1);
 
     % refresh results object and handles
+    handles.curveprops.(curvename).Results.ContactPoint = results;
     guidata(handles.figure1, handles);
     
 end % WindowsButtonDownCallback
