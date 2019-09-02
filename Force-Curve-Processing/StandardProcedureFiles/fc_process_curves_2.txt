@@ -16,6 +16,15 @@
 # userdata: []
 # function_properties: []
 
+# function: ContactPoint
+# Status: []
+# singleton: false
+# part_index: []
+# segment_index: []
+# offset: []
+# calculated_data: []
+# userdata: []
+
 # function: TipSampleSeperation
 # OnGui: false
 # AlreadyDisplayed: false
@@ -28,15 +37,6 @@
 # calculation_status: false
 # userdata: []
 # function_properties: []
-
-# function: ContactPoint
-# Status: []
-# singleton: false
-# part_index: []
-# segment_index: []
-# offset: []
-# calculated_data: []
-# userdata: []
 
 # function: StepFinder
 # nargin: 0
