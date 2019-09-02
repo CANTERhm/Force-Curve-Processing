@@ -12,6 +12,11 @@ function UpdateCalculatedOffsetValueCallback(src, evt, offset_value_handle, offs
         return
     end
     
+    % abort if gui should not be displayed
+    if ~handles.procedure.Baseline.OnGui
+        return
+    end
+    
     curvename = table.UserData.CurrentCurveName;
     value_label = handles.procedure.Baseline.function_properties.gui_elements.(offset_value_handle);
     value = handles.curveprops.(curvename).Results.Baseline.(offset_property);

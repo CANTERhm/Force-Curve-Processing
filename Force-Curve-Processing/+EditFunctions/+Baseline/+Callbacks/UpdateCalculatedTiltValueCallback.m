@@ -12,6 +12,11 @@ function UpdateCalculatedTiltValueCallback(src, evt, tilt_value_handle, tilt_pro
         return
     end
     
+    % abort if gui should not be displayed
+    if ~handles.procedure.Baseline.OnGui
+        return
+    end
+    
     curvename = table.UserData.CurrentCurveName;
     value_label = handles.procedure.Baseline.function_properties.gui_elements.(tilt_value_handle);
     value = handles.curveprops.(curvename).Results.Baseline.(tilt_property);

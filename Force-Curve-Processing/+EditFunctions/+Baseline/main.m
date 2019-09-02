@@ -114,6 +114,7 @@ function main(varargin)
         end
     else
         handles.procedure.Baseline.AlreadyDisplayed = false;
+        handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
         UtilityFcn.ResetMainFigureCallbacks();
         for i = 1:length(curvenames)
             curvename = curvenames{i};

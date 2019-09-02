@@ -1,5 +1,5 @@
 function main(varargin)
-%MAINTSS initialize activated editfunction "ContactPoint"
+% MAIN initialize activated editfunction "ContactPoint"
 %
 %   main-function initializes the whole infrastrukture of the respectively
 %   activated editfunction. This Function can also be used as an Callback;
@@ -24,11 +24,11 @@ function main(varargin)
     curvenames = fieldnames(handles.curveprops.DynamicProps);
     results_panel = handles.guiprops.Panels.results_panel;
     edit_button_handle = findobj(allchild(handles.guiprops.Panels.processing_panel),...
-        'Type', 'UIControl', 'Tag', 'TipSampleSeperation');
+        'Type', 'UIControl', 'Tag', 'ContactPoint');
 
     %% abort if tabel is empty (means no curves loaded)
     if isempty(table.Data)
-        note = 'Error invoking Tip Sample Seperation: No Force-Curves have been loaded!';
+        note = 'Error invoking Contact Point: No Force-Curves have been loaded!';
         HelperFcn.ShowNotification(note);
         return
     end
@@ -43,11 +43,17 @@ function main(varargin)
 
             cp_results = Results();
             cp_results.addproperty('calculated_data');
+            cp_results.addproperty('part_index');
+            cp_results.addproperty('segment_index');
+            cp_results.addproperty('offset');
             cp_results.addproperty('userdata');
             cp_results.addproperty('property_listener');
             cp_results.calculated_data = [];
             cp_results.property_listener = [];
-            cp_results.userdata = handles.procedure.TipSampleSeperation.userdata;
+            cp_results.part_index = 1;
+            cp_results.segment_index = 1;
+            cp_results.offset = 0;
+            cp_results.userdata = handles.procedure.ContactPoint.userdata;
 
             % update handles-struct in function workspace
             handles.curveprops.(curvename).Results.ContactPoint = cp_results;
@@ -85,7 +91,8 @@ function main(varargin)
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.ContactPoint.AuxillaryFcn.CreateGuiElements(handles);
-%             handles = EditFunctions.ContactPoint.AuxillaryFcn.UpdateGuiElements(handles);
+            handles = EditFunctions.ContactPoint.AuxillaryFcn.SetWindowButtonCallbacks(handles);
+%             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetPropetyListeners(handles);
 %             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
 %             EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
         end
@@ -108,5 +115,9 @@ function main(varargin)
     
     %% update handles-struct
     guidata(handles.figure1, handles);
+    
+    %%%%%%%%%%test%%%%%%%%%%%%%%%%%%%%%
+    disp('ContactPoint');
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 

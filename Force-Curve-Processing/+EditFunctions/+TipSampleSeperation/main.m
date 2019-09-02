@@ -1,5 +1,5 @@
 function main(varargin)
-%MAINTSS initialize activated editfunction "Tip Sample Seperation"
+% MAIN initialize activated editfunction "Tip Sample Seperation"
 %
 %   main-function initializes the whole infrastrukture of the respectively
 %   activated editfunction. This Function can also be used as an Callback;
@@ -110,6 +110,7 @@ function main(varargin)
         end
     else
         handles.procedure.TipSampleSeperation.AlreadyDisplayed = false;
+        handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
         UtilityFcn.ResetMainFigureCallbacks();
         for i = 1:length(curvenames)
             curvename = curvenames{i};
