@@ -102,6 +102,7 @@ function main(varargin)
         if handles.procedure.Baseline.AlreadyDisplayed
             handles = EditFunctions.Baseline.AuxillaryFcn.UpdateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
+            EditFunctions.Baseline.Callbacks.UpdateGraph([], []);
         else
             handles.procedure.Baseline.AlreadyDisplayed = true;
             delete(allchild(results_panel));
@@ -109,6 +110,7 @@ function main(varargin)
             handles = EditFunctions.Baseline.AuxillaryFcn.CreateGuiElements(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.SetPropertyListener(handles);
             handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
+            EditFunctions.Baseline.Callbacks.UpdateGraph([], []);
         end
     else
         handles.procedure.Baseline.AlreadyDisplayed = false;

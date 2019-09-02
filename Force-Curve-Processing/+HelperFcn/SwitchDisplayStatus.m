@@ -4,7 +4,7 @@ function handles = SwitchDisplayStatus(handles)
 
     %% create variabless
     edit_functions = fieldnames(handles.procedure.DynamicProps);
-    edit_buttons = allchild(handles.guiprops.Panels.processing_panel);
+    edit_buttons = flipud(allchild(handles.guiprops.Panels.processing_panel));
     
     % delete proc_root_button from edit_buttons
     mask = arrayfun(@maskfun, edit_buttons);
@@ -16,7 +16,6 @@ function handles = SwitchDisplayStatus(handles)
             handles.procedure.(edit_functions{i}).AlreadyDisplayed = false;
         end
     end
-
 end
 
 function y = maskfun(btn)

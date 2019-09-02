@@ -143,7 +143,9 @@ function WindowButtonUpCallback(src, evt, setting_part_dropdown_name, setting_se
     src.WindowButtonMotionFcn = '';
     src.WindowButtonUpFcn = '';
     
-    EditFunctions.Baseline.main();
+    handles = EditFunctions.Baseline.AuxillaryFcn.CalculateData(handles);
+    EditFunctions.Baseline.Callbacks.UpdateGraph([], []);
+%     EditFunctions.Baseline.main();
     
     % update handles
     guidata(handles.figure1, handles);

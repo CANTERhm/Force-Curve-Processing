@@ -50,6 +50,7 @@ function main(varargin)
 
             TSS_results = Results();
             TSS_results.addproperty('calculated_data');
+            TSS_results.addproperty('calculation_status');
             TSS_results.addproperty('sensitivity');
             TSS_results.addproperty('spring_constant');
             TSS_results.addproperty('curve_parts_index');
@@ -58,6 +59,7 @@ function main(varargin)
             TSS_results.addproperty('property_listener');
             TSS_results.calculated_data = [];
             TSS_results.property_listener = [];
+            TSS_results.calculation_status = handles.procedure.TipSampleSeperation.calculation_status;
             TSS_results.sensitivity = handles.procedure.TipSampleSeperation.sensitivity;
             TSS_results.spring_constant = handles.procedure.TipSampleSeperation.spring_constant;
             TSS_results.curve_parts_index = handles.procedure.TipSampleSeperation.curve_parts_index;
@@ -95,13 +97,14 @@ function main(varargin)
     if handles.procedure.TipSampleSeperation.OnGui
         if handles.procedure.TipSampleSeperation.AlreadyDisplayed
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
-%             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.UpdateGuiElements(handles);
+            handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.UpdateGuiElements(handles);
             EditFunctions.TipSampleSeperation.Callbacks.UpdateGraph([], []);
         else
             handles.procedure.TipSampleSeperation.AlreadyDisplayed = true;
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CreateGuiElements(handles);
+            handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.UpdateGuiElements(handles);
             handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
             EditFunctions.TipSampleSeperation.Callbacks.UpdateGraph([], []);
         end

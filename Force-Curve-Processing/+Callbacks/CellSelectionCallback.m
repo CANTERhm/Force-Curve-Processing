@@ -40,31 +40,31 @@ if ~isempty(evt.Indices)
     end
     active_edit_function = edit_functions(to_test);
     
-    UtilityFcn.RefreshGraph([], [],...
-        'xchannel_idx', xchannel_value,...
-        'ychannel_idx', ychannel_value,...
-        'EditFunction', active_edit_function.String,...
-        'RefreshAll', true);
+%     UtilityFcn.RefreshGraph([], [],...
+%         'xchannel_idx', xchannel_value,...
+%         'ychannel_idx', ychannel_value,...
+%         'EditFunction', active_edit_function.String,...
+%         'RefreshAll', true);
 
 %   % this part might be obsolete. Delete it some time 
 %
-%     edit_buttons = handles.guiprops.Features.edit_buttons;
-%     
-%     edit_functions = allchild(handles.guiprops.Panels.processing_panel);
-%     to_test = false(length(edit_functions), 1);
-%     for i = 1:length(to_test)
-%         if edit_functions(i).Value == 1
-%             to_test(i) = true;
-%         end
-%     end
-%     active_edit_function = edit_functions(to_test);
-%     
-%     if isempty(edit_buttons) || strcmp(active_edit_function.Tag, 'procedure_root_btn')
-%         UtilityFcn.RefreshGraph([], [],...
-%             'xchannel_idx', xchannel_value,...
-%             'ychannel_idx', ychannel_value,...
-%             'RefreshAll', true);
-%     end
+    edit_buttons = handles.guiprops.Features.edit_buttons;
+    
+    edit_functions = allchild(handles.guiprops.Panels.processing_panel);
+    to_test = false(length(edit_functions), 1);
+    for i = 1:length(to_test)
+        if edit_functions(i).Value == 1
+            to_test(i) = true;
+        end
+    end
+    active_edit_function = edit_functions(to_test);
+    
+    if isempty(edit_buttons) || strcmp(active_edit_function.Tag, 'procedure_root_btn')
+        UtilityFcn.RefreshGraph([], [],...
+            'xchannel_idx', xchannel_value,...
+            'ychannel_idx', ychannel_value,...
+            'RefreshAll', true);
+    end
     
     
 end
