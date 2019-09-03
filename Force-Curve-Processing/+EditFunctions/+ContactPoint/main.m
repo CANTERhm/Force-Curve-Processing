@@ -84,24 +84,21 @@ function main(varargin)
     if handles.procedure.ContactPoint.OnGui
         if handles.procedure.ContactPoint.AlreadyDisplayed
             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
-%             handles = EditFunctions.ContactPoint.AuxillaryFcn.UpdateGuiElements(handles);
-            EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
             EditFunctions.ContactPoint.Callbacks.UpdateGraphicalRepresentation([], []);
         else
             handles.procedure.ContactPoint.AlreadyDisplayed = true;
             delete(allchild(results_panel));
             UtilityFcn.ResetMainFigureCallbacks();
             handles = EditFunctions.ContactPoint.AuxillaryFcn.CreateGuiElements(handles);
-            handles = EditFunctions.ContactPoint.AuxillaryFcn.InitiateGraphicalRepresentation(handles);
             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetWindowButtonCallbacks(handles);
             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetPropertyListeners(handles);
             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
-            EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
+            EditFunctions.ContactPoint.Callbacks.UpdateGraphicalRepresentation([], []);
         end
     else
         handles.procedure.ContactPoint.AlreadyDisplayed = false;
         handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
-        UtilityFcn.ResetMainFigureCallbacks();
+%         UtilityFcn.ResetMainFigureCallbacks();
         for i = 1:length(curvenames)
             curvename = curvenames{i};
             cp_results = handles.curveprops.(curvename).Results.ContactPoint;

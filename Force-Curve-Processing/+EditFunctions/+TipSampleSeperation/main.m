@@ -111,7 +111,7 @@ function main(varargin)
     else
         handles.procedure.TipSampleSeperation.AlreadyDisplayed = false;
         handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
-        UtilityFcn.ResetMainFigureCallbacks();
+%         UtilityFcn.ResetMainFigureCallbacks();
         for i = 1:length(curvenames)
             curvename = curvenames{i};
             TSS_results = handles.curveprops.(curvename).Results.TipSampleSeperation;

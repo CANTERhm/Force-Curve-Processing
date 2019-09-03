@@ -19,6 +19,10 @@ function UpdateOffsetValueCallback(src, evt)
     offset_value_handle.String = num2str(offset_value);
     offset_value_handle.Value = offset_value;
     
+    %% recalculate data
+    handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
+    EditFunctions.ContactPoint.Callbacks.UpdateGraphicalRepresentation([], []);
+    
     %% update handles-struct
     guidata(handles.figure1, handles);
     
