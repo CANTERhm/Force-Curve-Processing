@@ -22,7 +22,7 @@ function handles = CalculateData(handles)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    data = handles.curveprops.(curvename).Results.Baseline;
+    data = handles.curveprops.(curvename).Results.ContactPoint;
     raw_data = handles.curveprops.(curvename).RawData;
     notification = handles.procedure.TipSampleSeperation.function_properties.gui_elements.notification;
     try

@@ -120,8 +120,8 @@ function main(varargin)
             curvename = curvenames{i};
             baseline_results = handles.curveprops.(curvename).Results.Baseline;
             if ~isempty(baseline_results.property_listener)
-                for n = 1:length(baseline_results.property_listener.ListenerObjects)
-                    delete(baseline_results.property_listener.ListenerObjects(n))
+                for n = length(baseline_results.property_listener.ListenerObjects):-1:1
+                    baseline_results.property_listener = baseline_results.property_listener.deleteListener(baseline_results.property_listener.ListenerObjects(n));
                 end
             end
             delete(baseline_results.property_listener);

@@ -1,6 +1,5 @@
 function UpdateCalculatedTiltValueCallback(src, evt, tilt_value_handle, tilt_property)
-% UPDATECALCULATEDTILTVALUE update the results tilt value of the baseline
-% editfunction
+% UPDATECALCULATEDTILTVALUE update the results tilt value of the EditFunction: Baseline
 
     %% create variables
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');

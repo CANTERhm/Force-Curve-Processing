@@ -1,5 +1,5 @@
 function UpdateGraph(src, evt)
-% UPDATEGRAPH update the graph after calculated_data has been updated
+% UPDATEGRAPH update the graph of the EditFunction: ContactPoint
 
     %% create variables
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
@@ -12,8 +12,8 @@ function UpdateGraph(src, evt)
     UtilityFcn.RefreshGraph([], [],...
         'xchannel_idx', xchannel_value,...
         'ychannel_idx', ychannel_value,...
-        'EditFunction', 'TipSampleSeperation',...
-        'RefreshAll', false);
+        'EditFunction', 'ContactPoint',...
+        'RefreshAll', true);
     
     %% update handles-struct
     guidata(handles.figure1, handles);

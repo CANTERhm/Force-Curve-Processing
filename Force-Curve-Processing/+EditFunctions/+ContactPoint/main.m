@@ -83,9 +83,10 @@ function main(varargin)
     
     if handles.procedure.ContactPoint.OnGui
         if handles.procedure.ContactPoint.AlreadyDisplayed
-%             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
+            handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
 %             handles = EditFunctions.ContactPoint.AuxillaryFcn.UpdateGuiElements(handles);
-%             EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
+            EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
+            EditFunctions.ContactPoint.Callbacks.UpdateGraphicalRepresentation([], []);
         else
             handles.procedure.ContactPoint.AlreadyDisplayed = true;
             delete(allchild(results_panel));
@@ -94,18 +95,19 @@ function main(varargin)
             handles = EditFunctions.ContactPoint.AuxillaryFcn.InitiateGraphicalRepresentation(handles);
             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetWindowButtonCallbacks(handles);
             handles = EditFunctions.ContactPoint.AuxillaryFcn.SetPropertyListeners(handles);
-%             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
-%             EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
+            handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
+            EditFunctions.ContactPoint.Callbacks.UpdateGraph([], []);
         end
     else
         handles.procedure.ContactPoint.AlreadyDisplayed = false;
+        handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
         UtilityFcn.ResetMainFigureCallbacks();
         for i = 1:length(curvenames)
             curvename = curvenames{i};
             cp_results = handles.curveprops.(curvename).Results.ContactPoint;
             if ~isempty(cp_results.property_listener)
-                for n = 1:length(cp_results.property_listener.ListenerObjects)
-                    delete(cp_results.property_listener.ListenerObjects(n))
+                for n = length(cp_results.property_listener.ListenerObjects):-1:1
+                    cp_results.property_listener = cp_results.property_listener.deleteListener(cp_results.property_listener.ListenerObjects(n));
                 end
             end
             delete(cp_results.property_listener);
@@ -116,9 +118,5 @@ function main(varargin)
     
     %% update handles-struct
     guidata(handles.figure1, handles);
-    
-    %%%%%%%%%%test%%%%%%%%%%%%%%%%%%%%%
-    disp('ContactPoint');
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 

@@ -15,11 +15,13 @@ function handles = InitiateGraphicalRepresentation(handles)
     ax = handles.guiprops.MainAxes;
     
     %% plot graphical representation
-    x = 0;
     y = linspace(ax.YLim(1), ax.YLim(2), 2);
-    hold(ax, 'on')
+    x = zeros(1, length(y));
+    
+    hold(ax, 'on');
     plot(ax, x, y, 'k--',...
-        'Tag', 'cp_offset_representation');
+        'Tag', 'cp_offset_representation',...
+        'DisplayName', 'Offset');
     hold(ax, 'off');
     
     %% update handles-struct

@@ -11,6 +11,7 @@ function handles = SetPropertyListeners(handles)
     end
     
     curvenames = fieldnames(handles.curveprops.DynamicProps);
+    ax = handles.guiprops.MainAxes;
     
     %% create listener
     for i = 1:length(curvenames)
@@ -18,9 +19,17 @@ function handles = SetPropertyListeners(handles)
         cp = handles.curveprops.(curvename).Results.ContactPoint;
         cp.property_listener = PropListener();
 
-        % Baseline Range: update border-edit-controls
+        % offset_value: update offset-property in handles
         cp.property_listener.addListener(cp, 'offset', 'PostSet',...
             @EditFunctions.ContactPoint.Callbacks.UpdateOffsetValueCallback);
+        
+        % update graph if data have been recalculated
+        cp.property_listener.addListener(cp, 'calculated_data', 'PostSet',...
+            @EditFunctions.ContactPoint.Callbacks.UpdateGraph);
+        
+        % offset representation: update line-plot
+        cp.property_listener.addListener(ax, 'YLim', 'PostSet',...
+            @EditFunctions.ContactPoint.Callbacks.UpdateGraphicalRepresentation);
         
         %% update handles-struct
         handles.curveprops.(curvename).Results.ContactPoint = cp;

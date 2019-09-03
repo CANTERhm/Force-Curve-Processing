@@ -1,6 +1,5 @@
 function UpdateCalculatedOffsetValueCallback(src, evt, offset_value_handle, offset_property)
-% UPDATECALCULATEDOFFSETVALUE update the results offset value of the
-% baseline editfunction
+% UPDATECALCULATEDOFFSETVALUE update the results offset value of the EditFunction: Baseline
 
     %% create variables
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
