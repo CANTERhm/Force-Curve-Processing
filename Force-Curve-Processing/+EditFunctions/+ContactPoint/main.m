@@ -84,6 +84,7 @@ function main(varargin)
     if handles.procedure.ContactPoint.OnGui
         if handles.procedure.ContactPoint.AlreadyDisplayed
             handles = EditFunctions.ContactPoint.AuxillaryFcn.CalculateData(handles);
+            handles = EditFunctions.ContactPoint.AuxillaryFcn.UpdateGuiElements(handles);
             EditFunctions.ContactPoint.Callbacks.UpdateGraphicalRepresentation([], []);
         else
             handles.procedure.ContactPoint.AlreadyDisplayed = true;

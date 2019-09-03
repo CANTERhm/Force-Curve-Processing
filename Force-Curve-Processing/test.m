@@ -7,7 +7,7 @@ end
 
 curvename = table.UserData.CurrentCurveName;
 RawData = handles.curveprops.(curvename).RawData;
-results = handles.curveprops.(curvename).Results.Baseline.calculated_data;
+results = handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data;
 
 % results = [];
 
@@ -21,7 +21,7 @@ if ~isempty(results)
     cd = UtilityFcn.ExtractPlotData(RawData, handles,...
         'xchannel_idx', 'measuredHeight',...
         'ychannel_idx', 'vDeflection',...
-        'edit_button', 'Baseline');
+        'edit_button', 'TipSampleSeperation');
 else
     cd = UtilityFcn.ExtractPlotData(RawData, handles,...
         'xchannel_idx', 'measuredHeight',...

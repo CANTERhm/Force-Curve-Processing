@@ -31,8 +31,8 @@ function handles = CreateGuiElements(handles)
         'Title', 'Settings',...
         'Padding', 5,...
         'Tag', 'results_panel');
-
-    %% calibration values elements: sensitivity + springconstant
+    
+    %% cp offset value elements: offset_label, offset_value, offset_unit
     
     cp_offset = handles.curveprops.(curvename).Results.ContactPoint.offset;
     
@@ -65,9 +65,26 @@ function handles = CreateGuiElements(handles)
     handles.procedure.ContactPoint.function_properties.gui_elements.offset_value = offset_value;
     handles.procedure.ContactPoint.function_properties.gui_elements.offset_unit = offset_unit;
     
+    %% cp offset value elements: reset button
+    results_grid_2 = uix.Grid('Parent', results_vbox,...
+        'Spacing', 5);
+    
+    uix.Empty('Parent', results_grid_2);
+    uix.Empty('Parent', results_grid_2);
+    reset_offset_btn = uicontrol('Parent', results_grid_2,...
+        'Style', 'pushbutton',...
+        'String', 'Reset',...
+        'Tag', 'cp_reset_offset_btn',...
+        'Callback', @EditFunctions.ContactPoint.Callbacks.ResetButtonCallback);
+    
+    results_grid_2.Heights = -1;
+    results_grid_2.Widths = [-1 -1 -1];
+    
+    handles.procedure.ContactPoint.function_properties.gui_elements.reset_offset_btn = reset_offset_btn;
+    
     %% positional settigs for panels
     
-    results_vbox.Heights = 45;
+    results_vbox.Heights = [45 25];
     main_vbox.Heights = -1;
     scrolling_panel.Heights = 100;
 

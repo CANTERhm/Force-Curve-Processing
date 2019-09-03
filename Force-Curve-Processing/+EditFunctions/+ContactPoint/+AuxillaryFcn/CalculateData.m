@@ -23,7 +23,11 @@ function handles = CalculateData(handles)
     cp_data = handles.curveprops.(curvename).Results.ContactPoint;
     raw_data = handles.curveprops.(curvename).RawData;
     try
-        curve_data = bl_data.calculated_data;
+        if isempty(cp_data.calculated_data)
+            curve_data = bl_data.calculated_data;
+        else
+            curve_data = cp_data.calculated_data;
+        end
     catch ME
         switch ME.identifier
             case 'MATLAB:structRefFromNonStruct'
