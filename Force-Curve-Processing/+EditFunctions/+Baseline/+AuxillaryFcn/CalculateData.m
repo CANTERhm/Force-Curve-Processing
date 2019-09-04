@@ -193,11 +193,31 @@ function handles = CalculateData(handles)
     sTime_idx = find(ismember(actual_xchannel_string, 'seriesTime'));
     
     if actual_xchannel == mHeight_idx
+        
+        % load data to baseline
         handles.curveprops.(curvename).Results.Baseline.calculated_data = corrected_data.CurveData;
+        
+        % load data to contact point
+        if ~isempty(handles.curveprops.(curvename).Results.ContactPoint)
+            handles.curveprops.(curvename).Results.ContactPoint.calculated_data = corrected_data.CurveData;
+        end
+        
     elseif actual_xchannel == sTime_idx
+        
+        % load data to baseline
         handles.curveprops.(curvename).Results.Baseline.calculated_data = corrected_data_2.CurveData;
+        
+        % load data to contact point
+        handles.curveprops.(curvename).Results.ContactPoint.calculated_data = corrected_data_2.CurveData;
+        
     else
+        
+        % load data to baseline
         handles.curveprops.(curvename).Results.Baseline.calculated_data = raw_data.CurveData;
+        
+        % load data to contact point
+        handles.curveprops.(curvename).Results.ContactPoint.calculated_data = raw_data.CurveData;
+        
     end
     
 end

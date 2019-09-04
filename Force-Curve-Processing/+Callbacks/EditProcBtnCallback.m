@@ -8,7 +8,8 @@ HelperFcn.SwitchToggleState(src);
 name = src.Tag;
 UtilityFcn.ResetMainFigureCallbacks();
 try
-    EditFunctions.(name).main();
+    UtilityFcn.ExecuteAllEditFcn();
+%     EditFunctions.(name).main();
 catch ME
     switch ME.identifier
         case 'MATLAB:undefinedVarOrClass'

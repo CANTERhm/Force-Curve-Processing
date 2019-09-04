@@ -1,6 +1,5 @@
 function UpdateCalculatedTiltValueCallback(src, evt, tilt_value_handle, tilt_property)
-% UPDATECALCULATEDTILTVALUE update the results tilt value of the baseline
-% editfunction
+% UPDATECALCULATEDTILTVALUE update the results tilt value of the EditFunction: Baseline
 
     %% create variables
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
@@ -9,6 +8,11 @@ function UpdateCalculatedTiltValueCallback(src, evt, tilt_value_handle, tilt_pro
     
     % abort if tabel is empty (means no curves loaded)
     if isempty(table.Data) || isempty(table.UserData)
+        return
+    end
+    
+    % abort if gui should not be displayed
+    if ~handles.procedure.Baseline.OnGui
         return
     end
     

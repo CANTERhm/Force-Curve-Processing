@@ -1,6 +1,5 @@
 function UpdateCalculatedOffsetValueCallback(src, evt, offset_value_handle, offset_property)
-% UPDATECALCULATEDOFFSETVALUE update the results offset value of the
-% baseline editfunction
+% UPDATECALCULATEDOFFSETVALUE update the results offset value of the EditFunction: Baseline
 
     %% create variables
     main = findobj(allchild(groot), 'Type', 'Figure', 'Tag', 'figure1');
@@ -9,6 +8,11 @@ function UpdateCalculatedOffsetValueCallback(src, evt, offset_value_handle, offs
     
     % abort if tabel is empty (means no curves loaded)
     if isempty(table.Data) || isempty(table.UserData)
+        return
+    end
+    
+    % abort if gui should not be displayed
+    if ~handles.procedure.Baseline.OnGui
         return
     end
     

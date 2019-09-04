@@ -7,15 +7,15 @@ end
 
 curvename = table.UserData.CurrentCurveName;
 RawData = handles.curveprops.(curvename).RawData;
-% results = handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data;
+results = handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data;
 
-results = [];
+% results = [];
 
-% fig = figure();
-% ax = axes(fig);
-% ax.NextPlot = 'add';
-% grid on;
-% grid minor;
+fig = figure();
+ax = axes(fig);
+ax.NextPlot = 'add';
+grid on;
+grid minor;
 
 if ~isempty(results)
     cd = UtilityFcn.ExtractPlotData(RawData, handles,...

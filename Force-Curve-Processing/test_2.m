@@ -1,12 +1,6 @@
-t = allchild(handles.guiprops.Panels.processing_panel);
-m = arrayfun(@fun, t);
+clearvars -except main handles
 
-clearvars -except main handles m
-
-function y = fun(btn)
-    if btn.Value == 0
-        y = false;
-    else
-        y = true;
-    end
-end
+figure();
+y = linspace(1,100,2);
+x = ones(1, length(y))*1;
+plot(x, y, 'k--');

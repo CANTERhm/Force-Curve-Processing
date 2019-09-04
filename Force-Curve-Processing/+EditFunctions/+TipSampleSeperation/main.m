@@ -1,5 +1,5 @@
 function main(varargin)
-%MAINTSS initialize activated editfunction "Tip Sample Seperation"
+% MAIN initialize activated editfunction "Tip Sample Seperation"
 %
 %   main-function initializes the whole infrastrukture of the respectively
 %   activated editfunction. This Function can also be used as an Callback;
@@ -110,13 +110,14 @@ function main(varargin)
         end
     else
         handles.procedure.TipSampleSeperation.AlreadyDisplayed = false;
-        UtilityFcn.ResetMainFigureCallbacks();
+        handles = EditFunctions.TipSampleSeperation.AuxillaryFcn.CalculateData(handles);
+%         UtilityFcn.ResetMainFigureCallbacks();
         for i = 1:length(curvenames)
             curvename = curvenames{i};
             TSS_results = handles.curveprops.(curvename).Results.TipSampleSeperation;
             if ~isempty(TSS_results.property_listener)
-                for n = 1:length(TSS_results.property_listener.ListenerObjects)
-                    delete(TSS_results.property_listener.ListenerObjects(n))
+                for n = length(TSS_results.property_listener.ListenerObjects):-1:1
+                    TSS_results.property_listener = TSS_results.property_listener.delteListener(TSS_results.property_listener.ListenerObjects(n));
                 end
             end
             delete(TSS_results.property_listener);
