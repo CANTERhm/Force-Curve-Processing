@@ -22,11 +22,16 @@ function handles = CalculateData(handles)
     end
     
     curvename = table.UserData.CurrentCurveName;
-    data = handles.curveprops.(curvename).Results.ContactPoint;
+    cp_data = handles.curveprops.(curvename).Results.ContactPoint;
+    tss_data = handles.curveprops.(curvename).Results.TipSampleSeperation;
     raw_data = handles.curveprops.(curvename).RawData;
     notification = handles.procedure.TipSampleSeperation.function_properties.gui_elements.notification;
     try
-        curve_data = data.calculated_data;
+        if isempty(tss_data.calculated_data)
+            curve_data = tss_data.calculated_data;
+        else
+            curve_data = cp_data.calculated_data;
+        end
     catch ME
         switch ME.identifier
             case 'MATLAB:structRefFromNonStruct'
@@ -87,7 +92,11 @@ function handles = CalculateData(handles)
     end
     
     %% update handles-struct
+    
+    % load data to tip sample seperation
     handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data = curve_data;
+    
+    % load data to step_finder
     
     % write the calibration values to curveprops also
     handles.curveprops.(curvename).Results.TipSampleSeperation.sensitivity = sensitivity;

@@ -77,8 +77,15 @@ function handles = CalculateData(handles)
         curve_data.(segments{i}).measuredHeight = mHeight;
     end
     
-    %% update handles-struct
+    %% update handles-struct 
+    
+    % load results to contact point
     handles.curveprops.(curvename).Results.ContactPoint.calculated_data = curve_data;
+    
+    % load data to tip sample seperation
+    if ~isempty(handles.curveprops.(curvename).Results.TipSampleSeperation)
+        handles.curveprops.(curvename).Results.TipSampleSeperation.calculated_data = curve_data;
+    end
 
 end
 
