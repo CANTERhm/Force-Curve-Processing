@@ -37,7 +37,7 @@ function handles = CalculateData(handles)
                 % solution: abort function
                 if handles.procedure.ContactPoint.OnGui
                     note = 'ContactPoint: took data from RawData, because calculated_data of "Baseline" is empty';
-                    HelperFcn.ShowNitification(note);
+                    HelperFcn.ShowNotification(note);
                 end
                 curve_data = raw_data.CurveData;
             otherwise
@@ -58,7 +58,7 @@ function handles = CalculateData(handles)
                 % solution: take data from RawData
                 curve_data = raw_data.CurveData;
                 segments = fieldnames(curve_data);
-                if handles.procedure.TipSampleSeperation.OnGui
+                if handles.procedure.ContactPoint.OnGui
                     note = 'ContactPoint: Took data from RawData, because calculated_data of "Baseline" is not segmented';
                     HelperFcn.ShowNotification(note);
                 end
