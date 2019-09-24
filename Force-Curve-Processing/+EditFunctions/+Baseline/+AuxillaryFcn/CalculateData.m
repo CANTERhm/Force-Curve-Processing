@@ -208,7 +208,9 @@ function handles = CalculateData(handles)
         handles.curveprops.(curvename).Results.Baseline.calculated_data = corrected_data_2.CurveData;
         
         % load data to contact point
-        handles.curveprops.(curvename).Results.ContactPoint.calculated_data = corrected_data_2.CurveData;
+        if ~isempty(handles.curveprops.(curvename).Results.ContactPoint)
+            handles.curveprops.(curvename).Results.ContactPoint.calculated_data = corrected_data_2.CurveData;
+        end
         
     else
         
@@ -216,7 +218,9 @@ function handles = CalculateData(handles)
         handles.curveprops.(curvename).Results.Baseline.calculated_data = raw_data.CurveData;
         
         % load data to contact point
-        handles.curveprops.(curvename).Results.ContactPoint.calculated_data = raw_data.CurveData;
+        if ~isempty(handles.curveprops.(curvename).Results.ContactPoint)
+            handles.curveprops.(curvename).Results.ContactPoint.calculated_data = raw_data.CurveData;
+        end
         
     end
     

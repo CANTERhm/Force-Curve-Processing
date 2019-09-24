@@ -40,7 +40,7 @@
 # userdata: []
 # function_properties: []
 
-# function: StepFinder
+# function: FindSteps
 # nargin: 0
 
 # function: ChainFit
